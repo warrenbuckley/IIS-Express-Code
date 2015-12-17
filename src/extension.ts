@@ -2,6 +2,8 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as os from 'os';
+import * as path from 'path';
+import * as fs from 'fs';
 
 
 // this method is called when your extension is activated
@@ -21,8 +23,18 @@ export function activate(context: vscode.ExtensionContext) {
 		//Check if we are on Windows and not OSX
 		//Type = 'WINDOWS_NT'
 		//Platform = 'win32'
-		let operatingSystem = os.platform();
-		let oSys = os.type();
+		let operatingSystem = os.type();
+		
+		//Uppercase string to ensure we match correctly
+		operatingSystem = operatingSystem.toUpperCase();
+		
+		//New ES2015 includes as opposed to indexOf()
+		if(!operatingSystem.includes('WINDOWS_NT')){
+			vscode.window.showErrorMessage('You can only run this extension on Windows.');
+			
+			//Stop the extension from excuting anymore
+			return;
+		}
 
 		//Check if we are in a folder/workspace & NOT just have a single file open
 		let folderPath = vscode.workspace.rootPath;
@@ -32,6 +44,42 @@ export function activate(context: vscode.ExtensionContext) {
 			//Stop the extension from excuting anymore
 			return;
 		}
+		
+		//Let's check for two folder locations for IISExpress
+		//32bit machines - 'C:\Program Files\IIS Express\iisexpress.exe'
+		//64bit machines - 'C:\Program Files (x86)\IIS Express\iisexpress.exe'
+		
+		//'C:\Program Files (x86)'
+		let programFilesPath = process.env.ProgramFiles;
+		
+		//Try to find IISExpress excutable - build up path to EXE
+		programFilesPath = path.join(programFilesPath, 'IIS Express', 'iisexpress.exe');
+		
+		//Check if we have access to the file/path & ensure this process can excute it
+		fs.access(programFilesPath, fs.X_OK, err => {
+			
+			//If found we get err as undefinied
+			console.log(err ? 'no access!' : 'can read/write');
+		});
+		
+		fs.stat(programFilesPath, (err, stats) =>{
+			
+			//Err for not found file
+			//& stats is null/undefinied if not found
+			
+			console.log(err);
+			console.log(stats);
+		});
+		
+		// 
+		// if(!iisExpress){
+		// 	//The object is empty - so means we did not find the EXE on the machines
+		// 	//Using new ES2015 string concatantion 
+		// 	vscode.window.showErrorMessage(`We did not find a copy of IISExpress.exe at ${programFilesPath}`);
+		// 	
+		// 	//Stop the extension from excuting anymore
+		// 	return;
+		// }
 		
 		
 		
