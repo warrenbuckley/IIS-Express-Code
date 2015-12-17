@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
-
+import * as iis from './IISExpress';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		//Check if we are in a folder/workspace & NOT just have a single file open
-		let folderPath = vscode.workspace.rootPath;
+		const folderPath = vscode.workspace.rootPath;
 		if(!folderPath){
 			vscode.window.showErrorMessage('Please open a workspace directory first.');
 			
@@ -55,34 +55,44 @@ export function activate(context: vscode.ExtensionContext) {
 		//Try to find IISExpress excutable - build up path to EXE
 		programFilesPath = path.join(programFilesPath, 'IIS Express', 'iisexpress.exe');
 		
-		//Check if we have access to the file/path & ensure this process can excute it
-		fs.access(programFilesPath, fs.X_OK, err => {
-			
-			//If found we get err as undefinied
-			console.log(err ? 'no access!' : 'can read/write');
-		});
-		
+		//Check if we can find the file path (get stat info on it)
 		fs.stat(programFilesPath, (err, stats) =>{
 			
-			//Err for not found file
-			//& stats is null/undefinied if not found
+			//err is undefinied & stats contains info on the file in an object if we find the file
 			
-			console.log(err);
-			console.log(stats);
+			//ENOENT - File or folder not found
+			if(err && err.code.toUpperCase() === 'ENOENT'){
+				vscode.window.showErrorMessage(`We did not find a copy of IISExpress.exe at ${programFilesPath}`);
+				
+				//Stop the extension from excuting anymore
+				//TODO: The return is exiting the fs.stat function not the extension
+				return;
+			}
+			else if(err){
+				//Some other error - maybe file permission or ...?
+				vscode.window.showErrorMessage(`There was an error trying to find IISExpress.exe at ${programFilesPath} due to ${err.message}`);
+				
+				//Stop the extension from excuting anymore
+				//TODO: The return is exiting the fs.stat function not the extension
+				return;
+			}
 		});
 		
-		// 
-		// if(!iisExpress){
-		// 	//The object is empty - so means we did not find the EXE on the machines
-		// 	//Using new ES2015 string concatantion 
-		// 	vscode.window.showErrorMessage(`We did not find a copy of IISExpress.exe at ${programFilesPath}`);
-		// 	
-		// 	//Stop the extension from excuting anymore
-		// 	return;
-		// }
+		//OK done all the basic checks - lets run IISExpress
 		
+		//IISExpress command line arguments
+		var args: iis.IExpressArguments = {
+			path: folderPath,
+			port: 5002
+		};
 		
+		//Run IISExpress
+		//Don't like the call below (ugly as hell, imported module as alias, then module name then function?!)
+		iis.IIS.startWebsite(args);
 		
+		//TODO: Get sub menu to list out two options (Run Site, Stop Site)
+		//Stop only works if a site running
+		//Run only works if a site not running?
 		
 
 	});
