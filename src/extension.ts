@@ -87,13 +87,47 @@ export function activate(context: vscode.ExtensionContext) {
 		};
 		
 		//Run IISExpress
-		//Don't like the call below (ugly as hell, imported module as alias, then module name then function?!)
-		iis.IIS.startWebsite(args);
+		//Don't like the call below (ugly as hell, imported module as alias, then class name constructor)
+		let iisProc = new iis.IIS(programFilesPath, args);
+	
+		//Quick Pick (Dropdown item/s to start or stop the IIS Express cmd line process)
+		let quickPickItems: vscode.QuickPickItem[] = [
+			{
+				label: 'Start Website',
+				description: 'Run IISExpress site from this current folder'
+			},
+			{
+				label: 'Stop Website',
+				description: 'Stop the curently running IISExpress site from this current folder'
+			}
+		];
 		
-		//TODO: Get sub menu to list out two options (Run Site, Stop Site)
-		//Stop only works if a site running
-		//Run only works if a site not running?
 		
+		//Show the quick pick items & decide what we do based on what item selected
+		vscode.window.showQuickPick(quickPickItems).then(result => {
+			
+			//It's possible to press escape & cancel quick pick selector
+			if(!result){
+				vscode.window.showErrorMessage('No item chosen, quiting.');
+				
+				//Stop the extension from excuting anymore
+				return
+			}
+			
+			//Depending on what item select is what function/method we call on our class
+			switch (result.label.toUpperCase()) {
+				case 'START WEBSITE':
+					iisProc.startWebsite();
+					break;
+			
+				case 'STOP WEBSITE':
+					iisProc.stopWebsite();
+					break;
+			
+				default:
+					break;
+			}
+		});
 
 	});
 	
