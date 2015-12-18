@@ -86,8 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
 			port: 5002
 		};
 		
-		//Run IISExpress
-		//Don't like the call below (ugly as hell, imported module as alias, then class name constructor)
+		//Run IISExpress Class Contructor
 		let iisProc = new iis.IIS(programFilesPath, args);
 	
 		//Quick Pick (Dropdown item/s to start or stop the IIS Express cmd line process)

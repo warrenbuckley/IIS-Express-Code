@@ -15,13 +15,23 @@ export interface IExpressArguments {
 // * Is there any events for on close etc on main app?
 
 export class IIS {
-	public _iisProcess: process.ChildProcess;
+	//public _iisProcess: process.ChildProcess;
 	private _iisPath: string;
 	private _args: IExpressArguments;
 	
 	constructor(iisPath: string, args: IExpressArguments){
 		this._iisPath = iisPath;
 		this._args = args;
+		this._iisProcess = null;
+	}
+	
+	
+	private _iisProcess : process.ChildProcess;
+	public get iisProcess() : process.ChildProcess {
+		return this._iisProcess;
+	}
+	public set iisProcess(v : process.ChildProcess) {
+		this._iisProcess = v;
 	}
 	
 	
