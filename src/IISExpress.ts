@@ -15,27 +15,17 @@ export interface IExpressArguments {
 // * Is there any events for on close etc on main app?
 
 export class IIS {
-	//public _iisProcess: process.ChildProcess;
+	private _iisProcess: process.ChildProcess;
 	private _iisPath: string;
 	private _args: IExpressArguments;
+	private _output: vscode.OutputChannel;
 	
 	constructor(iisPath: string, args: IExpressArguments){
 		this._iisPath = iisPath;
 		this._args = args;
-		this._iisProcess = null;
 	}
 	
-	
-	private _iisProcess : process.ChildProcess;
-	public get iisProcess() : process.ChildProcess {
-		return this._iisProcess;
-	}
-	public set iisProcess(v : process.ChildProcess) {
-		this._iisProcess = v;
-	}
-	
-	
-	public startWebsite(){
+	public startWebsite(): process.ChildProcess{
 		//Need to run this command
 		//iisexpress /path:app-path [/port:port-number] [/clr:clr-version] [/systray:boolean]
 		//isexpress /path:c:\myapp\ /port:5005
@@ -53,19 +43,23 @@ export class IIS {
 		//This is the magic that runs the IISExpress cmd
 		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`]);
 		
-		//
-		console.log('After init:' + this._iisProcess);
+		//Create output channel & show it
+		this._output = vscode.window.createOutputChannel('IIS Express');
+		this._output.show(vscode.ViewColumn.Three);
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
+			this._output.appendLine(data);
 			console.log(`stdout: ${data}`);
 		});
 		
 		this._iisProcess.stderr.on('data', (data) => {
+			this._output.appendLine(`stderr: ${data}`);
 			console.log(`stderr: ${data}`);
 		});
 		
 		this._iisProcess.on('error', (err:Error) => {
+			this._output.appendLine(`ERROR: ${err.message}`);
 			console.log(`ERROR: ${err.message}`);
 		});
 		
@@ -74,14 +68,17 @@ export class IIS {
 		//Not sure we need or can get rid of?
 		//STDOUT End, iisProcess.exit then iisProcess.close
 		this._iisProcess.stdout.on('end', (data) =>{
+			this._output.appendLine(`End: ${data}`);
 			console.log(`End: ${data}`);
 		});
 		
 		this._iisProcess.on('exit', (code) =>{
+			this._output.appendLine(`Exit with code: ${code}`);
 			console.log(`Exit with code: ${code}`);
 		});
 		
 		this._iisProcess.on('close', (code) =>{
+			this._output.appendLine(`Closing with code: ${code}`);
 			console.log(`Closing with code: ${code}`);
 		});
 		
@@ -89,25 +86,21 @@ export class IIS {
 		vscode.window.showInformationMessage(`Running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`);
 	}
 	
-	public stopWebsite(){
+	public stopWebsite({showError:boolean}){
 		
-		//Why is _iisProcess undefined/null?!
-		//Thought with it being a prop on the class both methods could be able to retrieve it
-		//So when we spawn it from startWebsite() it will have a val
-		//That stopWebsite() could Kill it
-		
-		//Check what iisProcess here
-		console.log(this._iisProcess);
-		
+		//If we do not have an iisProcess running
 		if(!this._iisProcess){
 			vscode.window.showErrorMessage('No website currently running');
 			
 			//Stop function from running
 			return;
 		}
-				
+		
 		//Kill the process
 		this._iisProcess.kill('SIGINT');
+		
+		//Clear the output log
+		this._output.clear();
 		
 		//Display Message
 		vscode.window.showInformationMessage(`Stopped running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`);
