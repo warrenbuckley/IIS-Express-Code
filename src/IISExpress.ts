@@ -19,6 +19,7 @@ export class IIS {
 	private _iisPath: string;
 	private _args: IExpressArguments;
 	private _output: vscode.OutputChannel;
+	private _statusbar: vscode.StatusBarItem;
 	
 	constructor(iisPath: string, args: IExpressArguments){
 		this._iisPath = iisPath;
@@ -46,6 +47,16 @@ export class IIS {
 		//Create output channel & show it
 		this._output = vscode.window.createOutputChannel('IIS Express');
 		this._output.show(vscode.ViewColumn.Three);
+		
+		//Create Statusbar item & show it
+		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+		
+		//Set props on statusbar & show it
+		this._statusbar.text = `$(browser) http://localhost:${this._args.port}`;
+		this._statusbar.tooltip = `Running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`;
+		this._statusbar.command = 'extension.iis-express';
+		this._statusbar.show();
+		
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
@@ -101,6 +112,10 @@ export class IIS {
 		
 		//Clear the output log
 		this._output.clear();
+		
+		//Remove the statusbar item
+		this._statusbar.hide();
+		this._statusbar.dispose();
 		
 		//Display Message
 		vscode.window.showInformationMessage(`Stopped running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`);
