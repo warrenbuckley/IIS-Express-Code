@@ -7,12 +7,8 @@ export interface IExpressArguments {
 }
 
 // TODO:
-// * Serialise object to string array for cmd line args/switches?
-// * New function to stopWebsite - Kills process
 // * Tidy up code - remove events we do not need
 // * Open up URL automagically - once process started
-// * Test when VSCode quits that it kills the iisExpress process
-// * Is there any events for on close etc on main app?
 
 export class IIS {
 	private _iisProcess: process.ChildProcess;
@@ -57,6 +53,8 @@ export class IIS {
 		this._statusbar.command = 'extension.iis-express';
 		this._statusbar.show();
 		
+        //Open Browser
+        let browser = process.exec(`start http://localhost:${this._args.port}`);
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
@@ -75,29 +73,11 @@ export class IIS {
 		});
 		
 		
-		//When closing from systry following events occur
-		//Not sure we need or can get rid of?
-		//STDOUT End, iisProcess.exit then iisProcess.close
-		this._iisProcess.stdout.on('end', (data) =>{
-			this._output.appendLine(`End: ${data}`);
-			console.log(`End: ${data}`);
-		});
-		
-		this._iisProcess.on('exit', (code) =>{
-			this._output.appendLine(`Exit with code: ${code}`);
-			console.log(`Exit with code: ${code}`);
-		});
-		
-		this._iisProcess.on('close', (code) =>{
-			this._output.appendLine(`Closing with code: ${code}`);
-			console.log(`Closing with code: ${code}`);
-		});
-		
 		//Display Message
 		vscode.window.showInformationMessage(`Running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`);
 	}
 	
-	public stopWebsite({showError:boolean}){
+	public stopWebsite(){
 		
 		//If we do not have an iisProcess running
 		if(!this._iisProcess){
@@ -112,12 +92,12 @@ export class IIS {
 		
 		//Clear the output log
 		this._output.clear();
+        this._output.hide();
+        this._output.dispose();
 		
 		//Remove the statusbar item
 		this._statusbar.hide();
 		this._statusbar.dispose();
 		
-		//Display Message
-		vscode.window.showInformationMessage(`Stopped running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`);
 	}
 }

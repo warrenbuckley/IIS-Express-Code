@@ -1,31 +1,34 @@
 {
-	"name": "iis-express",
-	"displayName": "IIS Express",
-	"description": "This allows you to run the current folder as a website in IIS Express",
-	"version": "0.0.1",
-	"publisher": "Warren Buckley",
-	"engines": {
-		"vscode": "^0.10.1"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:extension.iis-express"
-	],
-	"main": "./out/src/extension",
-	"contributes": {
-		"commands": [{
-			"command": "extension.iis-express",
-			"title": "IIS Express: Run Website"
-		}]
-	},
-	"scripts": {
-		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
-	},
-	"devDependencies": {
-		"typescript": "^1.6.2",
-		"vscode": "0.10.x"
-	}
+  "name": "iis-express",
+  "displayName": "IIS Express",
+  "description": "This allows you to run the current folder as a website in IIS Express",
+  "version": "0.0.1",
+  "publisher": "Warren Buckley",
+  "engines": {
+    "vscode": "^0.10.1"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.iis-express"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.iis-express",
+        "title": "IIS Express: Run Website"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+  },
+  "devDependencies": {
+    "typescript": "^1.6.2",
+    "vscode": "0.10.x"
+  },
+  "dependencies": {}
 }
