@@ -1,13 +1,14 @@
-# README
-## This is the README for your extension "iis-express" 
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+# IIS Express for Visual Studio Code
+## Run websites straight from VS Code
+This extension gives you the power to run a folder open in Visual Studio code as a website using IIS Express.
 
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
+### Features
+* Auto opens folder in browser
+* Super simple way from the command pallete to start & stop the website
+* See ouput from the IIS Express command line directly in Visual Studio 
 
-### For more information
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+### Requirements 
+* Windows Machine (Sorry not for Linux & OSX)
+* IIS Express installed
 
-** Enjoy!**
+
