@@ -4,6 +4,7 @@
     "description": "This allows you to run the current folder as a website in IIS Express",
     "version": "0.0.1",
     "publisher": "warren-buckley",
+    "icon":"images/iis-icon.png",
     "galleryBanner": {
         "color": "#007acc",
         "theme": "dark"
