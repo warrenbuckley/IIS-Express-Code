@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
     //IISExpress command line arguments
     let args: iis.IExpressArguments = {
         path: verification.folderPath,
-        port: 5002
+        port: iis.getRandomPort()
     };
 
     //Run IISExpress Class Contructor
