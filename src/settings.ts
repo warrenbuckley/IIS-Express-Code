@@ -18,12 +18,14 @@ export function getSettings():Isettings{
     // Checks that iisexpress.json exist
     // *******************************************
 	let settingsFilePath = vscode.workspace.rootPath + "\\.vscode\\iisexpress.json";
+    
     //use -> https://www.npmjs.com/package/jsonfile
     var jsonfile = require('jsonfile');
     
     try {
         //Check if we can find the file path (get stat info on it)
         let fileCheck = fs.statSync(settingsFilePath);
+        
         //read file .vscode\iisexpress.json and overwrite port property from iisexpress.json
         settings = jsonfile.readFileSync(settingsFilePath);
     }
