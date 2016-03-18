@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as process from 'child_process';
+import * as settingsHelpers from './settings';
 
 export interface IExpressArguments {
 	path: string;
@@ -36,6 +37,11 @@ export class IIS {
 			//Stop the method/function from running
 			return;
 		}
+        
+        //Refetch IIS Port Number, user may have changed the config file and restarted
+        //They wont see the change currently until they restart VS Code as we grab it on init of extension
+        //TODO (Refactor) Not the neatest way to be re-fetching it here
+        this._args.port = settingsHelpers.getSettings().port;
 		
 		//This is the magic that runs the IISExpress cmd
 		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`]);
