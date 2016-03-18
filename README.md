@@ -23,6 +23,9 @@ Open the command pallete & type **ext install** then search for **IIS Express**
 
 
 # Changelog
+## Version 0.0.3
+* **New:** Port number setting can be set in .vscode/iisexpress.json if you wish to override random port number
+
 ## Version 0.0.2
 * **New:** Port number is now random
 
