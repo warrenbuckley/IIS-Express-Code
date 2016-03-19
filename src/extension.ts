@@ -3,7 +3,6 @@
 import * as vscode from 'vscode';
 import * as iis from './IISExpress';
 import * as verify from './verification';
-import * as settingsHelpers from './settings';
 
 
 // this method is called when your extension is activated
@@ -12,13 +11,10 @@ export function activate(context: vscode.ExtensionContext) {
     
     //Begin checks of OS, IISExpress location etc..
     let verification = verify.checkForProblems();
-    
-    let settings = settingsHelpers.getSettings();
 
     //IISExpress command line arguments
     let args: iis.IExpressArguments = {
-        path: verification.folderPath,
-        port: settings.port
+        path: verification.folderPath
     };
 
     //Run IISExpress Class Contructor
