@@ -50,6 +50,7 @@
     "vscode": "0.10.x"
   },
   "dependencies": {
+    "iconv-lite": "^0.4.13",
     "jsonfile": "^2.2.3"
   }
 }
