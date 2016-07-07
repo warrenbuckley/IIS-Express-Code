@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as process from 'child_process';
 import * as settingsHelpers from './settings';
+var iconv=require('iconv-lite')
 
 export interface IExpressArguments {
 	path: string;
@@ -62,18 +63,21 @@ export class IIS {
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
+			var data=this.decode2gbk(data);
 			this._output.appendLine(data);
 			console.log(`stdout: ${data}`);
 		});
 		
 		this._iisProcess.stderr.on('data', (data) => {
+			var data=this.decode2gbk(data);
 			this._output.appendLine(`stderr: ${data}`);
 			console.log(`stderr: ${data}`);
 		});
 		
 		this._iisProcess.on('error', (err:Error) => {
-			this._output.appendLine(`ERROR: ${err.message}`);
-			console.log(`ERROR: ${err.message}`);
+			var message=this.decode2gbk(err.message);
+			this._output.appendLine(`ERROR: ${message}`);
+			console.log(`ERROR: ${message}`);
 		});
 		
 		
@@ -105,6 +109,10 @@ export class IIS {
 		this._statusbar.dispose();
 		
 	}
-    
+	
+    private decode2gbk(data) {
+		var buffer = new Buffer(data);
+ 		return iconv.decode(buffer, 'gbk');
+	}
     
 }
