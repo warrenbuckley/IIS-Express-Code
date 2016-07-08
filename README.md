@@ -23,6 +23,9 @@ Open the command pallete & type **ext install** then search for **IIS Express**
 
 
 # Changelog
+## Version 0.0.5
+* **Bug Fix:** Fixes problem with extension from loading correctly after updating to VSCode 1.3
+
 ## Version 0.0.4
 * **New:** Community PR from @czhj that supports Chinese characters in output build log window
 
