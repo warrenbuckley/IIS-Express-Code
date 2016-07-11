@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import * as process from 'child_process';
 import * as settingsHelpers from './settings';
-var iconv=require('iconv-lite')
+var iconv=require('iconv-lite');
+var jschardet = require('jschardet')
 
 export interface IExpressArguments {
 	path: string;
@@ -63,19 +64,19 @@ export class IIS {
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
-			var data=this.decode2gbk(data);
+			var data=this.decode(data);
 			this._output.appendLine(data);
 			console.log(`stdout: ${data}`);
 		});
 		
 		this._iisProcess.stderr.on('data', (data) => {
-			var data=this.decode2gbk(data);
+			var data=this.decode(data);
 			this._output.appendLine(`stderr: ${data}`);
 			console.log(`stderr: ${data}`);
 		});
 		
 		this._iisProcess.on('error', (err:Error) => {
-			var message=this.decode2gbk(err.message);
+			var message=this.decode(err.message);
 			this._output.appendLine(`ERROR: ${message}`);
 			console.log(`ERROR: ${message}`);
 		});
@@ -110,9 +111,10 @@ export class IIS {
 		
 	}
 	
-    private decode2gbk(data) {
+    private decode(data) {
 		var buffer = new Buffer(data);
- 		return iconv.decode(buffer, 'gbk');
+		var detectResult = jschardet.detect(buffer).encoding;
+		return iconv.decode(buffer, detectResult);
 	}
     
 }

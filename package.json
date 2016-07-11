@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "iconv-lite": "^0.4.13",
+    "jschardet": "^1.4.1",
     "jsonfile": "^2.2.3"
   }
 }
