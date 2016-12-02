@@ -51,7 +51,7 @@ export class IIS {
 		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`]);
 		
 		//Create output channel & show it
-		this._output = vscode.window.createOutputChannel('IIS Express');
+		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
 		this._output.show(vscode.ViewColumn.Three);
 		
 		//Create Statusbar item & show it
