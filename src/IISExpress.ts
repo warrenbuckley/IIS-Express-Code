@@ -4,7 +4,7 @@ import * as settingsHelpers from './settings';
 var iconv=require('iconv-lite')
 
 export interface IExpressArguments {
-	path: string;
+	path?: string;
 	port?: number;
 }
 

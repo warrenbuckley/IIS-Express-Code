@@ -14,7 +14,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     //IISExpress command line arguments
     let args: iis.IExpressArguments = {
-        path: verification.folderPath
     };
 
     //Run IISExpress Class Contructor
