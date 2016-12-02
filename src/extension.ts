@@ -21,60 +21,60 @@ export function activate(context: vscode.ExtensionContext) {
     let iisProc = new iis.IIS(verification.programPath, args);
     
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	var disposable = vscode.commands.registerCommand('extension.iis-express', () => {
-		// The code you place here will be executed every time your command is executed
-		
-        //Stop extension from running if we did not pass checks
+	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
+	var startSite = vscode.commands.registerCommand('extension.iis-express.start',() => {
+ 		
+		 //Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             //Stop the extension from running
             return;
         }
-        
-		//Quick Pick (Dropdown item/s to start or stop the IIS Express cmd line process)
-		let quickPickItems: vscode.QuickPickItem[] = [
-			{
-				label: 'Start Website',
-				description: 'Run IISExpress site from this current folder'
-			},
-			{
-				label: 'Stop Website',
-				description: 'Stop the curently running IISExpress site from this current folder'
-			}
-		];
-		
-		
-		//Show the quick pick items & decide what we do based on what item selected
-		vscode.window.showQuickPick(quickPickItems).then(result => {
-			
-			//It's possible to press escape & cancel quick pick selector
-			if(!result){
-				vscode.window.showErrorMessage('No item chosen, quiting.');
-				
-				//Stop the extension from excuting anymore
-				return
-			}
-			
-			//Depending on what item select is what function/method we call on our class
-			switch (result.label.toUpperCase()) {
-				case 'START WEBSITE':
-					let proc = iisProc.startWebsite();
-					break;
-			
-				case 'STOP WEBSITE':
-					iisProc.stopWebsite();
-					break;
-			
-				default:
-					break;
-			}
-		});
 
+		//Start Website...
+		iisProc.startWebsite();
 	});
-	
-	context.subscriptions.push(disposable);
+
+	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
+	var stopSite = vscode.commands.registerCommand('extension.iis-express.stop',() => {
+ 		
+		 //Stop extension from running if we did not pass checks
+        if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
+            //Stop the extension from running
+            return;
+        }
+
+		//Stop Website...
+		iisProc.stopWebsite();
+	});
+
+	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
+	var openSite = vscode.commands.registerCommand('extension.iis-express.open',() => {
+ 		
+		 //Stop extension from running if we did not pass checks
+        if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
+            //Stop the extension from running
+            return;
+        }
+
+		//Open site in browser - this will need to check if site is running first...
+		iisProc.openWebsite();
+	});
+
+    //Registering a command so we can assign a direct keybinding to it (without opening quick launch)
+	var restartSite = vscode.commands.registerCommand('extension.iis-express.restart',() => {
+ 		
+		 //Stop extension from running if we did not pass checks
+        if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
+            //Stop the extension from running
+            return;
+        }
+
+		//Open site in browser - this will need to check if site is running first...
+		iisProc.restartSite();
+	});
+
+	//Push the commands
+	context.subscriptions.push(startSite, stopSite, openSite, restartSite);
 }
 
 //this method is called when your extension is deactivated

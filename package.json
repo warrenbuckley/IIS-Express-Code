@@ -30,16 +30,45 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.iis-express"
+    "onCommand:extension.iis-express.start",
+    "onCommand:extension.iis-express.stop",
+    "onCommand:extension.iis-express.open",
+    "onCommand:extension.iis-express.restart"
   ],
   "main": "./out/src/extension",
   "contributes": {
     "commands": [
       {
-        "command": "extension.iis-express",
-        "title": "IIS Express: Run Website"
+        "command": "extension.iis-express.start",
+        "title": "IIS Express: Start Website"
+      },
+      {
+        "command": "extension.iis-express.stop",
+        "title": "IIS Express: Stop Website"
+      },
+      {
+        "command": "extension.iis-express.restart",
+        "title": "IIS Express: Restart Website"
       }
-    ]
+    ],
+    "keybindings": [
+      {
+        "command": "extension.iis-express.start",
+        "key": "ctrl+f5"
+      },
+      {
+        "command": "extension.iis-express.stop",
+        "key": "shift+f5"
+      },
+      {
+        "command": "extension.iis-express.restart",
+        "key": "ctrl+shift+f5"
+      }
+    ],
+    "jsonValidation": [{
+        "fileMatch": "/.vscode/iisexpress.json",
+        "url": "https://raw.githubusercontent.com/warrenbuckley/IIS-Express-Code/master/src/iisexpress-schema.json"
+    }]
   },
   "scripts": {
     "vscode:prepublish": "node ./node_modules/vscode/bin/compile",

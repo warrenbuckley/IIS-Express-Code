@@ -45,7 +45,7 @@ export class IIS {
         this._args.port = settings.port;
 		
 		//Folder to run as the arg
-		this._args.path = settings.path;
+		this._args.path = settings.path ? settings.path : vscode.workspace.rootPath;
 
 		//This is the magic that runs the IISExpress cmd
 		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`]);
@@ -60,11 +60,11 @@ export class IIS {
 		//Set props on statusbar & show it
 		this._statusbar.text = `$(browser) http://localhost:${this._args.port}`;
 		this._statusbar.tooltip = `Running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`;
-		this._statusbar.command = 'extension.iis-express';
+		this._statusbar.command = 'extension.iis-express.open';
 		this._statusbar.show();
 		
-        //Open Browser
-        let browser = process.exec(`start http://localhost:${this._args.port}`);
+        //Open browser
+		this.openWebsite();
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
@@ -113,6 +113,34 @@ export class IIS {
 		this._statusbar.hide();
 		this._statusbar.dispose();
 		
+	}
+
+	public openWebsite(){
+
+		//If we do not have an iisProcess running
+		if(!this._iisProcess){
+			vscode.window.showErrorMessage('No website currently running');
+			
+			//Stop function from running
+			return;
+		}
+
+		//Uses the 'start' command & url to open default browser
+		let browser = process.exec(`start http://localhost:${this._args.port}`);
+	}
+
+	public restartSite(){
+		//If we do not have an iisProcess/website running
+		if(!this._iisProcess){
+			//Then just do a start site...
+			this.startWebsite();
+		}
+		else {
+			//It's already running so stop it first then, start it
+			this.stopWebsite();
+			this.startWebsite();
+		}
+
 	}
 	
     private decode2gbk(data) {
