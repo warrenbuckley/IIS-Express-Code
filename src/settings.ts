@@ -5,25 +5,29 @@ import * as vscode from 'vscode';
 
 interface Isettings {
     port: number;
+    path: string;
 }
 
 
 export function getSettings():Isettings{
     //Give some default values
     let settings:Isettings = {
-        port : getRandomPort()
+        port : getRandomPort(),
+        path: vscode.workspace.rootPath
     };
     
     // *******************************************
     // Checks that iisexpress.json exist
     // *******************************************
-	let settingsFilePath = vscode.workspace.rootPath + "\\.vscode\\iisexpress.json";
+    let settingsFolderPath = vscode.workspace.rootPath + "\\.vscode";
+	let settingsFilePath = settingsFolderPath + "\\iisexpress.json";
+
     
     //use -> https://www.npmjs.com/package/jsonfile
     var jsonfile = require('jsonfile');
     
     try {
-        //Check if we can find the file path (get stat info on it)
+        //Check if we can find the iisexpress config file from the path (get stat info on it)
         let fileCheck = fs.statSync(settingsFilePath);
         
         //read file .vscode\iisexpress.json and overwrite port property from iisexpress.json
@@ -31,9 +35,16 @@ export function getSettings():Isettings{
     }
     catch (err) {
         //file didn't exist so
-        //create .vscode\iisexpress.json and append settings object
-       	jsonfile.writeFile(settingsFilePath, settings, {spaces: 2}, function (err) {
-            console.error(err);
+        //create .vscode folder first
+        fs.mkdirSync(settingsFolderPath);
+        
+        //jsonfile.writeFile (does not create path/folder if it does not exist)
+        //The dir should be available & thus able to now write the file
+       	jsonfile.writeFile(settingsFilePath, settings, {spaces: 2}, function (jsonErr) {
+            if(jsonErr){
+                console.error(jsonErr);
+                vscode.window.showErrorMessage('Error creating iisexpress.json file: ' + jsonErr);
+            }
         });
     }
     

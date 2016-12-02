@@ -10,7 +10,6 @@ export interface IExpressArguments {
 
 // TODO:
 // * Tidy up code - remove events we do not need
-// * Open up URL automagically - once process started
 
 export class IIS {
 	private _iisProcess: process.ChildProcess;
@@ -39,9 +38,15 @@ export class IIS {
 			return;
 		}
         
+		//settings
+		var settings = settingsHelpers.getSettings();
+
         //Get IIS Port Number from config file
-        this._args.port = settingsHelpers.getSettings().port;
+        this._args.port = settings.port;
 		
+		//Folder to run as the arg
+		this._args.path = settings.path;
+
 		//This is the magic that runs the IISExpress cmd
 		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`]);
 		

@@ -2,11 +2,11 @@ import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
+import * as settingsHelpers from './settings';
 
 interface verification {
     isValidOS: boolean;
     folderIsOpen: boolean;
-    folderPath: string;
     iisExists: boolean;
     programPath: string;
 }
@@ -18,7 +18,6 @@ export function checkForProblems():verification{
     let results:verification = {
         isValidOS: false,
         folderIsOpen: false,
-        folderPath: '',
         iisExists:false,
         programPath: ''
     };
@@ -60,11 +59,9 @@ export function checkForProblems():verification{
 		
         //We are not a folder
         results.folderIsOpen = false;
-        results.folderPath = null;
 	} 
     else {
         results.folderIsOpen = true;
-        results.folderPath = folderPath;
     }
     
     
