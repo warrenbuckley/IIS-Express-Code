@@ -6,6 +6,7 @@ import * as vscode from 'vscode';
 interface Isettings {
     port: number;
     path: string;
+    clr: string;
 }
 
 
@@ -13,7 +14,8 @@ export function getSettings():Isettings{
     //Give some default values
     let settings:Isettings = {
         port : getRandomPort(),
-        path: vscode.workspace.rootPath
+        path: vscode.workspace.rootPath,
+        clr: "v4.0"
     };
     
     // *******************************************
