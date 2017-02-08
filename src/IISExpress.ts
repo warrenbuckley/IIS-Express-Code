@@ -6,7 +6,7 @@ var iconv=require('iconv-lite')
 export interface IExpressArguments {
 	path?: string;
 	port?: number;
-	clr?: string;
+	clr?: settingsHelpers.clrVersion;
 }
 
 // TODO:
