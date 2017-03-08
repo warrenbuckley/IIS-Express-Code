@@ -1,9 +1,12 @@
 {
 	"title": "JSON schema for VS Code IIS Express configuration file",
 	"$schema": "http://json-schema.org/draft-04/schema#",
-
+    "definitions": {
+        "clr": {
+            "enum": ["v2.0","v4.0"]
+        }
+    },
 	"type": "object",
-
 	 "properties": {
          "port": {
              "type": "integer",
@@ -16,7 +19,7 @@
             "description": "This property is optional & allows you to set a path to the folder or subfolder as the root of your site/project for IIS Express to run"
         },
         "clr":{
-            "type": "string",
+            "$ref": "#/definitions/clr",
             "description": "This property is optional & allows you to set AppPool CLR version, 2.0 vs 4.0"
         }
     },
