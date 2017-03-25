@@ -3,9 +3,10 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 
-interface Isettings {
+export interface Isettings {
     port: number;
     path: string;
+    url?: string;
 }
 
 
