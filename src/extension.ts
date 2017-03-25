@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as iis from './IISExpress';
 import * as verify from './verification';
+import * as settings from './settings';
 
 
 // this method is called when your extension is activated
@@ -30,7 +31,8 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
 		//Start Website...
-		iisProc.startWebsite();
+		//Pass settings - just in case its changed between session
+		iisProc.startWebsite(settings.getSettings());
 	});
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -56,7 +58,8 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
 		//Open site in browser - this will need to check if site is running first...
-		iisProc.openWebsite();
+		//Pass settings - just in case its changed between session (Hence not set globally in this file)
+		iisProc.openWebsite(settings.getSettings());
 	});
 
     //Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -69,7 +72,8 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
 		//Open site in browser - this will need to check if site is running first...
-		iisProc.restartSite();
+		//Pass settings - just in case its changed between session (Hence not set globally in this file)
+		iisProc.restartSite(settings.getSettings());
 	});
 
 	//Push the commands
