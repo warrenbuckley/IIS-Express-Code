@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as process from 'child_process';
-import * as settingsHelpers from './settings';
+import * as settings from './settings';
 var iconv=require('iconv-lite')
 
 export interface IExpressArguments {
@@ -23,7 +23,7 @@ export class IIS {
 		this._args = args;
 	}
 	
-	public startWebsite(): process.ChildProcess{
+	public startWebsite(settings?: settings.Isettings): process.ChildProcess{
 		//Need to run this command
 		//iisexpress /path:app-path [/port:port-number] [/clr:clr-version] [/systray:boolean]
 		//isexpress /path:c:\myapp\ /port:5005
@@ -38,9 +38,6 @@ export class IIS {
 			return;
 		}
         
-		//settings
-		var settings = settingsHelpers.getSettings();
-
         //Get IIS Port Number from config file
         this._args.port = settings.port;
 		
@@ -64,7 +61,7 @@ export class IIS {
 		this._statusbar.show();
 		
         //Open browser
-		this.openWebsite();
+		this.openWebsite(settings);
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
@@ -115,7 +112,7 @@ export class IIS {
 		
 	}
 
-	public openWebsite(){
+	public openWebsite(settings?: settings.Isettings){
 
 		//If we do not have an iisProcess running
 		if(!this._iisProcess){
@@ -125,20 +122,29 @@ export class IIS {
 			return;
 		}
 
-		//Uses the 'start' command & url to open default browser
-		let browser = process.exec(`start http://localhost:${this._args.port}`);
+		
+		if (settings && settings.url) {
+			//We have a starting URL set - but lets ensure we strip starting / if present
+			let startUrl = settings.url.startsWith('/') ? settings.url.substring(1) : settings.url;
+
+			//Start browser with start url
+			let browser = process.exec(`start http://localhost:${this._args.port}/${startUrl}`);
+    	} else {
+			//Uses the 'start' command & url to open default browser
+			let browser = process.exec(`start http://localhost:${this._args.port}`);
+		}
 	}
 
-	public restartSite(){
+	public restartSite(settings? : settings.Isettings){
 		//If we do not have an iisProcess/website running
 		if(!this._iisProcess){
 			//Then just do a start site...
-			this.startWebsite();
+			this.startWebsite(settings);
 		}
 		else {
 			//It's already running so stop it first then, start it
 			this.stopWebsite();
-			this.startWebsite();
+			this.startWebsite(settings);
 		}
 
 	}
