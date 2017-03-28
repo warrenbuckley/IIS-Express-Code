@@ -7,14 +7,19 @@ export interface Isettings {
     port: number;
     path: string;
     url?: string;
+    clr: clrVersion;
 }
-
+export enum clrVersion {
+	v20 = <any>"v2.0",
+	v40 = <any>"v4.0"
+}
 
 export function getSettings():Isettings{
     //Give some default values
     let settings:Isettings = {
         port : getRandomPort(),
-        path: vscode.workspace.rootPath
+        path: vscode.workspace.rootPath,
+        clr: clrVersion.v40
     };
     
     // *******************************************

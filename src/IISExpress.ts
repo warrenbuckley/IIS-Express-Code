@@ -6,6 +6,7 @@ var iconv=require('iconv-lite')
 export interface IExpressArguments {
 	path?: string;
 	port?: number;
+	clr?: settingsHelpers.clrVersion;
 }
 
 // TODO:
@@ -17,7 +18,8 @@ export class IIS {
 	private _args: IExpressArguments;
 	private _output: vscode.OutputChannel;
 	private _statusbar: vscode.StatusBarItem;
-	
+	private _statusMessage: string;
+
 	constructor(iisPath: string, args: IExpressArguments){
 		this._iisPath = iisPath;
 		this._args = args;
@@ -44,9 +46,12 @@ export class IIS {
 		//Folder to run as the arg
 		this._args.path = settings.path ? settings.path : vscode.workspace.rootPath;
 
+		//CLR version, yes there are still people on 3.5
+		this._args.clr = settings.clr;	
+
 		//This is the magic that runs the IISExpress cmd
-		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`]);
-		
+		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`]);
+		console.log(`stdout: Command with Params ${this._iisPath} ${[`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`].join(' ')}`);
 		//Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
 		this._output.show(vscode.ViewColumn.Three);
@@ -56,7 +61,8 @@ export class IIS {
 		
 		//Set props on statusbar & show it
 		this._statusbar.text = `$(browser) http://localhost:${this._args.port}`;
-		this._statusbar.tooltip = `Running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`;
+		this._statusMessage = `Running folder '${this._args.path}' as a website on http://localhost:${this._args.port} on CLR: ${this._args.clr}`;
+		this._statusbar.tooltip = this._statusMessage;
 		this._statusbar.command = 'extension.iis-express.open';
 		this._statusbar.show();
 		
@@ -84,7 +90,7 @@ export class IIS {
 		
 		
 		//Display Message
-		vscode.window.showInformationMessage(`Running folder '${this._args.path}' as a website on http://localhost:${this._args.port}`);
+		vscode.window.showInformationMessage(this._statusMessage);
 	}
 	
 	public stopWebsite(){
