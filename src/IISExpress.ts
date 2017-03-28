@@ -6,7 +6,7 @@ var iconv=require('iconv-lite')
 export interface IExpressArguments {
 	path?: string;
 	port?: number;
-	clr?: settingsHelpers.clrVersion;
+	clr?: settings.clrVersion;
 }
 
 // TODO:
@@ -52,6 +52,7 @@ export class IIS {
 		//This is the magic that runs the IISExpress cmd
 		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`]);
 		console.log(`stdout: Command with Params ${this._iisPath} ${[`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`].join(' ')}`);
+		
 		//Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
 		this._output.show(vscode.ViewColumn.Three);
