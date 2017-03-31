@@ -40,7 +40,7 @@
     "commands": [
       {
         "command": "extension.iis-express.start",
-        "title": "IIS Express: Start Website"
+        "title": "IIS Express: Start Website"        
       },
       {
         "command": "extension.iis-express.stop",
@@ -68,7 +68,37 @@
     "jsonValidation": [{
         "fileMatch": "/.vscode/iisexpress.json",
         "url": "https://raw.githubusercontent.com/warrenbuckley/IIS-Express-Code/master/src/iisexpress-schema.json"
-    }]
+    }],
+    "menus": {
+      "explorer/context": [
+        {
+          "group": "iisexpress@1",
+          "command": "extension.iis-express.start"
+        },
+        {
+          "group": "iisexpress@2",
+          "command": "extension.iis-express.stop"
+        },
+        {
+          "group": "iisexpress@3",
+          "command": "extension.iis-express.restart"
+        }
+      ],
+      "editor/context": [
+        {
+          "group": "iisexpress@1",
+          "command": "extension.iis-express.start"
+        },
+        {
+          "group": "iisexpress@2",
+          "command": "extension.iis-express.stop"
+        },
+        {
+          "group": "iisexpress@3",
+          "command": "extension.iis-express.restart"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
