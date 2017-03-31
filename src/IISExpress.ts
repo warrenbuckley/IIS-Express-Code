@@ -25,7 +25,7 @@ export class IIS {
 		this._args = args;
 	}
 	
-	public startWebsite(settings?: settings.Isettings): process.ChildProcess{
+	public startWebsite(options?: settings.Isettings): process.ChildProcess{
 		//Need to run this command
 		//iisexpress /path:app-path [/port:port-number] [/clr:clr-version] [/systray:boolean]
 		//isexpress /path:c:\myapp\ /port:5005
@@ -41,17 +41,16 @@ export class IIS {
 		}
         
         //Get IIS Port Number from config file
-        this._args.port = settings.port;
+        this._args.port = options.port;
 		
 		//Folder to run as the arg
-		this._args.path = settings.path ? settings.path : vscode.workspace.rootPath;
+		this._args.path = options.path ? options.path : vscode.workspace.rootPath;
 
 		//CLR version, yes there are still people on 3.5
-		this._args.clr = settings.clr;	
+		this._args.clr = options.clr ? options.clr : settings.clrVersion.v40;
 
 		//This is the magic that runs the IISExpress cmd
 		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`]);
-		console.log(`stdout: Command with Params ${this._iisPath} ${[`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`].join(' ')}`);
 		
 		//Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
@@ -68,7 +67,7 @@ export class IIS {
 		this._statusbar.show();
 		
         //Open browser
-		this.openWebsite(settings);
+		this.openWebsite(options);
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
@@ -119,7 +118,7 @@ export class IIS {
 		
 	}
 
-	public openWebsite(settings?: settings.Isettings){
+	public openWebsite(options?: settings.Isettings){
 
 		//If we do not have an iisProcess running
 		if(!this._iisProcess){
@@ -130,9 +129,9 @@ export class IIS {
 		}
 
 		
-		if (settings && settings.url) {
+		if (options && options.url) {
 			//We have a starting URL set - but lets ensure we strip starting / if present
-			let startUrl = settings.url.startsWith('/') ? settings.url.substring(1) : settings.url;
+			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
 
 			//Start browser with start url
 			let browser = process.exec(`start http://localhost:${this._args.port}/${startUrl}`);
@@ -142,16 +141,16 @@ export class IIS {
 		}
 	}
 
-	public restartSite(settings? : settings.Isettings){
+	public restartSite(options? : settings.Isettings){
 		//If we do not have an iisProcess/website running
 		if(!this._iisProcess){
 			//Then just do a start site...
-			this.startWebsite(settings);
+			this.startWebsite(options);
 		}
 		else {
 			//It's already running so stop it first then, start it
 			this.stopWebsite();
-			this.startWebsite(settings);
+			this.startWebsite(options);
 		}
 
 	}
