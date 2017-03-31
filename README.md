@@ -23,6 +23,10 @@ Open the command pallete & type **ext install** then search for **IIS Express**
 
 
 # Changelog
+## Version 0.0.7
+* **New:** `.vscode/iisexpress.json` now supports a new property `url` which is an optional property & allows you to set the URL you wish to open eg: '/about/the-team'
+* **New:** `.vscode/iisexpress.json` now supports a new property `clr` which is an optional property allowing you to set the CLR to run your .NET website (Thanks to @avieru)
+
 ## Version 0.0.6
 * **New:** Restart site option
 * **New:** Keyboard shortcuts to start (Ctrl+F5), stop (Shift+F5) & restart site (Ctrl+Shift+F5)
