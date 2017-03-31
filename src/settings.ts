@@ -10,8 +10,8 @@ export interface Isettings {
     clr: clrVersion;
 }
 export enum clrVersion {
-	v20 = <any>"v2.0",
-	v40 = <any>"v4.0"
+    v40 = <any>"v4.0",
+	v20 = <any>"v2.0"	
 }
 
 export function getSettings():Isettings{

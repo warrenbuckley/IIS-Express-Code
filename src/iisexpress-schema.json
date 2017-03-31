@@ -3,7 +3,7 @@
 	"$schema": "http://json-schema.org/draft-04/schema#",
     "definitions": {
         "clr": {
-            "enum": ["v2.0","v4.0"]
+            "enum": ["v4.0","v2.0"]
         }
     },
 	"type": "object",
