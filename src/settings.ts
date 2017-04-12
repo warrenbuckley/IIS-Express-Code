@@ -8,10 +8,17 @@ export interface Isettings {
     path: string;
     url?: string;
     clr: clrVersion;
+    protocol: protocol;
 }
+
 export enum clrVersion {
     v40 = <any>"v4.0",
 	v20 = <any>"v2.0"	
+}
+
+export enum protocolType {
+    http = <any>"http",
+    https = <any>"https"
 }
 
 export function getSettings():Isettings{
@@ -19,7 +26,8 @@ export function getSettings():Isettings{
     let settings:Isettings = {
         port : getRandomPort(),
         path: vscode.workspace.rootPath,
-        clr: clrVersion.v40
+        clr: clrVersion.v40,
+        protocol: protocolType.http
     };
     
     // *******************************************
