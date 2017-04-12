@@ -49,13 +49,10 @@ export class IIS {
 		//CLR version, yes there are still people on 3.5
 		this._args.clr = options.clr ? options.clr : settings.clrVersion.v40;
 
-		//This is the magic that runs the IISExpress cmd
-		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`]);
-		
 		//Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
 		this._output.show(vscode.ViewColumn.Three);
-		
+
 		//Create Statusbar item & show it
 		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
 		
@@ -65,6 +62,17 @@ export class IIS {
 		this._statusbar.tooltip = this._statusMessage;
 		this._statusbar.command = 'extension.iis-express.open';
 		this._statusbar.show();
+
+		//Delete any existing entries for the site using appcmd
+		process.execFile('node', ['--version'], (error, stdout, stderr) => {
+			if (error) {
+				this._output.appendLine(`Error Deleting existing entry using appcmd: ${error}`);
+			}
+			console.log(stdout);
+		});
+
+		//This is the magic that runs the IISExpress cmd
+		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`]);
 		
         //Open browser
 		this.openWebsite(options);
