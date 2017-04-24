@@ -18,8 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
     };
 
     //Run IISExpress Class Contructor
-    let iisProc = new iis.IIS(verification.programPath, args);
-    
+    let iisProc = new iis.IIS(verification.programPath, verification.appCmdProgramPath, args);
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var startSite = vscode.commands.registerCommand('extension.iis-express.start',() => {

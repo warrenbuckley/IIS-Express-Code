@@ -9,6 +9,7 @@ interface verification {
     folderIsOpen: boolean;
     iisExists: boolean;
     programPath: string;
+    appCmdProgramPath: string;
 }
 
 
@@ -19,7 +20,8 @@ export function checkForProblems():verification{
         isValidOS: false,
         folderIsOpen: false,
         iisExists:false,
-        programPath: ''
+        programPath: '',
+        appCmdProgramPath: ''
     };
     
     // *******************************************
@@ -77,16 +79,18 @@ export function checkForProblems():verification{
 	
 	//'C:\Program Files (x86)'
 	let programFilesPath = process.env.ProgramFiles;
+    let iisPath = null;
 	
 	//Try to find IISExpress excutable - build up path to EXE
-	programFilesPath = path.join(programFilesPath, 'IIS Express', 'iisexpress.exe');
+	iisPath = path.join(programFilesPath, 'IIS Express', 'iisexpress.exe');
 	
     try {
         //Check if we can find the file path (get stat info on it)
-        let fileCheck = fs.statSync(programFilesPath);
+        let fileCheck = fs.statSync(iisPath);
     
         results.iisExists = true;
-        results.programPath = programFilesPath;
+        results.programPath = iisPath;
+        results.appCmdProgramPath = path.join(programFilesPath, 'IIS Express', 'appcmd.exe');
     }
     catch (err) {
        	//ENOENT - File or folder not found
