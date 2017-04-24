@@ -8,13 +8,14 @@ export interface Isettings {
     path: string;
     url?: string;
     clr: clrVersion;
-    protocol: protocol;
+    protocol: protocolType;
 }
 
 export enum clrVersion {
     v40 = <any>"v4.0",
 	v20 = <any>"v2.0"	
 }
+
 
 export enum protocolType {
     http = <any>"http",
