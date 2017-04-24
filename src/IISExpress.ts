@@ -15,13 +15,15 @@ export interface IExpressArguments {
 export class IIS {
 	private _iisProcess: process.ChildProcess;
 	private _iisPath: string;
+	private _iisAppCmdPath: string;
 	private _args: IExpressArguments;
 	private _output: vscode.OutputChannel;
 	private _statusbar: vscode.StatusBarItem;
 	private _statusMessage: string;
 
-	constructor(iisPath: string, args: IExpressArguments){
+	constructor(iisPath: string, appCmdPath: string, args: IExpressArguments){
 		this._iisPath = iisPath;
+		this._iisAppCmdPath = appCmdPath; 
 		this._args = args;
 	}
 	
@@ -63,16 +65,33 @@ export class IIS {
 		this._statusbar.command = 'extension.iis-express.open';
 		this._statusbar.show();
 
+
+		//TODO - Could maybe move this to iisexpress cmd line exit event (so we tidy up on way out)
 		//Delete any existing entries for the site using appcmd
-		process.execFile('node', ['--version'], (error, stdout, stderr) => {
-			if (error) {
-				this._output.appendLine(`Error Deleting existing entry using appcmd: ${error}`);
-			}
-			console.log(stdout);
+		//Not done as async - so we wait until this command completes
+		process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `name: ${vscode.workspace.rootPath.replace(' ', '_')}`], (error, stdout, stderr) => {
+			// if (error) {
+			// 	this._output.appendLine(`Error Deleting existing site entry using appcmd: ${error}`);
+			// }
+
+			//Could be a sucess or error message
+			//Such as cannot find site to delete & will be an err or sucess of deletion
+			var data=this.decode2gbk(stdout);
+			this._output.appendLine(data);
+		});
+
+		//Add the site to the config (which will invoke/run from iisexpress cmd line)
+		//Not done as async - so we wait until this command completes
+		//TODO: NOT SURE NOW HOW TO USE/SET CLR aka APPPOOL
+		process.execFileSync(this._iisAppCmdPath, ['add', 'site', `name:${vscode.workspace.rootPath.replace(' ', '_')}`, `-bindings:${'https'}://localhost:${this._args.port}`, `-physicalPath:${this._args.path}`], (error, stdout, stderr) =>{
+			//Could be a sucess or error message
+			//Such as 
+			var data=this.decode2gbk(stdout);
+			this._output.appendLine(data);
 		});
 
 		//This is the magic that runs the IISExpress cmd
-		this._iisProcess = process.spawn(this._iisPath, [`-path:${this._args.path}`,`-port:${this._args.port}`,`-clr:${this._args.clr}`]);
+		this._iisProcess = process.spawn(this._iisPath, [`-site:${vscode.workspace.rootPath.replace(' ', '_')}`]);
 		
         //Open browser
 		this.openWebsite(options);
@@ -94,6 +113,22 @@ export class IIS {
 			var message=this.decode2gbk(err.message);
 			this._output.appendLine(`ERROR: ${message}`);
 			console.log(`ERROR: ${message}`);
+		});
+
+		this._iisProcess.on('close', (code:number, signal: string) =>{
+			console.log('close code', code);
+			console.log('closes signal', signal);
+
+			//Can do appcmd delete site on way down?
+			//IISExpress could have crashed, close manually from SysTray or our stop command executed
+			//Close VSCode that kills IISExpress (Not sure this will get caught?)
+			
+			//systray == code == 0
+			
+			//SHIFT+F5 ?
+
+			//
+
 		});
 		
 		
@@ -142,9 +177,11 @@ export class IIS {
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
 
 			//Start browser with start url
+			//TODO - PASS IN PROTOCOL
 			let browser = process.exec(`start http://localhost:${this._args.port}/${startUrl}`);
     	} else {
 			//Uses the 'start' command & url to open default browser
+			//TODO - PASS IN PROTOCOL
 			let browser = process.exec(`start http://localhost:${this._args.port}`);
 		}
 	}
