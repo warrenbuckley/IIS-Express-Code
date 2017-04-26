@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as process from 'child_process';
+import * as path from "path";
 import * as settings from './settings';
 var iconv=require('iconv-lite')
 
@@ -7,6 +8,7 @@ export interface IExpressArguments {
 	path?: string;
 	port?: number;
 	clr?: settings.clrVersion;
+	protocol?: settings.protocolType;
 }
 
 // TODO:
@@ -51,50 +53,57 @@ export class IIS {
 		//CLR version, yes there are still people on 3.5
 		this._args.clr = options.clr ? options.clr : settings.clrVersion.v40;
 
+		this._args.protocol = options.protocol ? options.protocol : settings.protocolType.http;
+
 		//Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
 		this._output.show(vscode.ViewColumn.Three);
 
-		//Create Statusbar item & show it
-		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-		
-		//Set props on statusbar & show it
-		this._statusbar.text = `$(browser) http://localhost:${this._args.port}`;
-		this._statusMessage = `Running folder '${this._args.path}' as a website on http://localhost:${this._args.port} on CLR: ${this._args.clr}`;
-		this._statusbar.tooltip = this._statusMessage;
-		this._statusbar.command = 'extension.iis-express.open';
-		this._statusbar.show();
-
+		//Its the folder name (with some illegal chars removed)
+		//TODO: Need to get the comma's removed
+		var siteName = vscode.workspace.rootPath.split(path.sep).join().replace(' ', '_').replace(':', '_').replace(',', '_');
 
 		//TODO - Could maybe move this to iisexpress cmd line exit event (so we tidy up on way out)
 		//Delete any existing entries for the site using appcmd
 		//Not done as async - so we wait until this command completes
-		process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `name: ${vscode.workspace.rootPath.replace(' ', '_')}`], (error, stdout, stderr) => {
-			// if (error) {
-			// 	this._output.appendLine(`Error Deleting existing site entry using appcmd: ${error}`);
-			// }
+		try {
+			process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `-name:${siteName}`]);
+		} catch (error) {
+			console.log(error);
+		}
 
-			//Could be a sucess or error message
-			//Such as cannot find site to delete & will be an err or sucess of deletion
-			var data=this.decode2gbk(stdout);
-			this._output.appendLine(data);
-		});
 
 		//Add the site to the config (which will invoke/run from iisexpress cmd line)
 		//Not done as async - so we wait until this command completes
-		//TODO: NOT SURE NOW HOW TO USE/SET CLR aka APPPOOL
-		process.execFileSync(this._iisAppCmdPath, ['add', 'site', `name:${vscode.workspace.rootPath.replace(' ', '_')}`, `-bindings:${'https'}://localhost:${this._args.port}`, `-physicalPath:${this._args.path}`], (error, stdout, stderr) =>{
-			//Could be a sucess or error message
-			//Such as 
-			var data=this.decode2gbk(stdout);
-			this._output.appendLine(data);
-		});
+		try {
+			process.execFileSync(this._iisAppCmdPath, ['add', 'site', `-name:${siteName}`, `-bindings:${this._args.protocol}://localhost:${this._args.port}`, `-physicalPath:${this._args.path}`]);
+		} catch (error) {
+			console.log(error);
+		}
+
+		
+
+		//TODO: Add the correct AppPool based on CLR Version to run
+		//appcmd set app /app.name: Website1/ /applicationPool:Clr4IntegratedAppPool
+		//appcmd set app /app.name: Website1/ /applicationPool:Clr2IntegratedAppPool
+
 
 		//This is the magic that runs the IISExpress cmd
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${vscode.workspace.rootPath.replace(' ', '_')}`]);
 		
+		//Create Statusbar item & show it
+		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
+		
+		//Set props on statusbar & show it
+		this._statusbar.text = `$(browser) ${options.protocol}://localhost:${this._args.port}`;
+		this._statusMessage = `Running folder '${this._args.path}' as a website on ${options.protocol}://localhost:${this._args.port} on CLR: ${this._args.clr}`;
+		this._statusbar.tooltip = this._statusMessage;
+		this._statusbar.command = 'extension.iis-express.open';
+		this._statusbar.show();
+
         //Open browser
 		this.openWebsite(options);
+		
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
@@ -115,23 +124,6 @@ export class IIS {
 			console.log(`ERROR: ${message}`);
 		});
 
-		this._iisProcess.on('close', (code:number, signal: string) =>{
-			console.log('close code', code);
-			console.log('closes signal', signal);
-
-			//Can do appcmd delete site on way down?
-			//IISExpress could have crashed, close manually from SysTray or our stop command executed
-			//Close VSCode that kills IISExpress (Not sure this will get caught?)
-			
-			//systray == code == 0
-			
-			//SHIFT+F5 ?
-
-			//
-
-		});
-		
-		
 		//Display Message
 		vscode.window.showInformationMessage(this._statusMessage);
 	}
