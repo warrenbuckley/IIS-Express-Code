@@ -80,7 +80,7 @@ export class IIS {
 
 
 		//This is the magic that runs the IISExpress cmd
-		this._iisProcess = process.spawn(this._iisPath, [`-site:${vscode.workspace.rootPath.replace(' ', '_')}`]);
+		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
 		
 		//Create Statusbar item & show it
 		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -114,6 +114,27 @@ export class IIS {
 			this._output.appendLine(`ERROR: ${message}`);
 			console.log(`ERROR: ${message}`);
 		});
+
+		this._iisProcess.on('close', (code:number, signal:string) =>{
+
+			//Tidying up - so we remove the entry from appcmd
+			//As we use a uuid every time we start a site we need to do housekeeping & clean up
+			//When we are finished - this happens for:
+
+			//* Will happen when users stops with CTRL+F5
+			//* Close from the systray icon
+			//* Restart of site
+			//* Close VSCode & thus closing IISExpress
+
+			//Delete any existing entries for the site using appcmd
+			//Not done as async - so we wait until this command completes
+			try {
+				process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `${siteName}`]);
+			} catch (error) {
+				console.log(error);
+			}
+		});
+
 
 		//Display Message
 		vscode.window.showInformationMessage(this._statusMessage);
