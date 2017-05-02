@@ -65,10 +65,12 @@
         "key": "ctrl+shift+f5"
       }
     ],
-    "jsonValidation": [{
+    "jsonValidation": [
+      {
         "fileMatch": "/.vscode/iisexpress.json",
         "url": "https://raw.githubusercontent.com/warrenbuckley/IIS-Express-Code/master/src/iisexpress-schema.json"
-    }]
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
@@ -76,6 +78,7 @@
   },
   "devDependencies": {
     "typescript": "^1.6.2",
+    "uuid": "^3.0.1",
     "vscode": "0.10.x"
   },
   "dependencies": {
