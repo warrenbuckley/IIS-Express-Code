@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as process from 'child_process';
 import * as path from "path";
 import * as settings from './settings';
+import * as uuidV4  from 'uuid/v4';
 var iconv=require('iconv-lite')
 
 export interface IExpressArguments {
@@ -59,19 +60,9 @@ export class IIS {
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
 		this._output.show(vscode.ViewColumn.Three);
 
-		//Its the folder name (with some illegal chars removed)
-		//TODO: Need to get the comma's removed
-		var siteName = vscode.workspace.rootPath.split(path.sep).join().replace(' ', '_').replace(':', '_').replace(',', '_');
-
-		//TODO - Could maybe move this to iisexpress cmd line exit event (so we tidy up on way out)
-		//Delete any existing entries for the site using appcmd
-		//Not done as async - so we wait until this command completes
-		try {
-			process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `-name:${siteName}`]);
-		} catch (error) {
-			console.log(error);
-		}
-
+		//Site name is the name of the workspace folder & GUID/UUID
+		//Need to append a UUID as could have two folders/sites with same name
+		var siteName = path.basename(vscode.workspace.rootPath) + "-" + uuidV4();
 
 		//Add the site to the config (which will invoke/run from iisexpress cmd line)
 		//Not done as async - so we wait until this command completes
