@@ -31,9 +31,6 @@ export class IIS {
 	}
 	
 	public startWebsite(options?: settings.Isettings): process.ChildProcess{
-		//Need to run this command
-		//iisexpress /path:app-path [/port:port-number] [/clr:clr-version] [/systray:boolean]
-		//isexpress /path:c:\myapp\ /port:5005
 		
 		//Verify process not already running, so if we have a PID (process ID) it's running
 		//TODO: NOT WORKING?! - So it re-runs & moans that port in use
@@ -51,9 +48,10 @@ export class IIS {
 		//Folder to run as the arg
 		this._args.path = options.path ? options.path : vscode.workspace.rootPath;
 
-		//CLR version, yes there are still people on 3.5
+		//CLR version, yes there are still people on 3.5 & default back to v4 if not set
 		this._args.clr = options.clr ? options.clr : settings.clrVersion.v40;
 
+		//If no protocol set fallback to http as opposed to https
 		this._args.protocol = options.protocol ? options.protocol : settings.protocolType.http;
 
 		//Create output channel & show it
@@ -71,23 +69,27 @@ export class IIS {
 		} catch (error) {
 			console.log(error);
 		}
-
 		
+		//Based on the CLR chosen use the correct built in AppPools shipping with IISExpress
+		var appPool = this._args.clr === settings.clrVersion.v40 ? "Clr4IntegratedAppPool" : "Clr2IntegratedAppPool";
 
-		//TODO: Add the correct AppPool based on CLR Version to run
-		//appcmd set app /app.name: Website1/ /applicationPool:Clr4IntegratedAppPool
-		//appcmd set app /app.name: Website1/ /applicationPool:Clr2IntegratedAppPool
+		//Assign the apppool to the site
+		//appcmd set app /app.name:Site-Staging-201ec232-2906-4052-a431-727ec57b5b2e/ /applicationPool:Clr2IntegratedAppPool
+		try {
+			process.execFileSync(this._iisAppCmdPath, ['set', 'app', `/app.name:${siteName}/`, `/applicationPool:${appPool}`]);
+		} catch (error) {
+			console.log(error);
+		}
 
-
-		//This is the magic that runs the IISExpress cmd
+		//This is the magic that runs the IISExpress cmd from the appcmd config list
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
 		
 		//Create Statusbar item & show it
 		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
 		
 		//Set props on statusbar & show it
-		this._statusbar.text = `$(browser) ${options.protocol}://localhost:${this._args.port}`;
-		this._statusMessage = `Running folder '${this._args.path}' as a website on ${options.protocol}://localhost:${this._args.port} on CLR: ${this._args.clr}`;
+		this._statusbar.text = `$(browser) ${this._args.protocol}://localhost:${this._args.port}`;
+		this._statusMessage = `Running folder '${this._args.path}' as a website on ${this._args.protocol}://localhost:${this._args.port} on CLR: ${this._args.clr}`;
 		this._statusbar.tooltip = this._statusMessage;
 		this._statusbar.command = 'extension.iis-express.open';
 		this._statusbar.show();
@@ -150,7 +152,7 @@ export class IIS {
 			return;
 		}
 		
-		//Kill the process
+		//Kill the process - which will also hook into the exit event to remove the config entry
 		this._iisProcess.kill('SIGINT');
         this._iisProcess = undefined;
 		
@@ -181,12 +183,10 @@ export class IIS {
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
 
 			//Start browser with start url
-			//TODO - PASS IN PROTOCOL
-			let browser = process.exec(`start http://localhost:${this._args.port}/${startUrl}`);
+			let browser = process.exec(`start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
     	} else {
 			//Uses the 'start' command & url to open default browser
-			//TODO - PASS IN PROTOCOL
-			let browser = process.exec(`start http://localhost:${this._args.port}`);
+			let browser = process.exec(`start ${this._args.protocol}://localhost:${this._args.port}`);
 		}
 	}
 
