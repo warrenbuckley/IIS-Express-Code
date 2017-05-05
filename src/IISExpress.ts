@@ -81,6 +81,13 @@ export class IIS {
 			console.log(error);
 		}
 
+		//TODO: If using HTTPS need to call yet another cmd
+		// May be problematic as needed to be run as an adminstrator
+		// IisExpressAdminCmd.exe setupSslUrl -url:https://localhost:4430 -UseSelfSigned
+		
+		//TODO: Will need to undo/remove on process exit
+		// IisExpressAdminCmd.exe deleteSslUrl -url:https://localhost:4430
+
 		//This is the magic that runs the IISExpress cmd from the appcmd config list
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
 		
