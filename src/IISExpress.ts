@@ -62,6 +62,11 @@ export class IIS {
 		//Need to append a UUID as could have two folders/sites with same name
 		var siteName = path.basename(vscode.workspace.rootPath) + "-" + uuidV4();
 
+		//TODO: If user is using HTTPS & port not in range of auto-approved port numbers
+		//44300 - 44399
+		//Then display an error & stop process
+
+
 		//Add the site to the config (which will invoke/run from iisexpress cmd line)
 		//Not done as async - so we wait until this command completes
 		try {
@@ -81,12 +86,8 @@ export class IIS {
 			console.log(error);
 		}
 
-		//TODO: If using HTTPS need to call yet another cmd
-		// May be problematic as needed to be run as an adminstrator
-		// IisExpressAdminCmd.exe setupSslUrl -url:https://localhost:4430 -UseSelfSigned
 		
-		//TODO: Will need to undo/remove on process exit
-		// IisExpressAdminCmd.exe deleteSslUrl -url:https://localhost:4430
+		
 
 		//This is the magic that runs the IISExpress cmd from the appcmd config list
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
