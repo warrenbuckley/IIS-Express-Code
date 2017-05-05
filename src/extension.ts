@@ -6,10 +6,12 @@ import * as verify from './verification';
 import * as settings from './settings';
 
 
+let iisProc:iis.IIS = undefined;
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    
+
     //Begin checks of OS, IISExpress location etc..
     let verification = verify.checkForProblems();
 
@@ -18,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     };
 
     //Run IISExpress Class Contructor
-    let iisProc = new iis.IIS(verification.programPath, verification.appCmdProgramPath, args);
+    iisProc = new iis.IIS(verification.programPath, verification.appCmdProgramPath, args);
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var startSite = vscode.commands.registerCommand('extension.iis-express.start',() => {
@@ -81,4 +83,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 //this method is called when your extension is deactivated
 export function deactivate() {
+
+	//Deals with removing the site from appcmd
+	//As stop site - calls the kill signal which we listen to already to remove appcmd site
+
+	//This is to deal with when IIS Express & Site running in VSCode
+	//And the VSCode Window/Application is shutdown
+	if(iisProc){
+		iisProc.stopWebsite();
+	}
 }

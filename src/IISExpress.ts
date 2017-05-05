@@ -126,7 +126,6 @@ export class IIS {
 			//* Will happen when users stops with CTRL+F5
 			//* Close from the systray icon
 			//* Restart of site
-			//* Close VSCode & thus closing IISExpress
 
 			//Delete any existing entries for the site using appcmd
 			//Not done as async - so we wait until this command completes
