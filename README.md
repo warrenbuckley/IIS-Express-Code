@@ -8,7 +8,9 @@ Open the command pallete & type **ext install** then search for **IIS Express**
 
 # Usage
 ## Available commands
-* **IIS Express: Run Website** - Start or stop the current folder run as a website
+* **IIS Express: Start Website** - Start the current folder run as a website
+* **IIS Express: Stop Website** - Stop the current folder run as a website
+* **IIS Express: Restart Website** - Restart (Stop & Start) the current folder run as a website
 
 ![Usage](images/iis-express-usage.gif)
 
