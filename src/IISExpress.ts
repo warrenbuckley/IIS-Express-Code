@@ -33,7 +33,6 @@ export class IIS {
 	public startWebsite(options?: settings.Isettings): process.ChildProcess{
 		
 		//Verify process not already running, so if we have a PID (process ID) it's running
-		//TODO: NOT WORKING?! - So it re-runs & moans that port in use
 		if(this._iisProcess != undefined){
 			//Display error message that it's already running
 			vscode.window.showErrorMessage('IISExpress is already running');
@@ -62,8 +61,7 @@ export class IIS {
 		//Need to append a UUID as could have two folders/sites with same name
 		var siteName = path.basename(vscode.workspace.rootPath) + "-" + uuidV4();
 
-		//TODO: If user is using HTTPS & port not in range of auto-approved port numbers
-		//44300 - 44399
+		//If user is using HTTPS & port not in range of auto-approved port numbers (44300-44399)
 		//Then display an error & stop process
 		if(this._args.protocol === settings.protocolType.https && (this._args.port >= 44300 && this._args.port <=44399) === false){
 			//Using HTTPS but not using a port within the range that supports SSL
