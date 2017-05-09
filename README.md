@@ -16,6 +16,7 @@ Open the command pallete & type **ext install** then search for **IIS Express**
 * Auto opens folder in browser
 * Super simple way from the command pallete to start & stop the website
 * See ouput from the IIS Express command line directly in Visual Studio 
+* Support for PHP via `ApplicationHost.config` common changes for all sites running with IIS Express
 
 # Requirements 
 * Windows Machine (Sorry not for Linux & OSX)
@@ -23,6 +24,29 @@ Open the command pallete & type **ext install** then search for **IIS Express**
 
 
 # Changelog
+## Version 1.0.0
+* **New:** `.vscode/iisexpress.json` now supports a new property `protocol` which is an optional property & allows you to set the protocol to either `http` or `https` By default this is set to `http` If you do use `https` then IIS Express expects the port number to be within a range of 44300 - 44399
+* **New:** Uses `ApplicationHost.config` allowing for common changes for all sites running IIS Express. This allows support for using PHP for example.
+
+### PHP Support
+If you wish to use PHP then you will need to install PHP for Windows and then use the following commands in the console
+
+**NOTE:** This alternatively may be `\Program Files (x86)\IIS Express\`
+```
+cd "c:\Program files\IIS Express\"
+```
+
+**NOTE:** The path to `php-cgi.exe` may be different for you so update the two commands below.
+
+```
+appcmd set config /section:system.webServer/fastCGI /+[fullPath='"C:\Program Files (x86)\P  HP\php-cgi.exe"']
+
+appcmd set config /section:system.webServer/handlers /+[name='PHP_via_FastCGI',path='*.php',verb='*',modules='FastCgiModule',scriptProcessor='"C:\Program Files (x86)\PHP\php-cgi.exe"',resourceType='Unspecified']
+
+appcmd set config /section:system.webServer/defaultDocument /+"files.[value='index.php']"
+```
+
+
 ## Version 0.0.7
 * **New:** `.vscode/iisexpress.json` now supports a new property `url` which is an optional property & allows you to set the URL you wish to open eg: '/about/the-team'
 * **New:** `.vscode/iisexpress.json` now supports a new property `clr` which is an optional property allowing you to set the CLR to run your .NET website (Thanks to @avieru)
