@@ -2,8 +2,10 @@ import * as vscode from 'vscode';
 import * as process from 'child_process';
 import * as path from "path";
 import * as settings from './settings';
-import * as uuidV4  from 'uuid/v4';
-var iconv=require('iconv-lite')
+
+//External libraries
+let uuidV4 = require('uuid/v4');
+let iconv=require('iconv-lite');
 
 export interface IExpressArguments {
 	path?: string;
