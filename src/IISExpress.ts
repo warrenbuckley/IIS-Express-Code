@@ -65,6 +65,13 @@ export class IIS {
 		//TODO: If user is using HTTPS & port not in range of auto-approved port numbers
 		//44300 - 44399
 		//Then display an error & stop process
+		if(this._args.protocol === settings.protocolType.https && (this._args.port >= 44300 && this._args.port <=44399) === false){
+			//Using HTTPS but not using a port within the range that supports SSL
+			vscode.window.showErrorMessage('When using HTTPS you need to use ports 44300 - 44399 in .vscode/iisexpress.json');
+			
+			//Stop the method/function from running
+			return;
+		}
 
 
 		//Add the site to the config (which will invoke/run from iisexpress cmd line)
