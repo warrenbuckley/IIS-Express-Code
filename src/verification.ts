@@ -4,6 +4,8 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as settingsHelpers from './settings';
 import * as childProcess from 'child_process';
+import * as https from 'https';
+
 
 interface verification {
     isValidOS: boolean;
@@ -75,8 +77,8 @@ export function checkForProblems():verification{
     // *******************************************
  
     //Let's check for two folder locations for IISExpress
-	//32bit machines - 'C:\Program Files\IIS Express\iisexpress.exe'
-	//64bit machines - 'C:\Program Files (x86)\IIS Express\iisexpress.exe'
+	//64bit machines - 'C:\Program Files\IIS Express\iisexpress.exe'
+	//32bit machines - 'C:\Program Files (x86)\IIS Express\iisexpress.exe'
 	
 	//'C:\Program Files (x86)'
 	let programFilesPath = process.env.ProgramFiles;
@@ -96,8 +98,6 @@ export function checkForProblems():verification{
     catch (err) {
        	//ENOENT - File or folder not found
 		if(err && err.code.toUpperCase() === 'ENOENT'){
-           // vscode.window.showErrorMessage(`We did not find a copy of IISExpress.exe at ${iisPath}`);
-            
             //Prompt user - so they opt in to installing IIS Express
             vscode.window.showWarningMessage(`We could not find IIS Express at ${iisPath}, would you like us to install it for you?`, 'Yes Please', 'No Thanks').then(selection => {
                 switch(selection){
@@ -105,6 +105,7 @@ export function checkForProblems():verification{
                         //Kick in to auto-pilot
 
                         //Download file - THEN (so use a promise)
+                        GetIISDownload();
 
                         //Install MSI with childprocess
 
@@ -142,7 +143,18 @@ export function checkForProblems():verification{
 }
 
 function GetIISDownload() : void {
-    //Need
+    //For now just download any MSI (dont determine Processor)
+    const options : https.RequestOptions = {
+        hostname: 'download.microsoft.com',
+        port: 443,
+        path: '/download/C/E/8/CE8D18F5-D4C0-45B5-B531-ADECD637A1AA/iisexpress_amd64_en-US.msi',
+        method: 'GET'
+    };
+
+    var file = fs.createWriteStream('C:\\iis.msi');
+    var request = https.get(options, function(response) {
+        response.pipe(file);
+    });
 }
 
 function InstallIIS() : void {
