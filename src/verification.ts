@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as settingsHelpers from './settings';
+import * as childProcess from 'child_process';
 
 interface verification {
     isValidOS: boolean;
@@ -95,11 +96,38 @@ export function checkForProblems():verification{
     catch (err) {
        	//ENOENT - File or folder not found
 		if(err && err.code.toUpperCase() === 'ENOENT'){
-			vscode.window.showErrorMessage(`We did not find a copy of IISExpress.exe at ${programFilesPath}`);
+           // vscode.window.showErrorMessage(`We did not find a copy of IISExpress.exe at ${iisPath}`);
+            
+            //Prompt user - so they opt in to installing IIS Express
+            vscode.window.showWarningMessage(`We could not find IIS Express at ${iisPath}, would you like us to install it for you?`, 'Yes Please', 'No Thanks').then(selection => {
+                switch(selection){
+                    case 'Yes Please':
+                        //Kick in to auto-pilot
+
+                        //Download file - THEN (so use a promise)
+
+                        //Install MSI with childprocess
+
+                        //Confirm install - somehow?!
+
+                        //Remove download file
+
+                        break;
+
+                    case 'No Thanks':
+                        //Open a browser to the IIS 10 Express download page for them to do it themselves
+                        let browser = childProcess.exec('start https://www.microsoft.com/en-us/download/details.aspx?id=48264');
+                        break;
+
+                    default:
+                        //Do nothing for now (Assume they clicked close on message)
+                }
+            });
+
         }
 		else if(err){
 			//Some other error - maybe file permission or ...?
-			vscode.window.showErrorMessage(`There was an error trying to find IISExpress.exe at ${programFilesPath} due to ${err.message}`);
+			vscode.window.showErrorMessage(`There was an error trying to find IISExpress.exe at ${iisPath} due to ${err.message}`);
 		}
        
        
@@ -111,4 +139,16 @@ export function checkForProblems():verification{
     //Return an object back from verifications
     return results;
     
+}
+
+function GetIISDownload() : void {
+    //Need
+}
+
+function InstallIIS() : void {
+    
+}
+
+function RemoveIISDownload() : void {
+
 }
