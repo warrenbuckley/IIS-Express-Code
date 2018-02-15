@@ -3,8 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as settingsHelpers from './settings';
-import * as childProcess from 'child_process';
-import * as https from 'https';
+import * as install from './install';
 
 
 interface verification {
@@ -103,21 +102,12 @@ export function checkForProblems():verification{
                 switch(selection){
                     case 'Yes Please':
                         //Kick in to auto-pilot
-
-                        //Download file - THEN (so use a promise)
-                        GetIISDownload();
-
-                        //Install MSI with childprocess
-
-                        //Confirm install - somehow?!
-
-                        //Remove download file
-
+                        install.DoMagicInstall();
                         break;
 
                     case 'No Thanks':
                         //Open a browser to the IIS 10 Express download page for them to do it themselves
-                        let browser = childProcess.exec('start https://www.microsoft.com/en-us/download/details.aspx?id=48264');
+                        install.OpenDownloadPage();
                         break;
 
                     default:
@@ -140,27 +130,4 @@ export function checkForProblems():verification{
     //Return an object back from verifications
     return results;
     
-}
-
-function GetIISDownload() : void {
-    //For now just download any MSI (dont determine Processor)
-    const options : https.RequestOptions = {
-        hostname: 'download.microsoft.com',
-        port: 443,
-        path: '/download/C/E/8/CE8D18F5-D4C0-45B5-B531-ADECD637A1AA/iisexpress_amd64_en-US.msi',
-        method: 'GET'
-    };
-
-    var file = fs.createWriteStream('C:\\iis.msi');
-    var request = https.get(options, function(response) {
-        response.pipe(file);
-    });
-}
-
-function InstallIIS() : void {
-    
-}
-
-function RemoveIISDownload() : void {
-
 }
