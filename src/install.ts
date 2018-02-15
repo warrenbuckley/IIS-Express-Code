@@ -17,12 +17,11 @@ export function DoMagicInstall() : void {
 
     FetchDownloadFile(processor).then(function (fileDownloadPath) {
 
-        console.log('File download Path', fileDownloadPath);
-
         //Execute the installer - once we know its been downloaded
         InstallTime(fileDownloadPath).then(function (){
             vscode.window.showInformationMessage('IIS Express has been successfully installed and is ready to use')
-        }).catch(function(error:Error){
+        })
+        .catch(function(error:Error){
              //Problem with the child process excuting the MSI install
             vscode.window.showErrorMessage(`There was a problem trying to install IIS Express: ${error.message}`);
         });
@@ -35,14 +34,11 @@ export function DoMagicInstall() : void {
 }
 
 function WhatProcessor() : string {
+    //Should be amd64 or x86
     return process.env.PROCESSOR_ARCHITECTURE;
 }
 
 function FetchDownloadFile(processor:string) : Promise<string> {
-
-    //amd64 - What this DEV machine is
-    //x86
-
     return new Promise((resolve, reject) => {
 
         //URL & HTTPS config to fetch file
@@ -86,14 +82,14 @@ function InstallTime(installerFilePath:string) : Promise<any> {
 
     return new Promise((resolve, reject) => {
         //Execute a cmd line install with the -passive switch on the MSI
-        childProcess.execFile(installerFilePath, ['/passive'], (error, stdout, stderr) => {
-            console.log('whats up');
+        const installer = childProcess.spawn('cmd.exe', ['/c', installerFilePath, '-passive']);
+        
+        installer.on('error', (error:Error) => {
+            reject(error);
+            return;
+        });
 
-            if (error) {
-              throw error;
-            }
-
-            //Everything was installed all OK
+        installer.on('exit', (code) => {
             resolve();
         });
     });
