@@ -2,7 +2,6 @@ import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import * as settingsHelpers from './settings';
 import * as install from './install';
 
 
@@ -88,7 +87,7 @@ export function checkForProblems():verification{
 	
     try {
         //Check if we can find the file path (get stat info on it)
-        let fileCheck = fs.statSync(iisPath);
+        fs.statSync(iisPath);
     
         results.iisExists = true;
         results.programPath = iisPath;
