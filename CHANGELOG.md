@@ -1,5 +1,5 @@
 # Changelog
-## Version 1.0.0
+## Version 1.0.1
 * **New:** Adds a new feature where IIS Express can be auto installed - by downloading the MSI from Microsoft & installing it for you when IIS is not detected
 
 ## Version 1.0.0
