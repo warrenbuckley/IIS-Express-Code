@@ -1,94 +1,94 @@
 {
-  "name": "iis-express",
-  "displayName": "IIS Express",
-  "description": "This allows you to run the current folder as a website in IIS Express",
-  "version": "1.0.0",
-  "publisher": "warren-buckley",
-  "icon": "images/iis-icon.png",
-  "galleryBanner": {
-    "color": "#007acc",
-    "theme": "dark"
-  },
-  "keywords": [
-    "IIS",
-    "IIS Express",
-    "Web Server"
-  ],
-  "bugs": {
-    "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues",
-    "email": ""
-  },
-  "homepage": "https://github.com/warrenbuckley/IIS-Express-Code",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/warrenbuckley/IIS-Express-Code.git"
-  },
-  "engines": {
-    "vscode": "^1.12.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:extension.iis-express.start",
-    "onCommand:extension.iis-express.stop",
-    "onCommand:extension.iis-express.open",
-    "onCommand:extension.iis-express.restart"
-  ],
-  "main": "./out/src/extension",
-  "contributes": {
-    "commands": [
-      {
-        "command": "extension.iis-express.start",
-        "title": "IIS Express: Start Website"
-      },
-      {
-        "command": "extension.iis-express.stop",
-        "title": "IIS Express: Stop Website"
-      },
-      {
-        "command": "extension.iis-express.restart",
-        "title": "IIS Express: Restart Website"
-      }
+    "name": "iis-express",
+    "displayName": "IIS Express",
+    "description": "This allows you to run the current folder as a website in IIS Express",
+    "version": "1.1.0",
+    "publisher": "warren-buckley",
+    "icon": "images/iis-icon.png",
+    "galleryBanner": {
+        "color": "#007acc",
+        "theme": "dark"
+    },
+    "keywords": [
+        "IIS",
+        "IIS Express",
+        "Web Server"
     ],
-    "keybindings": [
-      {
-        "command": "extension.iis-express.start",
-        "key": "ctrl+f5"
-      },
-      {
-        "command": "extension.iis-express.stop",
-        "key": "shift+f5"
-      },
-      {
-        "command": "extension.iis-express.restart",
-        "key": "ctrl+shift+f5"
-      }
+    "bugs": {
+        "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues",
+        "email": ""
+    },
+    "homepage": "https://github.com/warrenbuckley/IIS-Express-Code",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/warrenbuckley/IIS-Express-Code.git"
+    },
+    "engines": {
+        "vscode": "^1.12.0"
+    },
+    "categories": [
+        "Other"
     ],
-    "jsonValidation": [
-      {
-        "fileMatch": "/.vscode/iisexpress.json",
-        "url": "https://raw.githubusercontent.com/warrenbuckley/IIS-Express-Code/master/src/iisexpress-schema.json"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
-  },
-  "devDependencies": {
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.6",
-    "tslint": "^5.8.0",
-    "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
-  },
-  "dependencies": {
-    "iconv-lite": "^0.4.13",
-    "jsonfile": "^2.2.3",
-    "uuid": "^3.0.1"
-  }
+    "activationEvents": [
+        "onCommand:extension.iis-express.start",
+        "onCommand:extension.iis-express.stop",
+        "onCommand:extension.iis-express.open",
+        "onCommand:extension.iis-express.restart"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.iis-express.start",
+                "title": "IIS Express: Start Website"
+            },
+            {
+                "command": "extension.iis-express.stop",
+                "title": "IIS Express: Stop Website"
+            },
+            {
+                "command": "extension.iis-express.restart",
+                "title": "IIS Express: Restart Website"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "extension.iis-express.start",
+                "key": "ctrl+f5"
+            },
+            {
+                "command": "extension.iis-express.stop",
+                "key": "shift+f5"
+            },
+            {
+                "command": "extension.iis-express.restart",
+                "key": "ctrl+shift+f5"
+            }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "/.vscode/iisexpress.json",
+                "url": "https://raw.githubusercontent.com/warrenbuckley/IIS-Express-Code/master/src/iisexpress-schema.json"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "tslint": "^5.8.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "iconv-lite": "^0.4.13",
+        "jsonfile": "^2.2.3",
+        "uuid": "^3.0.1"
+    }
 }
