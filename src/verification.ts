@@ -2,7 +2,8 @@ import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import * as settingsHelpers from './settings';
+import * as install from './install';
+
 
 interface verification {
     isValidOS: boolean;
@@ -74,8 +75,8 @@ export function checkForProblems():verification{
     // *******************************************
  
     //Let's check for two folder locations for IISExpress
-	//32bit machines - 'C:\Program Files\IIS Express\iisexpress.exe'
-	//64bit machines - 'C:\Program Files (x86)\IIS Express\iisexpress.exe'
+	//64bit machines - 'C:\Program Files\IIS Express\iisexpress.exe'
+	//32bit machines - 'C:\Program Files (x86)\IIS Express\iisexpress.exe'
 	
 	//'C:\Program Files (x86)'
 	let programFilesPath = process.env.ProgramFiles;
@@ -86,7 +87,7 @@ export function checkForProblems():verification{
 	
     try {
         //Check if we can find the file path (get stat info on it)
-        let fileCheck = fs.statSync(iisPath);
+        fs.statSync(iisPath);
     
         results.iisExists = true;
         results.programPath = iisPath;
@@ -95,11 +96,28 @@ export function checkForProblems():verification{
     catch (err) {
        	//ENOENT - File or folder not found
 		if(err && err.code.toUpperCase() === 'ENOENT'){
-			vscode.window.showErrorMessage(`We did not find a copy of IISExpress.exe at ${programFilesPath}`);
+            //Prompt user - so they opt in to installing IIS Express
+            vscode.window.showWarningMessage(`We could not find IIS Express at ${iisPath}, would you like us to install it for you?`, 'Yes Please', 'No Thanks').then(selection => {
+                switch(selection){
+                    case 'Yes Please':
+                        //Kick in to auto-pilot
+                        install.DoMagicInstall();
+                        break;
+
+                    case 'No Thanks':
+                        //Open a browser to the IIS 10 Express download page for them to do it themselves
+                        install.OpenDownloadPage();
+                        break;
+
+                    default:
+                        //Do nothing for now (Assume they clicked close on message)
+                }
+            });
+
         }
 		else if(err){
 			//Some other error - maybe file permission or ...?
-			vscode.window.showErrorMessage(`There was an error trying to find IISExpress.exe at ${programFilesPath} due to ${err.message}`);
+			vscode.window.showErrorMessage(`There was an error trying to find IISExpress.exe at ${iisPath} due to ${err.message}`);
 		}
        
        

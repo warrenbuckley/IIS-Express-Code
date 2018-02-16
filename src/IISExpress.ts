@@ -115,21 +115,18 @@ export class IIS {
 		
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data) =>{
-			var data=this.decode2gbk(data);
+			data = this.decode2gbk(data);
 			this._output.appendLine(data);
-			console.log(`stdout: ${data}`);
 		});
 		
 		this._iisProcess.stderr.on('data', (data) => {
-			var data=this.decode2gbk(data);
+			data = this.decode2gbk(data);
 			this._output.appendLine(`stderr: ${data}`);
-			console.log(`stderr: ${data}`);
 		});
 		
 		this._iisProcess.on('error', (err:Error) => {
-			var message=this.decode2gbk(err.message);
+			var message = this.decode2gbk(err.message);
 			this._output.appendLine(`ERROR: ${message}`);
-			console.log(`ERROR: ${message}`);
 		});
 
 		this._iisProcess.on('close', (code:number, signal:string) =>{
@@ -197,10 +194,10 @@ export class IIS {
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
 
 			//Start browser with start url
-			let browser = process.exec(`start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
+			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
     	} else {
 			//Uses the 'start' command & url to open default browser
-			let browser = process.exec(`start ${this._args.protocol}://localhost:${this._args.port}`);
+			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}`);
 		}
 	}
 
@@ -218,7 +215,7 @@ export class IIS {
 
 	}
 	
-    private decode2gbk(data) {
+    private decode2gbk(data): string {
 		var buffer = new Buffer(data);
  		return iconv.decode(buffer, 'gbk');
 	}

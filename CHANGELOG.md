@@ -1,5 +1,8 @@
 # Changelog
 ## Version 1.0.0
+* **New:** Adds a new feature where IIS Express can be auto installed - by downloading the MSI from Microsoft & installing it for you when IIS is not detected
+
+## Version 1.0.0
 * **New:** `.vscode/iisexpress.json` now supports a new property `protocol` which is an optional property & allows you to set the protocol to either `http` or `https` By default this is set to `http` If you do use `https` then IIS Express expects the port number to be within a range of 44300 - 44399
 * **New:** Uses `ApplicationHost.config` allowing for common changes for all sites running IIS Express. This allows support for using PHP for example.
 
