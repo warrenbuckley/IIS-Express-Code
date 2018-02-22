@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 export interface Isettings {
     port: number;
     path: string;
+    config?: string;
     url?: string;
     clr: clrVersion;
     protocol: protocolType;
