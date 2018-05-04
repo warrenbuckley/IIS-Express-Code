@@ -15,8 +15,7 @@
         "Web Server"
     ],
     "bugs": {
-        "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues",
-        "email": ""
+        "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues"
     },
     "homepage": "https://github.com/warrenbuckley/IIS-Express-Code",
     "repository": {
@@ -24,7 +23,7 @@
         "url": "https://github.com/warrenbuckley/IIS-Express-Code.git"
     },
     "engines": {
-        "vscode": "^1.12.0"
+        "vscode": "^1.23.0"
     },
     "categories": [
         "Other"
@@ -35,7 +34,7 @@
         "onCommand:extension.iis-express.open",
         "onCommand:extension.iis-express.restart"
     ],
-    "main": "./out/src/extension",
+    "main": "./out/extension",
     "contributes": {
         "commands": [
             {
