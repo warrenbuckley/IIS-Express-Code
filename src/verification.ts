@@ -122,7 +122,7 @@ export function checkForProblems():verification{
        
        
         results.iisExists = false;
-        results.programPath = null;
+        results.programPath = "";
     }
     
     

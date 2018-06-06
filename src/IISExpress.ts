@@ -18,13 +18,13 @@ export interface IExpressArguments {
 // * Tidy up code - remove events we do not need
 
 export class IIS {
-	private _iisProcess: process.ChildProcess;
+	private _iisProcess!: process.ChildProcess | undefined;
 	private _iisPath: string;
 	private _iisAppCmdPath: string;
 	private _args: IExpressArguments;
-	private _output: vscode.OutputChannel;
-	private _statusbar: vscode.StatusBarItem;
-	private _statusMessage: string;
+	private _output!: vscode.OutputChannel;
+	private _statusbar!: vscode.StatusBarItem;
+	private _statusMessage!: string;
 
 	constructor(iisPath: string, appCmdPath: string, args: IExpressArguments){
 		this._iisPath = iisPath;
@@ -32,7 +32,7 @@ export class IIS {
 		this._args = args;
 	}
 	
-	public startWebsite(options?: settings.Isettings): process.ChildProcess{
+	public startWebsite(options?: settings.Isettings) {
 		
 		//Verify process not already running, so if we have a PID (process ID) it's running
 		if(this._iisProcess != undefined){
@@ -42,7 +42,13 @@ export class IIS {
 			//Stop the method/function from running
 			return;
 		}
-        
+
+		
+		if(!options){
+			vscode.window.showErrorMessage('No options found');
+			return;
+		}
+
         //Get IIS Port Number from config file
         this._args.port = options.port;
 		
@@ -61,7 +67,7 @@ export class IIS {
 
 		//Site name is the name of the workspace folder & GUID/UUID
 		//Need to append a UUID as could have two folders/sites with same name
-		var siteName = path.basename(vscode.workspace.rootPath) + "-" + uuidV4();
+		var siteName = path.basename(vscode.workspace.rootPath as string) + "-" + uuidV4();
 
 		//If user is using HTTPS & port not in range of auto-approved port numbers (44300-44399)
 		//Then display an error & stop process
@@ -114,12 +120,12 @@ export class IIS {
 		
 		
 		//Attach all the events & functions to iisProcess
-		this._iisProcess.stdout.on('data', (data) =>{
+		this._iisProcess.stdout.on('data', (data: string) =>{
 			data = this.decode2gbk(data);
 			this._output.appendLine(data);
 		});
 		
-		this._iisProcess.stderr.on('data', (data) => {
+		this._iisProcess.stderr.on('data', (data: string) => {
 			data = this.decode2gbk(data);
 			this._output.appendLine(`stderr: ${data}`);
 		});
@@ -129,7 +135,7 @@ export class IIS {
 			this._output.appendLine(`ERROR: ${message}`);
 		});
 
-		this._iisProcess.on('close', (code:number, signal:string) =>{
+		this._iisProcess.on('close', () =>{
 
 			//Tidying up - so we remove the entry from appcmd
 			//As we use a uuid every time we start a site we need to do housekeeping & clean up
@@ -215,7 +221,7 @@ export class IIS {
 
 	}
 	
-    private decode2gbk(data): string {
+    private decode2gbk(data: string): string {
 		var buffer = new Buffer(data);
  		return iconv.decode(buffer, 'gbk');
 	}

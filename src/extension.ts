@@ -6,7 +6,7 @@ import * as verify from './verification';
 import * as settings from './settings';
 
 
-let iisProc:iis.IIS = undefined;
+let iisProc:iis.IIS;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

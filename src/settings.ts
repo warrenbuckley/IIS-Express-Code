@@ -24,7 +24,7 @@ export function getSettings():Isettings{
     //Give some default values
     let settings:Isettings = {
         port : getRandomPort(),
-        path: vscode.workspace.rootPath,
+        path: vscode.workspace.rootPath as string,
         clr: clrVersion.v40,
         protocol: protocolType.http
     };
@@ -78,7 +78,7 @@ export function getSettings():Isettings{
 
         //jsonfile.writeFile (does not create path/folder if it does not exist)
         //The dir should be available & thus able to now write the file
-        jsonfile.writeFile(settingsFilePath, settings, {spaces: 2}, function (jsonErr) {
+        jsonfile.writeFile(settingsFilePath, settings, {spaces: 2}, function (jsonErr:string) {
             if(jsonErr){
                 console.error(jsonErr);
                 vscode.window.showErrorMessage('Error creating iisexpress.json file: ' + jsonErr);
