@@ -22,7 +22,7 @@ export class IIS {
 	private _iisPath: string;
 	private _iisAppCmdPath: string;
 	private _args: IExpressArguments;
-	private _output!: vscode.OutputChannel;
+	private _output!: vscode.OutputChannel | null;
 	private _statusbar!: vscode.StatusBarItem;
 	private _statusMessage!: string;
 
@@ -35,7 +35,7 @@ export class IIS {
 	public startWebsite(options?: settings.Isettings) {
 		
 		//Verify process not already running, so if we have a PID (process ID) it's running
-		if(this._iisProcess != undefined){
+		if(this._iisProcess !== undefined){
 			//Display error message that it's already running
 			vscode.window.showErrorMessage('IISExpress is already running');
 			
@@ -122,17 +122,17 @@ export class IIS {
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data: string) =>{
 			data = this.decode2gbk(data);
-			this._output.appendLine(data);
+			this._output!.appendLine(data);
 		});
 		
 		this._iisProcess.stderr.on('data', (data: string) => {
 			data = this.decode2gbk(data);
-			this._output.appendLine(`stderr: ${data}`);
+			this._output!.appendLine(`stderr: ${data}`);
 		});
 		
 		this._iisProcess.on('error', (err:Error) => {
 			var message = this.decode2gbk(err.message);
-			this._output.appendLine(`ERROR: ${message}`);
+			this._output!.appendLine(`ERROR: ${message}`);
 		});
 
 		this._iisProcess.on('close', () =>{
@@ -174,9 +174,9 @@ export class IIS {
         this._iisProcess = undefined;
 		
 		//Clear the output log
-		this._output.clear();
-        this._output.hide();
-        this._output.dispose();
+		this._output!.clear();
+        this._output!.hide();
+        this._output!.dispose();
 		this._output = null;
 
 		//Remove the statusbar item
