@@ -177,7 +177,8 @@ export class IIS {
 		this._output.clear();
         this._output.hide();
         this._output.dispose();
-		
+		this._output = null;
+
 		//Remove the statusbar item
 		this._statusbar.hide();
 		this._statusbar.dispose();
