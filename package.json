@@ -31,7 +31,6 @@
     "activationEvents": [
         "onCommand:extension.iis-express.start",
         "onCommand:extension.iis-express.stop",
-        "onCommand:extension.iis-express.open",
         "onCommand:extension.iis-express.restart"
     ],
     "main": "./out/extension",

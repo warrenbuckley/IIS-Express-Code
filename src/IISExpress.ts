@@ -32,7 +32,7 @@ export class IIS {
 		this._args = args;
 	}
 	
-	public startWebsite(options?: settings.Isettings) {
+	public startWebsite(options?: settings.Isettings, siteid?: string) {
 		
 		//Verify process not already running, so if we have a PID (process ID) it's running
 		if(this._iisProcess !== undefined){
@@ -49,17 +49,26 @@ export class IIS {
 			return;
 		}
 
+
+
+		let site = options.sites.find(i => i.siteid === siteid);
+		
+		if(!site){
+			vscode.window.showErrorMessage('site not found');
+			return;
+		}
+
         //Get IIS Port Number from config file
-        this._args.port = options.port;
+        this._args.port = site.port;
 		
 		//Folder to run as the arg
-		this._args.path = options.path ? options.path : vscode.workspace.rootPath;
+		this._args.path = site.path ? site.path : vscode.workspace.rootPath;
 
 		//CLR version, yes there are still people on 3.5 & default back to v4 if not set
-		this._args.clr = options.clr ? options.clr : settings.clrVersion.v40;
+		this._args.clr = site.clr ? site.clr : settings.clrVersion.v40;
 
 		//If no protocol set fallback to http as opposed to https
-		this._args.protocol = options.protocol ? options.protocol : settings.protocolType.http;
+		this._args.protocol = site.protocol ? site.protocol : settings.protocolType.http;
 
 		//Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
@@ -112,11 +121,10 @@ export class IIS {
 		this._statusbar.text = `$(browser) ${this._args.protocol}://localhost:${this._args.port}`;
 		this._statusMessage = `Running folder '${this._args.path}' as a website on ${this._args.protocol}://localhost:${this._args.port} on CLR: ${this._args.clr}`;
 		this._statusbar.tooltip = this._statusMessage;
-		this._statusbar.command = 'extension.iis-express.open';
 		this._statusbar.show();
 
         //Open browser
-		this.openWebsite(options);
+		this.openWebsite(site.url);
 		
 		
 		//Attach all the events & functions to iisProcess
@@ -185,7 +193,7 @@ export class IIS {
 		
 	}
 
-	public openWebsite(options?: settings.Isettings){
+	public openWebsite(url = ''){
 
 		//If we do not have an iisProcess running
 		if(!this._iisProcess){
@@ -196,9 +204,9 @@ export class IIS {
 		}
 
 		
-		if (options && options.url) {
+		if (url) {
 			//We have a starting URL set - but lets ensure we strip starting / if present
-			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
+			let startUrl = url.startsWith('/') ? url.substring(1) : url;
 
 			//Start browser with start url
 			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
