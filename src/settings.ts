@@ -100,7 +100,34 @@ export function getSettings(): Isettings {
     } else {
         //File exists lets read the settings from the JSON file then
         //read file .vscode\iisexpress.json and overwrite port property from iisexpress.json
-        settings = jsonfile.readFileSync(settingsFilePath);
+        let mySettings = jsonfile.readFileSync(settingsFilePath);
+
+        if (!mySettings.sites) { 
+            
+            // convert old iisexpress.json structure to support multiple sites structure
+            let newSettings: Isettings = {
+                sites: [
+                    {
+                        siteid: 'localhost:' + mySettings.port,
+                        port: mySettings.port,
+                        path: mySettings.path,
+                        clr: mySettings.clr,
+                        protocol: mySettings.protocol
+                    }
+                ]
+            };
+            mySettings = newSettings;
+
+            // update the iisexpress.json file
+            jsonfile.writeFile(settingsFilePath, mySettings, { spaces: 2 }, function (jsonErr: string) {
+                if (jsonErr) {
+                    console.error(jsonErr);
+                    vscode.window.showErrorMessage('Error updating iisexpress.json file: ' + jsonErr);
+                }
+            });
+        }
+        
+        settings = mySettings;
     }
 
     //Return an object back from verifications
