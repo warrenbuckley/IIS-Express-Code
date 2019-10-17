@@ -32,8 +32,8 @@ export function getSettings():Isettings{
     // *******************************************
     // Checks that iisexpress.json exist
     // *******************************************
-    let settingsFolderPath = vscode.workspace.rootPath + "\\.vscode";
-	let settingsFilePath = settingsFolderPath + "\\iisexpress.json";
+    let settingsFolderPath = vscode.workspace.rootPath + "/.vscode";
+	let settingsFilePath = settingsFolderPath + "/iisexpress.json";
 
     
     //use -> https://www.npmjs.com/package/jsonfile
