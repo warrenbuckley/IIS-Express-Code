@@ -194,17 +194,16 @@ export class IIS {
 			//Stop function from running
 			return;
 		}
-
 		
 		if (options && options.url) {
 			//We have a starting URL set - but lets ensure we strip starting / if present
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
 
 			//Start browser with start url
-			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
+			process.exec(`powershell.exe /c start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
     	} else {
 			//Uses the 'start' command & url to open default browser
-			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}`);
+			process.exec(`powershell.exe /c start ${this._args.protocol}://localhost:${this._args.port}`);
 		}
 	}
 

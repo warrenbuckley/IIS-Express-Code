@@ -6,7 +6,7 @@ import * as vscode from 'vscode';
 
 export function OpenDownloadPage(): void {
      //Open a browser to the IIS 10 Express download page for them to do it themselves
-     childProcess.exec('start https://www.microsoft.com/en-us/download/details.aspx?id=48264');
+     childProcess.exec('powershell.exe /c start https://www.microsoft.com/en-us/download/details.aspx?id=48264');
 }
 
 export function DoMagicInstall() : void {
