@@ -19,7 +19,7 @@ export function DoMagicInstall() : void {
 
         //Execute the installer - once we know its been downloaded
         InstallTime(fileDownloadPath).then(function (){
-            vscode.window.showInformationMessage('IIS Express has been successfully installed and is ready to use')
+            vscode.window.showInformationMessage('IIS Express has been successfully installed and is ready to use');
         })
         .catch(function(error:Error){
              //Problem with the child process excuting the MSI install
@@ -47,7 +47,7 @@ function FetchDownloadFile(processor:string) : Promise<string> {
             port: 443,
             path: `/download/C/E/8/CE8D18F5-D4C0-45B5-B531-ADECD637A1AA/iisexpress_${processor}_en-US.msi`,
             method: 'GET'
-        };        
+        };
 
         var request = https.get(options, function(response) {
 
@@ -58,7 +58,7 @@ function FetchDownloadFile(processor:string) : Promise<string> {
 
             var filePath = path.join(process.env.TEMP, `iisexpress_${processor}_en-US.msi`);
             var file = fs.createWriteStream(filePath);
-            
+
             //Saves the response into the file
             response.pipe(file);
 
@@ -83,7 +83,7 @@ function InstallTime(installerFilePath:string) : Promise<any> {
     return new Promise((resolve, reject) => {
         //Execute a cmd line install with the -passive switch on the MSI
         const installer = childProcess.spawn('cmd.exe', ['/c', installerFilePath, '-passive']);
-        
+
         installer.on('error', (error:Error) => {
             reject(error);
             return;

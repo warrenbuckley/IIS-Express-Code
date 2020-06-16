@@ -11,7 +11,7 @@ export interface Isettings {
 
 export enum clrVersion {
     v40 = <any>"v4.0",
-	v20 = <any>"v2.0"	
+	v20 = <any>"v2.0"
 }
 
 
@@ -28,17 +28,17 @@ export function getSettings():Isettings{
         clr: clrVersion.v40,
         protocol: protocolType.http
     };
-    
+
     // *******************************************
     // Checks that iisexpress.json exist
     // *******************************************
     let settingsFolderPath = vscode.workspace.rootPath + "\\.vscode";
 	let settingsFilePath = settingsFolderPath + "\\iisexpress.json";
 
-    
+
     //use -> https://www.npmjs.com/package/jsonfile
     var jsonfile = require('jsonfile');
-    
+
     let fileExists = false;
     let folderExists = false;
 
@@ -51,7 +51,7 @@ export function getSettings():Isettings{
         vscode.window.showErrorMessage('Unable to check if .vscode/iisexpress.json config exists');
     }
 
-    if(fileExists == false){
+    if(fileExists === false){
         //File does not exist lets create it
 
         //However we also need to verify that the directory exists as well
@@ -64,7 +64,7 @@ export function getSettings():Isettings{
             vscode.window.showErrorMessage('Unable to check if .vscode folder exists');
         }
 
-        if(folderExists == false){
+        if(folderExists === false){
             //Create the directory so the file can be written
             //create .vscode folder first
 
@@ -90,10 +90,10 @@ export function getSettings():Isettings{
         //read file .vscode\iisexpress.json and overwrite port property from iisexpress.json
         settings = jsonfile.readFileSync(settingsFilePath);
     }
-    
+
     //Return an object back from verifications
     return settings;
-    
+
 }
 
 

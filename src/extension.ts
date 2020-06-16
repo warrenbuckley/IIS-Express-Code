@@ -10,18 +10,18 @@ let iisProc:iis.IIS;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {    
+export function activate(context: vscode.ExtensionContext) {
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var startSite = vscode.commands.registerCommand('extension.iis-express.start',() => {
-		 
+
 		//Begin checks of OS, IISExpress location etc..
 		let verification = verify.checkForProblems();
 
 		//IISExpress command line arguments
 		let args: iis.IExpressArguments = {
 		};
-	
+
 		//Run IISExpress Class Contructor
 		iisProc = new iis.IIS(verification.programPath, verification.appCmdProgramPath, args);
 
@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var stopSite = vscode.commands.registerCommand('extension.iis-express.stop',() => {
-		 
+
 		//Begin checks of OS, IISExpress location etc..
 		let verification = verify.checkForProblems();
 
@@ -54,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var openSite = vscode.commands.registerCommand('extension.iis-express.open',() => {
-		 
+
 		//Begin checks of OS, IISExpress location etc..
 		let verification = verify.checkForProblems();
 
@@ -71,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     //Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var restartSite = vscode.commands.registerCommand('extension.iis-express.restart',() => {
-		 
+
 		//Begin checks of OS, IISExpress location etc..
 		let verification = verify.checkForProblems();
 

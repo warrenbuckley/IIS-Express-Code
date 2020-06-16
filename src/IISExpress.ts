@@ -28,22 +28,22 @@ export class IIS {
 
 	constructor(iisPath: string, appCmdPath: string, args: IExpressArguments){
 		this._iisPath = iisPath;
-		this._iisAppCmdPath = appCmdPath; 
+		this._iisAppCmdPath = appCmdPath;
 		this._args = args;
 	}
-	
+
 	public startWebsite(options?: settings.Isettings) {
-		
+
 		//Verify process not already running, so if we have a PID (process ID) it's running
 		if(this._iisProcess !== undefined){
 			//Display error message that it's already running
 			vscode.window.showErrorMessage('IISExpress is already running');
-			
+
 			//Stop the method/function from running
 			return;
 		}
 
-		
+
 		if(!options){
 			vscode.window.showErrorMessage('No options found');
 			return;
@@ -51,7 +51,7 @@ export class IIS {
 
         //Get IIS Port Number from config file
         this._args.port = options.port;
-		
+
 		//Folder to run as the arg
 		this._args.path = options.path ? options.path : vscode.workspace.rootPath;
 
@@ -74,7 +74,7 @@ export class IIS {
 		if(this._args.protocol === settings.protocolType.https && (this._args.port >= 44300 && this._args.port <=44399) === false){
 			//Using HTTPS but not using a port within the range that supports SSL
 			vscode.window.showErrorMessage('When using HTTPS you need to use ports 44300 - 44399 in .vscode/iisexpress.json');
-			
+
 			//Stop the method/function from running
 			return;
 		}
@@ -87,7 +87,7 @@ export class IIS {
 		} catch (error) {
 			console.log(error);
 		}
-		
+
 		//Based on the CLR chosen use the correct built in AppPools shipping with IISExpress
 		var appPool = this._args.clr === settings.clrVersion.v40 ? "Clr4IntegratedAppPool" : "Clr2IntegratedAppPool";
 
@@ -99,15 +99,15 @@ export class IIS {
 			console.log(error);
 		}
 
-		
-		
+
+
 
 		//This is the magic that runs the IISExpress cmd from the appcmd config list
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
-		
+
 		//Create Statusbar item & show it
 		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-		
+
 		//Set props on statusbar & show it
 		this._statusbar.text = `$(browser) ${this._args.protocol}://localhost:${this._args.port}`;
 		this._statusMessage = `Running folder '${this._args.path}' as a website on ${this._args.protocol}://localhost:${this._args.port} on CLR: ${this._args.clr}`;
@@ -117,19 +117,19 @@ export class IIS {
 
         //Open browser
 		this.openWebsite(options);
-		
-		
+
+
 		//Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data: string) =>{
 			data = this.decode2gbk(data);
 			this._output!.appendLine(data);
 		});
-		
+
 		this._iisProcess.stderr.on('data', (data: string) => {
 			data = this.decode2gbk(data);
 			this._output!.appendLine(`stderr: ${data}`);
 		});
-		
+
 		this._iisProcess.on('error', (err:Error) => {
 			var message = this.decode2gbk(err.message);
 			this._output!.appendLine(`ERROR: ${message}`);
@@ -158,21 +158,21 @@ export class IIS {
 		//Display Message
 		vscode.window.showInformationMessage(this._statusMessage);
 	}
-	
+
 	public stopWebsite(){
-		
+
 		//If we do not have an iisProcess running
 		if(!this._iisProcess){
 			vscode.window.showErrorMessage('No website currently running');
-			
+
 			//Stop function from running
 			return;
 		}
-		
+
 		//Kill the process - which will also hook into the exit event to remove the config entry
 		this._iisProcess.kill('SIGINT');
         this._iisProcess = undefined;
-		
+
 		//Clear the output log
 		this._output!.clear();
         this._output!.hide();
@@ -182,7 +182,7 @@ export class IIS {
 		//Remove the statusbar item
 		this._statusbar.hide();
 		this._statusbar.dispose();
-		
+
 	}
 
 	public openWebsite(options?: settings.Isettings){
@@ -190,12 +190,12 @@ export class IIS {
 		//If we do not have an iisProcess running
 		if(!this._iisProcess){
 			vscode.window.showErrorMessage('No website currently running');
-			
+
 			//Stop function from running
 			return;
 		}
 
-		
+
 		if (options && options.url) {
 			//We have a starting URL set - but lets ensure we strip starting / if present
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
@@ -221,10 +221,10 @@ export class IIS {
 		}
 
 	}
-	
+
     private decode2gbk(data: string): string {
 		var buffer = new Buffer(data);
  		return iconv.decode(buffer, 'gbk');
 	}
-    
+
 }
