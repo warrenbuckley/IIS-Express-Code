@@ -18,7 +18,7 @@ export interface IExpressArguments {
 // * Tidy up code - remove events we do not need
 
 export class IIS {
-	private _iisProcess!: process.ChildProcess | undefined;
+	private _iisProcess!: process.ChildProcessWithoutNullStreams;
 	private _iisPath: string;
 	private _iisAppCmdPath: string;
 	private _args: IExpressArguments;
@@ -171,7 +171,6 @@ export class IIS {
 
 		//Kill the process - which will also hook into the exit event to remove the config entry
 		this._iisProcess.kill('SIGINT');
-        this._iisProcess = undefined;
 
 		//Clear the output log
 		this._output!.clear();
