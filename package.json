@@ -83,7 +83,7 @@
         "@types/node": "^7.0.43",
         "tslint": "^5.8.0",
         "typescript": "^3.9.5",
-        "vscode": "^1.1.34"
+        "vscode": "^1.1.37"
     },
     "dependencies": {
         "iconv-lite": "^0.6.0",
