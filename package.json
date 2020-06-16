@@ -86,7 +86,7 @@
         "vscode": "^1.1.34"
     },
     "dependencies": {
-        "iconv-lite": "^0.4.13",
+        "iconv-lite": "^0.6.0",
         "jsonfile": "^2.2.3",
         "uuid": "^8.1.0"
     }
