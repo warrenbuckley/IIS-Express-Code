@@ -88,6 +88,6 @@
     "dependencies": {
         "iconv-lite": "^0.4.13",
         "jsonfile": "^2.2.3",
-        "uuid": "^3.0.1"
+        "uuid": "^8.1.0"
     }
 }
