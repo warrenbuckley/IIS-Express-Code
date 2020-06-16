@@ -35,7 +35,7 @@ export function DoMagicInstall() : void {
 
 function WhatProcessor() : string {
     //Should be amd64 or x86
-    return process.env.PROCESSOR_ARCHITECTURE;
+    return <string>process.env.PROCESSOR_ARCHITECTURE;
 }
 
 function FetchDownloadFile(processor:string) : Promise<string> {
@@ -56,7 +56,7 @@ function FetchDownloadFile(processor:string) : Promise<string> {
                 return;
             }
 
-            var filePath = path.join(process.env.TEMP, `iisexpress_${processor}_en-US.msi`);
+            var filePath = path.join(<string>process.env.TEMP, `iisexpress_${processor}_en-US.msi`);
             var file = fs.createWriteStream(filePath);
 
             //Saves the response into the file

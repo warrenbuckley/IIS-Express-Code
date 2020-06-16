@@ -79,7 +79,7 @@ export function checkForProblems():verification{
 	//32bit machines - 'C:\Program Files (x86)\IIS Express\iisexpress.exe'
 
 	//'C:\Program Files (x86)'
-	let programFilesPath = process.env.ProgramFiles;
+	let programFilesPath = <string>process.env.ProgramFiles;
     let iisPath = null;
 
 	//Try to find IISExpress excutable - build up path to EXE
