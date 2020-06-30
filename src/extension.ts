@@ -12,6 +12,7 @@ let iisProc:iis.IIS;
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
+
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var startSite = vscode.commands.registerCommand('extension.iis-express.start',() => {
 
@@ -48,6 +49,12 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
+		// iisProc could be undefinied as we only init in start
+		if(iisProc === undefined){
+			vscode.window.showErrorMessage('No website currently running', {modal: true});
+			return;
+		}
+
 		//Stop Website...
 		iisProc.stopWebsite();
 	});
@@ -62,7 +69,13 @@ export function activate(context: vscode.ExtensionContext) {
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             //Stop the extension from running
             return;
-        }
+		}
+
+		// iisProc could be undefinied as we only init in start
+		if(iisProc === undefined){
+			vscode.window.showErrorMessage('No website currently running');
+			return;
+		}
 
 		//Open site in browser - this will need to check if site is running first...
 		//Pass settings - just in case its changed between session (Hence not set globally in this file)
@@ -79,7 +92,13 @@ export function activate(context: vscode.ExtensionContext) {
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             //Stop the extension from running
             return;
-        }
+		}
+
+		// iisProc could be undefinied as we only init in start
+		if(iisProc === undefined){
+			vscode.window.showErrorMessage('No website currently running');
+			return;
+		}
 
 		//Open site in browser - this will need to check if site is running first...
 		//Pass settings - just in case its changed between session (Hence not set globally in this file)

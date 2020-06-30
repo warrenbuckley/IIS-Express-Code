@@ -160,15 +160,6 @@ export class IIS {
 	}
 
 	public stopWebsite(){
-
-		//If we do not have an iisProcess running
-		if(!this._iisProcess){
-			vscode.window.showErrorMessage('No website currently running');
-
-			//Stop function from running
-			return;
-		}
-
 		//Kill the process - which will also hook into the exit event to remove the config entry
 		this._iisProcess.kill('SIGINT');
 
@@ -185,16 +176,6 @@ export class IIS {
 	}
 
 	public openWebsite(options?: settings.Isettings){
-
-		//If we do not have an iisProcess running
-		if(!this._iisProcess){
-			vscode.window.showErrorMessage('No website currently running');
-
-			//Stop function from running
-			return;
-		}
-
-
 		if (options && options.url) {
 			//We have a starting URL set - but lets ensure we strip starting / if present
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
