@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import * as process from 'child_process';
-import * as path from "path";
+import * as path from 'path';
 import * as settings from './settings';
 
 //External libraries
-let uuidV4 = require('uuid/v4');
-let iconv=require('iconv-lite');
+import { v4 as uuidv4 } from 'uuid';
+import * as iconv from 'iconv-lite';
 
 export interface IExpressArguments {
 	path?: string;
@@ -67,7 +67,7 @@ export class IIS {
 
 		//Site name is the name of the workspace folder & GUID/UUID
 		//Need to append a UUID as could have two folders/sites with same name
-		var siteName = path.basename(vscode.workspace.rootPath as string) + "-" + uuidV4();
+		var siteName = path.basename(vscode.workspace.rootPath as string) + "-" + uuidv4();
 
 		//If user is using HTTPS & port not in range of auto-approved port numbers (44300-44399)
 		//Then display an error & stop process
