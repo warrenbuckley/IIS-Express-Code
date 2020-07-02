@@ -138,10 +138,6 @@ async function getConfigValue(configKey:string, fileName:string):Promise<string 
             // Check if we can find the file path (get stat info on it)
             fs.statSync(conventionFilePath);
 
-            // Add the convetion path to global config
-            // So we can fetch from config next time
-            await config.update(configKey, conventionFilePath, vscode.ConfigurationTarget.Global);
-
             // Return the path we found
             return conventionFilePath;
         }
