@@ -14,9 +14,6 @@ export interface IExpressArguments {
 	protocol?: settings.protocolType;
 }
 
-// TODO:
-// * Tidy up code - remove events we do not need
-
 export class IIS {
 	private _iisProcess!: process.ChildProcessWithoutNullStreams;
 	private _iisPath: string;

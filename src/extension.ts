@@ -14,10 +14,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
-	var startSite = vscode.commands.registerCommand('extension.iis-express.start',() => {
+	var startSite = vscode.commands.registerCommand('extension.iis-express.start',async () => {
 
 		//Begin checks of OS, IISExpress location etc..
-		let verification = verify.checkForProblems();
+		let verification = await verify.checkForProblems();
 
 		//IISExpress command line arguments
 		let args: iis.IExpressArguments = {
@@ -38,10 +38,10 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
-	var stopSite = vscode.commands.registerCommand('extension.iis-express.stop',() => {
+	var stopSite = vscode.commands.registerCommand('extension.iis-express.stop',async () => {
 
 		//Begin checks of OS, IISExpress location etc..
-		let verification = verify.checkForProblems();
+		let verification = await verify.checkForProblems();
 
 		 //Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
@@ -60,10 +60,10 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
-	var openSite = vscode.commands.registerCommand('extension.iis-express.open',() => {
+	var openSite = vscode.commands.registerCommand('extension.iis-express.open', async () => {
 
 		//Begin checks of OS, IISExpress location etc..
-		let verification = verify.checkForProblems();
+		let verification = await verify.checkForProblems();
 
 		 //Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
@@ -83,10 +83,10 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
     //Registering a command so we can assign a direct keybinding to it (without opening quick launch)
-	var restartSite = vscode.commands.registerCommand('extension.iis-express.restart',() => {
+	var restartSite = vscode.commands.registerCommand('extension.iis-express.restart',async () => {
 
 		//Begin checks of OS, IISExpress location etc..
-		let verification = verify.checkForProblems();
+		let verification = await verify.checkForProblems();
 
 		 //Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
