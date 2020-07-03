@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as install from './install';
 
+const TRY_INSTALL_IIS = "TRY_INSTALL_IIS";
 
 interface verification {
     isValidOS: boolean;
@@ -89,23 +90,25 @@ export async function checkForProblems():Promise<verification>{
         return results;
     }
 
-    //Prompt user - so they opt in to installing IIS Express
-    vscode.window.showWarningMessage(`We could not find IIS Express. Would you like us to install it for you?`, 'Yes Please', 'No Thanks').then(selection => {
-        switch(selection){
-            case 'Yes Please':
-                // Kick in to auto-pilot
-                install.DoMagicInstall();
-                break;
+    if(iisPath === TRY_INSTALL_IIS|| appCmdPath === TRY_INSTALL_IIS){
+        //Prompt user - so they opt in to installing IIS Express
+        vscode.window.showWarningMessage(`We could not find IIS Express. Would you like us to install it for you?`, 'Yes Please', 'No Thanks').then(selection => {
+            switch(selection){
+                case 'Yes Please':
+                    // Kick in to auto-pilot
+                    install.DoMagicInstall();
+                    break;
 
-            case 'No Thanks':
-                // Open a browser to the IIS 10 Express download page for them to do it themselves
-                install.OpenDownloadPage();
-                break;
+                case 'No Thanks':
+                    // Open a browser to the IIS 10 Express download page for them to do it themselves
+                    install.OpenDownloadPage();
+                    break;
 
-            default:
-                // Do nothing for now (Assume they clicked close on message)
-        }
-    });
+                default:
+                    // Do nothing for now (Assume they clicked close on message)
+            }
+        });
+    }
 
     results.iisExists = false;
     results.programPath = '';
@@ -144,7 +147,7 @@ async function getConfigValue(configKey:string, fileName:string):Promise<string 
         catch {
             // In the case of trying to find the convention path
             // We may not have it installed at all so we need to offer to auto install it
-            return null;
+            return TRY_INSTALL_IIS;
         }
     }
 
