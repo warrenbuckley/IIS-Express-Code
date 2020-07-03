@@ -58,6 +58,12 @@
                     "markdownDescription":  "An absolute path to **appcmd.exe** such as `C:\\Program Files\\IIS Express\\appcmd.exe`",
                     "default": null,
                     "type": ["string","null"]
+                },
+                "iisexpress.autoLaunchBrowser" : {
+                    "title": "Auto launch browser",
+                    "markdownDescription":  "An option to disable or enable the browser from launching the site when IIS Express starts. By default this is **true**",
+                    "default": true,
+                    "type": "boolean"
                 }
             }
         },

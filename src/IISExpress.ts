@@ -99,24 +99,27 @@ export class IIS {
 
 
 
-		//This is the magic that runs the IISExpress cmd from the appcmd config list
+		// This is the magic that runs the IISExpress cmd from the appcmd config list
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
 
-		//Create Statusbar item & show it
+		// Create Statusbar item & show it
 		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
 
-		//Set props on statusbar & show it
+		// Set props on statusbar & show it
 		this._statusbar.text = `$(browser) ${this._args.protocol}://localhost:${this._args.port}`;
 		this._statusMessage = `Running folder '${this._args.path}' as a website on ${this._args.protocol}://localhost:${this._args.port} on CLR: ${this._args.clr}`;
 		this._statusbar.tooltip = this._statusMessage;
 		this._statusbar.command = 'extension.iis-express.open';
 		this._statusbar.show();
 
-        //Open browser
-		this.openWebsite(options);
+		// Open browser
+		const autoLaunchBrowser:boolean = vscode.workspace.getConfiguration().get<boolean>('iisexpress.autoLaunchBrowser', true);
 
+		if(autoLaunchBrowser){
+			this.openWebsite(options);
+		}
 
-		//Attach all the events & functions to iisProcess
+		// Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data: string) =>{
 			data = this.decode2gbk(data);
 			this._output!.appendLine(data);
@@ -134,16 +137,16 @@ export class IIS {
 
 		this._iisProcess.on('close', () =>{
 
-			//Tidying up - so we remove the entry from appcmd
-			//As we use a uuid every time we start a site we need to do housekeeping & clean up
-			//When we are finished - this happens for:
+			// Tidying up - so we remove the entry from appcmd
+			// As we use a uuid every time we start a site we need to do housekeeping & clean up
+			// When we are finished - this happens for:
 
 			//* Will happen when users stops with CTRL+F5
 			//* Close from the systray icon
 			//* Restart of site
 
-			//Delete any existing entries for the site using appcmd
-			//Not done as async - so we wait until this command completes
+			// Delete any existing entries for the site using appcmd
+			// Not done as async - so we wait until this command completes
 			try {
 				process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `${siteName}`]);
 			} catch (error) {
@@ -152,21 +155,21 @@ export class IIS {
 		});
 
 
-		//Display Message
+		// Display Message
 		vscode.window.showInformationMessage(this._statusMessage);
 	}
 
 	public stopWebsite(){
-		//Kill the process - which will also hook into the exit event to remove the config entry
+		// Kill the process - which will also hook into the exit event to remove the config entry
 		this._iisProcess.kill('SIGINT');
 
-		//Clear the output log
+		// Clear the output log
 		this._output!.clear();
         this._output!.hide();
         this._output!.dispose();
 		this._output = null;
 
-		//Remove the statusbar item
+		// Remove the statusbar item
 		this._statusbar.hide();
 		this._statusbar.dispose();
 
@@ -174,13 +177,13 @@ export class IIS {
 
 	public openWebsite(options?: settings.Isettings){
 		if (options && options.url) {
-			//We have a starting URL set - but lets ensure we strip starting / if present
+			// We have a starting URL set - but lets ensure we strip starting / if present
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
 
-			//Start browser with start url
+			// Start browser with start url
 			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
     	} else {
-			//Uses the 'start' command & url to open default browser
+			// Uses the 'start' command & url to open default browser
 			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}`);
 		}
 	}
