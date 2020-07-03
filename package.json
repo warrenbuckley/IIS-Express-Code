@@ -36,6 +36,31 @@
     ],
     "main": "./out/extension",
     "contributes": {
+        "configuration": {
+            "title": "IIS Express",
+            "properties": {
+                "iisexpress.iisExpressPath" : {
+                    "title": "Path to IISExpress.exe",
+                    "examples": [
+                        "C:\\Program Files\\IIS Express\\iisexpress.exe",
+                        "C:\\Program Files (x86)\\IIS Express\\iisexpress.exe"
+                    ],
+                    "markdownDescription":  "An absolute path to **IISExpress.exe** such as `C:\\Program Files\\IIS Express\\iisexpress.exe`",
+                    "default": null,
+                    "type": ["string", "null"]
+                },
+                "iisexpress.appcmdPath" : {
+                    "title": "Path to AppCmd.exe",
+                    "examples": [
+                        "C:\\Program Files\\IIS Express\\appcmd.exe",
+                        "C:\\Program Files (x86)\\IIS Express\\appcmd.exe"
+                    ],
+                    "markdownDescription":  "An absolute path to **appcmd.exe** such as `C:\\Program Files\\IIS Express\\appcmd.exe`",
+                    "default": null,
+                    "type": ["string","null"]
+                }
+            }
+        },
         "commands": [
             {
                 "command": "extension.iis-express.start",
