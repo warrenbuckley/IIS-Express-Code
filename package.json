@@ -127,7 +127,7 @@
         "vscode-test": "^1.4.0"
     },
     "dependencies": {
-        "iconv-lite": "^0.6.1",
+        "iconv-lite": "^0.6.2",
         "jsonfile": "^6.0.1",
         "uuid": "^8.2.0"
     }
