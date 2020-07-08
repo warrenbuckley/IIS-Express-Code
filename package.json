@@ -70,15 +70,18 @@
         "commands": [
             {
                 "command": "extension.iis-express.start",
-                "title": "IIS Express: Start Website"
+                "title": "Start Website",
+                "category": "IIS Express"
             },
             {
                 "command": "extension.iis-express.stop",
-                "title": "IIS Express: Stop Website"
+                "title": "Stop Website",
+                "category": "IIS Express"
             },
             {
                 "command": "extension.iis-express.restart",
-                "title": "IIS Express: Restart Website"
+                "title": "Restart Website",
+                "category": "IIS Express"
             }
         ],
         "keybindings": [
