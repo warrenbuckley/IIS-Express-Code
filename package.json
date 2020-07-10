@@ -64,6 +64,13 @@
                     "markdownDescription":  "An option to disable or enable the browser from launching the site when IIS Express starts. By default this is **true**",
                     "default": true,
                     "type": "boolean"
+                },
+                "iisexpress.openInBrowser": {
+                    "title": "Open in browser",
+                    "markdownDescription": "Decide which browser to auto launch the site with when `iisexpress.autoLaunchBrowser` is set to **true**",
+                    "markdownEnumDescriptions": ["Open in `Default Browser`", "Open in `Chrome`", "Open in `Edge`", "Open in `Firefox`", "Open in `Opera`"],
+                    "enum": ["default", "chrome", "msedge", "firefox", "opera"],
+                    "default": "default"
                 }
             }
         },

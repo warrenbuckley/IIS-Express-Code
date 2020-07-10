@@ -176,15 +176,19 @@ export class IIS {
 	}
 
 	public openWebsite(options?: settings.Isettings){
+
+		let browserConfig = vscode.workspace.getConfiguration().get<string>("iisexpress.openInBrowser", "default");
+		let browser:string = browserConfig.toLocaleLowerCase() === "default" ? "" : browserConfig;
+
 		if (options && options.url) {
 			// We have a starting URL set - but lets ensure we strip starting / if present
 			let startUrl = options.url.startsWith('/') ? options.url.substring(1) : options.url;
 
 			// Start browser with start url
-			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
+			process.exec(`start ${browser} ${this._args.protocol}://localhost:${this._args.port}/${startUrl}`);
     	} else {
 			// Uses the 'start' command & url to open default browser
-			process.exec(`start ${this._args.protocol}://localhost:${this._args.port}`);
+			process.exec(`start ${browser} ${this._args.protocol}://localhost:${this._args.port}`);
 		}
 	}
 
