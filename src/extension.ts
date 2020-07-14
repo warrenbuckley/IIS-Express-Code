@@ -5,13 +5,18 @@ import * as iis from './IISExpress';
 import * as verify from './verification';
 import * as settings from './settings';
 
+import * as vsls from 'vsls';
 
 let iisProc:iis.IIS;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
+	// This will check if the user has VS LiveShare installed & return its API to us
+	// If not then this will be null
+	const liveshare = await vsls.getApi();
+	let liveShareServer:vscode.Disposable;
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	var startSite = vscode.commands.registerCommand('extension.iis-express.start',async () => {
@@ -35,6 +40,20 @@ export function activate(context: vscode.ExtensionContext) {
 		//Start Website...
 		//Pass settings - just in case its changed between session
 		iisProc.startWebsite(settings.getSettings());
+
+		// Ensure user has liveshare extension
+		if(liveshare != null){
+			if((liveshare.session.id !== null) && (liveshare.session.role === vsls.Role.Host)){
+				const portNumber = settings.getSettings().port;
+
+				// This will prompt the LiveShare Host to share the IIS Server Port
+				liveShareServer = await liveshare.shareServer({ displayName: `IIS Express:${portNumber}`, port: portNumber });
+
+				// Push the disposable VSCode into the subscriptions
+				// so VSCode can dispose them if we forget to or when the extension is deactivated
+				context.subscriptions.push(liveShareServer);
+			}
+		}
 	});
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -57,6 +76,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 		//Stop Website...
 		iisProc.stopWebsite();
+
+		// Ensure user has liveshare extension
+		if(liveshare != null){
+			if((liveshare.session.id !== null) && (liveshare.session.role === vsls.Role.Host) && (liveShareServer != null)){
+				// Kill off the live share server if its running
+				liveShareServer.dispose();
+			}
+		}
 	});
 
 	//Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -105,7 +132,7 @@ export function activate(context: vscode.ExtensionContext) {
 		iisProc.restartSite(settings.getSettings());
 	});
 
-	//Push the commands
+	//Push the commands & any other VSCode disposables
 	context.subscriptions.push(startSite, stopSite, openSite, restartSite);
 }
 
