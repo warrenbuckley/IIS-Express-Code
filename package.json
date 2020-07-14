@@ -39,37 +39,55 @@
         "configuration": {
             "title": "IIS Express",
             "properties": {
-                "iisexpress.iisExpressPath" : {
+                "iisexpress.iisExpressPath": {
                     "title": "Path to IISExpress.exe",
                     "examples": [
                         "C:\\Program Files\\IIS Express\\iisexpress.exe",
                         "C:\\Program Files (x86)\\IIS Express\\iisexpress.exe"
                     ],
-                    "markdownDescription":  "An absolute path to **IISExpress.exe** such as `C:\\Program Files\\IIS Express\\iisexpress.exe`",
+                    "markdownDescription": "An absolute path to **IISExpress.exe** such as `C:\\Program Files\\IIS Express\\iisexpress.exe`",
                     "default": null,
-                    "type": ["string", "null"]
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
-                "iisexpress.appcmdPath" : {
+                "iisexpress.appcmdPath": {
                     "title": "Path to AppCmd.exe",
                     "examples": [
                         "C:\\Program Files\\IIS Express\\appcmd.exe",
                         "C:\\Program Files (x86)\\IIS Express\\appcmd.exe"
                     ],
-                    "markdownDescription":  "An absolute path to **appcmd.exe** such as `C:\\Program Files\\IIS Express\\appcmd.exe`",
+                    "markdownDescription": "An absolute path to **appcmd.exe** such as `C:\\Program Files\\IIS Express\\appcmd.exe`",
                     "default": null,
-                    "type": ["string","null"]
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
-                "iisexpress.autoLaunchBrowser" : {
+                "iisexpress.autoLaunchBrowser": {
                     "title": "Auto launch browser",
-                    "markdownDescription":  "An option to disable or enable the browser from launching the site when IIS Express starts. By default this is **true**",
+                    "markdownDescription": "An option to disable or enable the browser from launching the site when IIS Express starts. By default this is **true**",
                     "default": true,
                     "type": "boolean"
                 },
                 "iisexpress.openInBrowser": {
                     "title": "Open in browser",
                     "markdownDescription": "Decide which browser to auto launch the site with when `iisexpress.autoLaunchBrowser` is set to **true**",
-                    "markdownEnumDescriptions": ["Open in `Default Browser`", "Open in `Chrome`", "Open in `Edge`", "Open in `Firefox`", "Open in `Opera`"],
-                    "enum": ["default", "chrome", "msedge", "firefox", "opera"],
+                    "markdownEnumDescriptions": [
+                        "Open in `Default Browser`",
+                        "Open in `Chrome`",
+                        "Open in `Edge`",
+                        "Open in `Firefox`",
+                        "Open in `Opera`"
+                    ],
+                    "enum": [
+                        "default",
+                        "chrome",
+                        "msedge",
+                        "firefox",
+                        "opera"
+                    ],
                     "default": "default"
                 }
             }
@@ -139,6 +157,7 @@
     "dependencies": {
         "iconv-lite": "^0.6.2",
         "jsonfile": "^6.0.1",
-        "uuid": "^8.2.0"
+        "uuid": "^8.2.0",
+        "vsls": "^1.0.2426"
     }
 }
