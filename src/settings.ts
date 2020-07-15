@@ -21,7 +21,7 @@ export enum protocolType {
 }
 
 export function getSettings():Isettings{
-    //Give some default values
+    // Give some default values
     let settings:Isettings = {
         port : getRandomPort(),
         path: vscode.workspace.rootPath as string,
@@ -37,7 +37,7 @@ export function getSettings():Isettings{
 
 
     // use -> https://www.npmjs.com/package/jsonfile
-    var jsonfile = require('jsonfile');
+    let jsonfile = require('jsonfile');
 
     let fileExists = false;
     let folderExists = false;

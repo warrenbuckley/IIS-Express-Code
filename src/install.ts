@@ -13,7 +13,7 @@ export function DoMagicInstall() : void {
 
     // Determine Process 64bit or 32bit
     // So we get correct installer file from MS download site
-    var processor = WhatProcessor();
+    const processor = WhatProcessor();
 
     FetchDownloadFile(processor).then(function (fileDownloadPath) {
 
@@ -49,15 +49,15 @@ function FetchDownloadFile(processor:string) : Promise<string> {
             method: 'GET'
         };
 
-        var request = https.get(options, function(response) {
+        const request = https.get(options, function(response) {
 
             if (response.statusCode !== 200) {
                 reject(`The request to download IIS Express installer file returned a ${response.statusCode}`);
                 return;
             }
 
-            var filePath = path.join(<string>process.env.TEMP, `iisexpress_${processor}_en-US.msi`);
-            var file = fs.createWriteStream(filePath);
+            const filePath = path.join(<string>process.env.TEMP, `iisexpress_${processor}_en-US.msi`);
+            const file = fs.createWriteStream(filePath);
 
             // Saves the response into the file
             response.pipe(file);
@@ -79,7 +79,6 @@ function FetchDownloadFile(processor:string) : Promise<string> {
 };
 
 function InstallTime(installerFilePath:string) : Promise<any> {
-
     return new Promise((resolve, reject) => {
         // Execute a cmd line install with the -passive switch on the MSI
         const installer = childProcess.spawn('cmd.exe', ['/c', installerFilePath, '-passive']);
