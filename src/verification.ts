@@ -17,7 +17,7 @@ interface verification {
 
 export async function checkForProblems():Promise<verification>{
 
-    //Give some default values
+    // Give some default values
     let results:verification = {
         isValidOS: false,
         folderIsOpen: false,
@@ -32,7 +32,6 @@ export async function checkForProblems():Promise<verification>{
 
 	//Type = 'WINDOWS_NT'
     let operatingSystem = os.type();
-
 
 	//Uppercase string to ensure we match correctly
 	operatingSystem = operatingSystem.toUpperCase();
@@ -54,7 +53,7 @@ export async function checkForProblems():Promise<verification>{
     // Checks that VS Code is open with a folder
     // *******************************************
 
-    //Get the path of the folder that is open in VS Code
+    // Get the path of the folder that is open in VS Code
     const folderPath = vscode.workspace.rootPath;
 
 
@@ -70,15 +69,9 @@ export async function checkForProblems():Promise<verification>{
     }
 
 
-
-
     // *******************************************
     // Verify IIS Express excutable Exists
     // *******************************************
-
-
-
-
     const iisPath = await getConfigValue('iisexpress.iisExpressPath', 'iisexpress.exe');
     const appCmdPath = await getConfigValue('iisexpress.appcmdPath', 'appcmd.exe');
 
@@ -91,7 +84,7 @@ export async function checkForProblems():Promise<verification>{
     }
 
     if(iisPath === TRY_INSTALL_IIS|| appCmdPath === TRY_INSTALL_IIS){
-        //Prompt user - so they opt in to installing IIS Express
+        // Prompt user - so they opt in to installing IIS Express
         vscode.window.showWarningMessage(`We could not find IIS Express. Would you like us to install it for you?`, 'Yes Please', 'No Thanks').then(selection => {
             switch(selection){
                 case 'Yes Please':
