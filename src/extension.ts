@@ -18,20 +18,14 @@ export async function activate(context: vscode.ExtensionContext) {
 	const liveshare = await vsls.getApi();
 	let liveShareServer:vscode.Disposable;
 
+	// Begin checks of OS, IISExpress location etc..
+	const verification = await verify.checkForProblems();
+	iisExpressServer = new iis.IISExpress(verification.programPath, verification.appCmdProgramPath);
+
 	// Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	const startSite = vscode.commands.registerCommand('extension.iis-express.start',async () => {
 
-		// Begin checks of OS, IISExpress location etc..
-		let verification = await verify.checkForProblems();
-
-		// IISExpress command line arguments
-		let args: iis.IExpressArguments = {
-		};
-
-		// Run IISExpress Class Contructor
-		iisExpressServer = new iis.IISExpress(verification.programPath, verification.appCmdProgramPath, args);
-
-		 // Stop extension from running if we did not pass checks
+		// Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             // Stop the extension from running
             return;
@@ -59,20 +53,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	const stopSite = vscode.commands.registerCommand('extension.iis-express.stop',async () => {
 
-		// Begin checks of OS, IISExpress location etc..
-		let verification = await verify.checkForProblems();
-
-		 // Stop extension from running if we did not pass checks
+		// Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             // Stop the extension from running
             return;
         }
-
-		// iisProc could be undefinied as we only init in start
-		if(iisExpressServer === undefined){
-			vscode.window.showErrorMessage('No website currently running', {modal: true});
-			return;
-		}
 
 		// Stop Website...
 		iisExpressServer.stopWebsite();
@@ -89,19 +74,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	// Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	const openSite = vscode.commands.registerCommand('extension.iis-express.open', async () => {
 
-		// Begin checks of OS, IISExpress location etc..
-		let verification = await verify.checkForProblems();
-
-		 // Stop extension from running if we did not pass checks
+		// Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             // Stop the extension from running
             return;
-		}
-
-		// iisProc could be undefinied as we only init in start
-		if(iisExpressServer === undefined){
-			vscode.window.showErrorMessage('No website currently running');
-			return;
 		}
 
 		// Open site in browser - this will need to check if site is running first...
@@ -112,19 +88,10 @@ export async function activate(context: vscode.ExtensionContext) {
     // Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	const restartSite = vscode.commands.registerCommand('extension.iis-express.restart',async () => {
 
-		// Begin checks of OS, IISExpress location etc..
-		let verification = await verify.checkForProblems();
-
-		 // Stop extension from running if we did not pass checks
+		// Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             // Stop the extension from running
             return;
-		}
-
-		// iisProc could be undefinied as we only init in start
-		if(iisExpressServer === undefined){
-			vscode.window.showErrorMessage('No website currently running');
-			return;
 		}
 
 		// Open site in browser - this will need to check if site is running first...

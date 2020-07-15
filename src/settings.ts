@@ -22,12 +22,14 @@ export enum protocolType {
 
 export function getSettings():Isettings{
     // Give some default values
-    let settings:Isettings = {
+    let defaultSettings:Isettings = {
         port : getRandomPort(),
         path: vscode.workspace.rootPath as string,
         clr: clrVersion.v40,
         protocol: protocolType.http
     };
+
+    let settings:Isettings;
 
     // *******************************************
     // Checks that iisexpress.json exist
@@ -78,22 +80,22 @@ export function getSettings():Isettings{
 
         // jsonfile.writeFile (does not create path/folder if it does not exist)
         // The dir should be available & thus able to now write the file
-        jsonfile.writeFile(settingsFilePath, settings, {spaces: 2}, function (jsonErr:string) {
+        jsonfile.writeFile(settingsFilePath, defaultSettings, {spaces: 2}, function (jsonErr:string) {
             if(jsonErr){
                 console.error(jsonErr);
                 vscode.window.showErrorMessage('Error creating iisexpress.json file: ' + jsonErr);
             }
         });
 
-    } else{
+        return defaultSettings;
+
+    } else {
         // File exists lets read the settings from the JSON file then
-        // read file .vscode\iisexpress.json and overwrite port property from iisexpress.json
-        settings = jsonfile.readFileSync(settingsFilePath);
+        // read file .vscode\iisexpress.json and merge with defaults
+        const fileSettings = jsonfile.readFileSync(settingsFilePath);
+        settings = {...defaultSettings, ...fileSettings};
+        return settings;
     }
-
-    // Return an object back from verifications
-    return settings;
-
 }
 
 
