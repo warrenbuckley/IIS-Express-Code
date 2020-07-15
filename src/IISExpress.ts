@@ -14,7 +14,7 @@ export interface IExpressArguments {
 	protocol?: settings.protocolType;
 }
 
-export class IIS {
+export class IISExpress {
 	private _iisProcess!: process.ChildProcessWithoutNullStreams;
 	private _iisPath: string;
 	private _iisAppCmdPath: string;

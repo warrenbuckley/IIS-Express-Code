@@ -7,7 +7,7 @@ import * as settings from './settings';
 
 import * as vsls from 'vsls';
 
-let iisProc:iis.IIS;
+let iisExpressServer:iis.IISExpress;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -29,7 +29,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		};
 
 		// Run IISExpress Class Contructor
-		iisProc = new iis.IIS(verification.programPath, verification.appCmdProgramPath, args);
+		iisExpressServer = new iis.IISExpress(verification.programPath, verification.appCmdProgramPath, args);
 
 		 // Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
@@ -39,7 +39,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 		// Start Website...
 		// Pass settings - just in case its changed between session
-		iisProc.startWebsite(settings.getSettings());
+		iisExpressServer.startWebsite(settings.getSettings());
 
 		// Ensure user has liveshare extension
 		if(liveshare !== null){
@@ -69,13 +69,13 @@ export async function activate(context: vscode.ExtensionContext) {
         }
 
 		// iisProc could be undefinied as we only init in start
-		if(iisProc === undefined){
+		if(iisExpressServer === undefined){
 			vscode.window.showErrorMessage('No website currently running', {modal: true});
 			return;
 		}
 
 		// Stop Website...
-		iisProc.stopWebsite();
+		iisExpressServer.stopWebsite();
 
 		// Ensure user has liveshare extension
 		if(liveshare !== null){
@@ -99,14 +99,14 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 
 		// iisProc could be undefinied as we only init in start
-		if(iisProc === undefined){
+		if(iisExpressServer === undefined){
 			vscode.window.showErrorMessage('No website currently running');
 			return;
 		}
 
 		// Open site in browser - this will need to check if site is running first...
 		// Pass settings - just in case its changed between session (Hence not set globally in this file)
-		iisProc.openWebsite(settings.getSettings());
+		iisExpressServer.openWebsite(settings.getSettings());
 	});
 
     // Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -122,14 +122,14 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 
 		// iisProc could be undefinied as we only init in start
-		if(iisProc === undefined){
+		if(iisExpressServer === undefined){
 			vscode.window.showErrorMessage('No website currently running');
 			return;
 		}
 
 		// Open site in browser - this will need to check if site is running first...
 		// Pass settings - just in case its changed between session (Hence not set globally in this file)
-		iisProc.restartSite(settings.getSettings());
+		iisExpressServer.restartSite(settings.getSettings());
 	});
 
 	// Push the commands & any other VSCode disposables
@@ -144,7 +144,7 @@ export function deactivate() {
 
 	// This is to deal with when IIS Express & Site running in VSCode
 	// And the VSCode Window/Application is shutdown
-	if(iisProc){
-		iisProc.stopWebsite();
+	if(iisExpressServer){
+		iisExpressServer.stopWebsite();
 	}
 }
