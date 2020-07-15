@@ -17,6 +17,8 @@ module.exports = {
         "curly": "warn",
         "eqeqeq": "warn",
         "no-throw-literal": "warn",
-        "semi": "off"
+        "semi": "off",
+        "no-var": "warn",
+        "spaced-comment": "warn"
     },
   };

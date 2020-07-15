@@ -17,7 +17,7 @@ interface verification {
 
 export async function checkForProblems():Promise<verification>{
 
-    //Give some default values
+    // Give some default values
     let results:verification = {
         isValidOS: false,
         folderIsOpen: false,
@@ -30,14 +30,13 @@ export async function checkForProblems():Promise<verification>{
     // Check if we are on Windows and not OSX
     // *******************************************
 
-	//Type = 'WINDOWS_NT'
+	// Type = 'WINDOWS_NT'
     let operatingSystem = os.type();
 
-
-	//Uppercase string to ensure we match correctly
+	// Uppercase string to ensure we match correctly
 	operatingSystem = operatingSystem.toUpperCase();
 
-	//New ES2015 includes as opposed to indexOf()
+	// New ES2015 includes as opposed to indexOf()
 	if(!operatingSystem.includes('WINDOWS_NT')){
 		vscode.window.showErrorMessage('You can only run this extension on Windows.');
 
@@ -45,7 +44,7 @@ export async function checkForProblems():Promise<verification>{
 	}
     else {
 
-        //Is Valid & Passes - we are on Windows
+        // Is Valid & Passes - we are on Windows
         results.isValidOS = true;
     }
 
@@ -54,15 +53,15 @@ export async function checkForProblems():Promise<verification>{
     // Checks that VS Code is open with a folder
     // *******************************************
 
-    //Get the path of the folder that is open in VS Code
+    // Get the path of the folder that is open in VS Code
     const folderPath = vscode.workspace.rootPath;
 
 
-    //Check if we are in a folder/workspace & NOT just have a single file open
+    // Check if we are in a folder/workspace & NOT just have a single file open
 	if(!folderPath){
 		vscode.window.showErrorMessage('Please open a workspace directory first.');
 
-        //We are not a folder
+        // We are not a folder
         results.folderIsOpen = false;
 	}
     else {
@@ -70,15 +69,9 @@ export async function checkForProblems():Promise<verification>{
     }
 
 
-
-
     // *******************************************
     // Verify IIS Express excutable Exists
     // *******************************************
-
-
-
-
     const iisPath = await getConfigValue('iisexpress.iisExpressPath', 'iisexpress.exe');
     const appCmdPath = await getConfigValue('iisexpress.appcmdPath', 'appcmd.exe');
 
@@ -91,7 +84,7 @@ export async function checkForProblems():Promise<verification>{
     }
 
     if(iisPath === TRY_INSTALL_IIS|| appCmdPath === TRY_INSTALL_IIS){
-        //Prompt user - so they opt in to installing IIS Express
+        // Prompt user - so they opt in to installing IIS Express
         vscode.window.showWarningMessage(`We could not find IIS Express. Would you like us to install it for you?`, 'Yes Please', 'No Thanks').then(selection => {
             switch(selection){
                 case 'Yes Please':
