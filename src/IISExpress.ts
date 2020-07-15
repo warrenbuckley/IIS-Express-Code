@@ -149,10 +149,6 @@ export class IISExpress {
 				console.log(error);
 			}
 		});
-
-
-		// Display Message
-		vscode.window.showInformationMessage(this._statusMessage);
 	}
 
 	public stopWebsite(){
