@@ -96,31 +96,53 @@
             {
                 "command": "extension.iis-express.start",
                 "title": "Start Website",
-                "category": "IIS Express"
+                "category": "IIS Express",
+                "enablement": "iisexpress:siterunning != true && isWindows"
             },
             {
                 "command": "extension.iis-express.stop",
                 "title": "Stop Website",
-                "category": "IIS Express"
+                "category": "IIS Express",
+                "enablement": "iisexpress:siterunning && isWindows"
             },
             {
                 "command": "extension.iis-express.restart",
                 "title": "Restart Website",
-                "category": "IIS Express"
+                "category": "IIS Express",
+                "enablement": "iisexpress:siterunning && isWindows"
             }
         ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "extension.iis-express.start",
+                    "when": "iisexpress:siterunning != true && isWindows"
+                },
+                {
+                    "command": "extension.iis-express.stop",
+                    "when": "iisexpress:siterunning && isWindows"
+                },
+                {
+                    "command": "extension.iis-express.restart",
+                    "when": "iisexpress:siterunning && isWindows"
+                }
+            ]
+        },
         "keybindings": [
             {
                 "command": "extension.iis-express.start",
+                "when": "iisexpress:siterunning != true && isWindows",
                 "key": "ctrl+f5"
             },
             {
                 "command": "extension.iis-express.stop",
-                "key": "shift+f5"
+                "key": "shift+f5",
+                "when": "iisexpress:siterunning && isWindows"
             },
             {
                 "command": "extension.iis-express.restart",
-                "key": "ctrl+shift+f5"
+                "key": "ctrl+shift+f5",
+                "when": "iisexpress:siterunning && isWindows"
             }
         ],
         "jsonValidation": [
