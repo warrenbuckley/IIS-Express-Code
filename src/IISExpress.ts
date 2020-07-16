@@ -115,6 +115,9 @@ export class IISExpress {
 			this.openWebsite(options);
 		}
 
+		// Used to enable/disable commands & to know when a site is running
+		vscode.commands.executeCommand('setContext', 'iisexpress:siterunning', true);
+
 		// Attach all the events & functions to iisProcess
 		this._iisProcess.stdout.on('data', (data: string) =>{
 			data = this.decode2gbk(data);
@@ -161,6 +164,9 @@ export class IISExpress {
 
 		// Kill the process - which will also hook into the exit event to remove the config entry
 		this._iisProcess.kill('SIGINT');
+
+		// Used to enable/disable commands & to know when a site is running
+		vscode.commands.executeCommand('setContext', 'iisexpress:siterunning', false);
 
 		// Clear the output log
 		this._output!.clear();
