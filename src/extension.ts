@@ -6,6 +6,8 @@ import * as verify from './verification';
 import * as settings from './settings';
 
 import * as vsls from 'vsls';
+import { ControlsTreeProvider } from './ControlsTreeProvider';
+// import { ControlsTreeProvider } from './ControlsTreeProvider';
 
 let iisExpressServer:iis.IISExpress;
 
@@ -17,6 +19,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	// If not then this will be null
 	const liveshare = await vsls.getApi();
 	let liveShareServer:vscode.Disposable;
+
+	// Register tree provider to put our custom commands into the tree
+	// Start, Stop, Restart, Support etc...
+	const controlsTreeProvider = new ControlsTreeProvider();
+	vscode.window.registerTreeDataProvider('iisexpress.controls', controlsTreeProvider);
 
 	// Begin checks of OS, IISExpress location etc..
 	const verification = await verify.checkForProblems();
@@ -99,8 +106,12 @@ export async function activate(context: vscode.ExtensionContext) {
 		iisExpressServer.restartSite(settings.getSettings());
 	});
 
+	const supporter = vscode.commands.registerCommand('extension.iis-express.supporter',async () => {
+		vscode.env.openExternal(vscode.Uri.parse("http://github.com/sponsors/warrenbuckley"));
+	});
+
 	// Push the commands & any other VSCode disposables
-	context.subscriptions.push(startSite, stopSite, openSite, restartSite);
+	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter);
 }
 
 // this method is called when your extension is deactivated

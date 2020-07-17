@@ -32,7 +32,8 @@
         "onCommand:extension.iis-express.start",
         "onCommand:extension.iis-express.stop",
         "onCommand:extension.iis-express.open",
-        "onCommand:extension.iis-express.restart"
+        "onCommand:extension.iis-express.restart",
+        "onView:iisexpress.controls"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -97,19 +98,29 @@
                 "command": "extension.iis-express.start",
                 "title": "Start Website",
                 "category": "IIS Express",
-                "enablement": "iisexpress:siterunning != true && isWindows"
+                "enablement": "iisexpress:siterunning != true && isWindows",
+                "icon": "$(play)"
             },
             {
                 "command": "extension.iis-express.stop",
                 "title": "Stop Website",
                 "category": "IIS Express",
-                "enablement": "iisexpress:siterunning && isWindows"
+                "enablement": "iisexpress:siterunning && isWindows",
+                "icon": "$(stop)"
             },
             {
                 "command": "extension.iis-express.restart",
                 "title": "Restart Website",
                 "category": "IIS Express",
-                "enablement": "iisexpress:siterunning && isWindows"
+                "enablement": "iisexpress:siterunning && isWindows",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "extension.iis-express.supporter",
+                "title": "Become a supporter",
+                "category": "IIS Express",
+                "enablement": "isWindows",
+                "icon" : "$(heart)"
             }
         ],
         "menus": {
@@ -125,6 +136,20 @@
                 {
                     "command": "extension.iis-express.restart",
                     "when": "iisexpress:siterunning && isWindows"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "extension.iis-express.start",
+                    "group": "navigation@10"
+                },
+                {
+                    "command": "extension.iis-express.restart",
+                    "group": "navigation@11"
+                },
+                {
+                    "command": "extension.iis-express.stop",
+                    "group": "navigation@12"
                 }
             ]
         },
@@ -145,6 +170,16 @@
                 "when": "iisexpress:siterunning && isWindows"
             }
         ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "iisexpress.controls",
+                    "contextualTitle": "IIS Express",
+                    "name": "IIS Express",
+                    "when": "isWindows"
+                }
+            ]
+        },
         "jsonValidation": [
             {
                 "fileMatch": "/.vscode/iisexpress.json",
