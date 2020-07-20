@@ -121,6 +121,13 @@
                 "category": "IIS Express",
                 "enablement": "isWindows",
                 "icon" : "$(heart)"
+            },
+            {
+                "command": "extension.iis-express.settings",
+                "title": "Open Settings",
+                "category": "IIS Express",
+                "enablement": "isWindows",
+                "icon" : "$(settings-gear)"
             }
         ],
         "menus": {
@@ -140,16 +147,9 @@
             ],
             "view/title": [
                 {
-                    "command": "extension.iis-express.start",
-                    "group": "navigation@10"
-                },
-                {
-                    "command": "extension.iis-express.restart",
-                    "group": "navigation@11"
-                },
-                {
-                    "command": "extension.iis-express.stop",
-                    "group": "navigation@12"
+                    "command": "extension.iis-express.settings",
+                    "group": "navigation@1",
+                    "when": "isWindows && view == iisexpress.controls"
                 }
             ]
         },

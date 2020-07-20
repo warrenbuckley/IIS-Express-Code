@@ -110,8 +110,13 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.env.openExternal(vscode.Uri.parse("http://github.com/sponsors/warrenbuckley"));
 	});
 
+	const openSettings = vscode.commands.registerCommand('extension.iis-express.settings',async () => {
+		// 'workbench.action.openSettings' argument is search query to only show our settings to filter out other settings
+		vscode.commands.executeCommand('workbench.action.openSettings', '@ext:warren-buckley.iis-express');
+	});
+
 	// Push the commands & any other VSCode disposables
-	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter);
+	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings);
 }
 
 // this method is called when your extension is deactivated
