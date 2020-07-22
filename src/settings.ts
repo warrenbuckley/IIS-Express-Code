@@ -24,7 +24,7 @@ export function getSettings():Isettings{
     // Give some default values
     let defaultSettings:Isettings = {
         port : getRandomPort(),
-        path: vscode.workspace.rootPath as string,
+        path: './',
         clr: clrVersion.v40,
         protocol: protocolType.http
     };
