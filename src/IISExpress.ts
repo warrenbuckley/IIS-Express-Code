@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as process from 'child_process';
 import * as path from 'path';
+import * as fs from 'fs';
 import * as settings from './settings';
 
 // External libraries
@@ -41,6 +42,8 @@ export class IISExpress {
 
 		if(!options){
 			vscode.window.showErrorMessage('No options found in .vscode/iisexpress.json',{modal: true});
+
+			// Stop the method/function from running
 			return;
 		}
 
@@ -57,6 +60,23 @@ export class IISExpress {
 			// If no protocol set fallback to http as opposed to https
 			protocol: options.protocol ? options.protocol : settings.protocolType.http
 		};
+
+
+
+		// The path stored in options could be a relative path such as './' or './child-sub-folder'
+		// It may also include the legacy full path of the workspace rootpath
+		// Which caused issues - when checked into source control & other users did not have same folder structure
+		// or if you moved the folder on your own machine - it would no longer map correctly
+		const resolvedPath = path.resolve(<string>vscode.workspace.rootPath, this._args.path);
+		this._args.path = resolvedPath;
+
+		// Verify folder exists on disk (in case relative path used & selected wrong thing)
+		if(fs.existsSync(resolvedPath) === false){
+			vscode.window.showErrorMessage(`The folder does not exist ${resolvedPath} & IIS Express can not run.`, {modal: true});
+
+			// Stop the method/function from running
+			return;
+		}
 
 		// Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
@@ -159,6 +179,8 @@ export class IISExpress {
 		if(this._iisProcess === undefined || this._iisProcess.killed === true){
 			// Display error message
 			vscode.window.showErrorMessage('IIS Express is not running', {modal:true});
+
+			// Stop the method/function from running
 			return;
 		}
 
