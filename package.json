@@ -186,6 +186,26 @@
                 "fileMatch": "/.vscode/iisexpress.json",
                 "url": "./src/iisexpress-schema.json"
             }
+        ],
+        "colors": [
+            {
+                "id": "iisexpress.startIcon",
+                "description": "Color for the start icon tree item in the custom view.",
+                "defaults": {
+                    "dark": "debugIcon.startForeground",
+                    "light": "debugIcon.startForeground",
+                    "highContrast": "debugIcon.startForeground"
+                }
+            },
+            {
+                "id": "iisexpress.stopIcon",
+                "description": "Color for the stop icon tree item in the custom view.",
+                "defaults": {
+                    "dark": "debugIcon.stopForeground",
+                    "light": "debugIcon.stopForeground",
+                    "highContrast": "debugIcon.stopForeground"
+                }
+            }
         ]
     },
     "scripts": {

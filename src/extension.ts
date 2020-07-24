@@ -29,6 +29,18 @@ export async function activate(context: vscode.ExtensionContext) {
 	const verification = await verify.checkForProblems();
 	iisExpressServer = new iis.IISExpress(verification.programPath, verification.appCmdProgramPath);
 
+	const colorThemeEvent = vscode.window.onDidChangeActiveColorTheme(e => {
+
+		const startIcon = new vscode.ThemeColor("iisexpress.startIcon");
+		const stopIcon = new vscode.ThemeColor("iisexpress.stopIcon");
+		const restartIcon = new vscode.ThemeColor("iisexpress.restartIcon");
+
+		// Update our SVGs fill atribute on disk (Copies of the codicon)
+
+		// TODO: Need a way to find out the hex color stored in the ThemeColors ?!
+	});
+
+
 	// Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	const startSite = vscode.commands.registerCommand('extension.iis-express.start',async () => {
 
@@ -116,7 +128,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	// Push the commands & any other VSCode disposables
-	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings);
+	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings, colorThemeEvent);
 }
 
 // this method is called when your extension is deactivated

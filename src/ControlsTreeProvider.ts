@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 
 export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTreeItem> {
 
@@ -15,7 +16,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
             items.push(
                 {
                     label: 'Start Website',
-                    iconPath: new vscode.ThemeIcon("play"),
+                    iconPath: path.join(__filename, '..', '..', 'assets', 'server.svg'),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Start Website',
