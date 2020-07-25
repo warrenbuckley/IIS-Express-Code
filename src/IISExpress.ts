@@ -233,7 +233,7 @@ export class IISExpress {
 	}
 
     private decode2gbk(data: string): string {
-		const buffer = new Buffer(data);
+		const buffer = Buffer.from(data);
  		return iconv.decode(buffer, 'gbk');
 	}
 
