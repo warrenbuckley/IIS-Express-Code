@@ -176,7 +176,7 @@
                     "id": "iisexpress.controls",
                     "contextualTitle": "IIS Express",
                     "name": "IIS Express",
-                    "when": "isWindows",
+                    "when": "isWindows && workspaceFolderCount != 0",
                     "icon": "assets/server-environment.svg"
                 }
             ]
