@@ -28,6 +28,28 @@
     "categories": [
         "Other"
     ],
+    "badges": [
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/v/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Version",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/i/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Installs",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/d/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Downloads",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/r/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Ratings",
+            "href": ""
+        }
+    ],
     "activationEvents": [
         "onCommand:extension.iis-express.start",
         "onCommand:extension.iis-express.stop",
