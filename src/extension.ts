@@ -4,16 +4,38 @@ import * as vscode from 'vscode';
 import * as iis from './IISExpress';
 import * as verify from './verification';
 import * as settings from './settings';
+import * as telemtry from './telemetry';
 
 import * as vsls from 'vsls';
 import { ControlsTreeProvider } from './ControlsTreeProvider';
-// import { ControlsTreeProvider } from './ControlsTreeProvider';
+import TelemetryReporter from 'vscode-extension-telemetry';
 
 let iisExpressServer:iis.IISExpress;
+
+// all events will be prefixed with this event name
+const extensionId = 'iis-express';
+
+// extension version will be reported as a property with each event
+const pkgJson = require('../package.json');
+const extensionVersion = pkgJson.version;
+
+// the application insights key (also known as instrumentation key)
+const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
+
+// telemetry reporter
+let reporter:TelemetryReporter;
+
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
+
+	// create telemetry reporter on extension activation
+	reporter = new TelemetryReporter(extensionId, extensionVersion, key);
+
+	// Push the disposable VSCode into the subscriptions
+	// so VSCode can dispose them if we forget to or when the extension is deactivated
+	context.subscriptions.push(reporter);
 
 	// This will check if the user has VS LiveShare installed & return its API to us
 	// If not then this will be null
@@ -36,7 +58,9 @@ export async function activate(context: vscode.ExtensionContext) {
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             // Stop the extension from running
             return;
-        }
+		}
+
+		await telemtry.updateCountAndReport(context, reporter, telemtry.keys.start);
 
 		// Start Website...
 		// Pass settings - just in case its changed between session
@@ -65,6 +89,8 @@ export async function activate(context: vscode.ExtensionContext) {
             // Stop the extension from running
             return;
         }
+
+		await telemtry.updateCountAndReport(context, reporter, telemtry.keys.stop);
 
 		// Stop Website...
 		iisExpressServer.stopWebsite();
@@ -101,6 +127,8 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
 		}
 
+		await telemtry.updateCountAndReport(context, reporter, telemtry.keys.restart);
+
 		// Open site in browser - this will need to check if site is running first...
 		// Pass settings - just in case its changed between session (Hence not set globally in this file)
 		iisExpressServer.restartSite(settings.getSettings());
@@ -130,4 +158,7 @@ export function deactivate() {
 	if(iisExpressServer){
 		iisExpressServer.stopWebsite();
 	}
+
+	// This will ensure all pending events get flushed
+	reporter.dispose();
 }

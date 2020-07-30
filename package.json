@@ -120,14 +120,14 @@
                 "title": "Become a supporter",
                 "category": "IIS Express",
                 "enablement": "isWindows",
-                "icon" : "$(heart)"
+                "icon": "$(heart)"
             },
             {
                 "command": "extension.iis-express.settings",
                 "title": "Open Settings",
                 "category": "IIS Express",
                 "enablement": "isWindows",
-                "icon" : "$(settings-gear)"
+                "icon": "$(settings-gear)"
             }
         ],
         "menus": {
@@ -216,6 +216,7 @@
         "iconv-lite": "^0.6.2",
         "jsonfile": "^6.0.1",
         "uuid": "^8.2.0",
+        "vscode-extension-telemetry": "^0.1.6",
         "vsls": "^1.0.2532"
     }
 }
