@@ -28,6 +28,28 @@
     "categories": [
         "Other"
     ],
+    "badges": [
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/v/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Version",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/i/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Installs",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/d/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Downloads",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/r/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Ratings",
+            "href": ""
+        }
+    ],
     "activationEvents": [
         "onCommand:extension.iis-express.start",
         "onCommand:extension.iis-express.stop",
@@ -200,10 +222,10 @@
         "@types/uuid": "^8.0.0",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.0.0",
-        "@types/node": "^14.0.25",
+        "@types/node": "^14.0.27",
         "@types/vscode": "^1.47.0",
-        "@typescript-eslint/eslint-plugin": "^3.7.0",
-        "@typescript-eslint/parser": "^3.7.0",
+        "@typescript-eslint/eslint-plugin": "^3.7.1",
+        "@typescript-eslint/parser": "^3.7.1",
         "eslint": "^7.5.0",
         "eslint-config-airbnb-base": "^14.2.0",
         "eslint-plugin-import": "^2.22.0",
@@ -215,7 +237,7 @@
     "dependencies": {
         "iconv-lite": "^0.6.2",
         "jsonfile": "^6.0.1",
-        "uuid": "^8.2.0",
+        "uuid": "^8.3.0",
         "vscode-extension-telemetry": "^0.1.6",
         "vsls": "^1.0.2532"
     }
