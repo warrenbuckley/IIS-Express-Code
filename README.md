@@ -64,6 +64,8 @@ Open in browser|iisexpress.autoLaunchBrowser|Decide which browser to auto launch
 * **Become a supporter** - Opens a webpage to my GitHub Sponsor page if you wish to donate & become a sponsor
 * **Open Settingsr** - This directly opens VSCode settings 
 
-
 ![Usage](images/iis-express-usage.gif)
+
+## How do I use HTTPS for my site?
+To enable HTTPS for your site use the settings file `.vscode/iisexpress.json` set the property **protocol** to **https** and ensure the port property is in the range between `44300 - 44399`
 
