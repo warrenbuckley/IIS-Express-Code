@@ -8,10 +8,7 @@ This extension gives you the power to run a folder open in Visual Studio code as
 
 ## Sponsorware
 <a href="https://github.com/sponsors/warrenbuckley"><img src="https://github.githubassets.com/images/modules/site/sponsors/pixel-mona-heart.gif" align="left" /></a>
-This is a free extension I have made for VSCode, but if you find it useful to yourself or your business then I would love you to consider sponsoring me on Github please - https://github.com/sponsors/warrenbuckley
-
-[GitHub](http://github.com)
-
+This is a free extension I have made for VSCode, if you find it useful to yourself or your business then <a href="https://github.com/sponsors/warrenbuckley">I would love you to consider sponsoring me on Github</a> please
 
 
 ## Install
