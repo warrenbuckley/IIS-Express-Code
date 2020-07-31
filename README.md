@@ -62,7 +62,7 @@ Open in browser|iisexpress.autoLaunchBrowser|Decide which browser to auto launch
 * **Stop Website** - Stop the current folder run as a website
 * **Restart Website** - Restart (Stop & Start) the current folder run as a website
 * **Become a supporter** - Opens a webpage to my GitHub Sponsor page if you wish to donate & become a sponsor
-* **Open Settingsr** - This directly opens VSCode settings 
+* **Open Settings** - This directly opens VSCode settings for IIS Express
 
 ![Usage](images/iis-express-usage.gif)
 
