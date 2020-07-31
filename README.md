@@ -1,5 +1,5 @@
-# Run websites straight from VS Code using IIS Express
-This extension gives you the power to run a folder open in Visual Studio code as a website using IIS Express.
+# IIS Express for VSCode
+This extension gives you the power to run a folder open in Visual Studio Code as a website using an IIS Express web server.
 
 [![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge)](https://marketplace.visualstudio.com/items?itemName=warren-buckley.iis-express)
 [![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge)](https://marketplace.visualstudio.com/items?itemName=warren-buckley.iis-express)
@@ -7,8 +7,8 @@ This extension gives you the power to run a folder open in Visual Studio code as
 [![Visual Studio Marketplace Rating](https://img.shields.io/visual-studio-marketplace/r/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge)](https://marketplace.visualstudio.com/items?itemName=warren-buckley.iis-express)
 
 ## Sponsorware
-<a href="https://github.com/sponsors/warrenbuckley"><img src="https://github.githubassets.com/images/modules/site/sponsors/pixel-mona-heart.gif" align="left" /></a>
-This is a free extension I have made for VSCode, if you find it useful to yourself or your business then <a href="https://github.com/sponsors/warrenbuckley">I would love you to consider sponsoring me on Github</a> please
+<a href="https://github.com/sponsors/warrenbuckley"><img src="https://github.githubassets.com/images/modules/site/sponsors/pixel-mona-heart.gif" align="left" height="45" /></a>
+This is a **free extension** I have made for VSCode, if you find it useful to yourself or your business then <a href="https://github.com/sponsors/warrenbuckley">I would love you to consider sponsoring me on Github</a> please
 
 
 ## Install
