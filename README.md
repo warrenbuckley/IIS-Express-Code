@@ -24,6 +24,29 @@ Open the command pallete in VSCode & type **ext install** then search for **IIS 
 
 ![Installing IIS Express for VSCode](images/iis-express-install.gif)
 
+## Settings for IIS Express
+IIS Express for VSCode automatically generates a default config file for you & stores it at `.vscode/iisexpress.json`
+You can modify this file on disk inside VSCode to get intellisens/autocompletion for the available properties for you to set
+
+Setting | Alias | Description|Required
+--------|-------|------------|--------
+Port Number|port|The port number you wish to use for IIS Express|✔
+Folder Path of Site|path|This property is optional & allows you to set an absolute path to the folder or subfolder as the root of your site/project for IIS Express to run. Additionally this support relative paths to the workspace folder such as `./my-sub-folder`|❌
+CLR|clr|This property is optional & allows you to set AppPool CLR version, 2.0 vs 4.0|❌
+Protocol|protocol|This property is optional & allows you to set http or https|❌
+Url Suffix|url|This property is optional & allows you to set the page URL you wish to open eg: '/about/the-team'|❌
+
+### Default Settings
+By default with the file not generated it will create the following file for you on disk and setting a random port number.
+```json
+{
+  "port": 18420,
+  "path": "./",
+  "clr": "v4.0",
+  "protocol": "http"
+}
+```
+
 ## Global Settings for IIS Express for VSCode
 Below is a table of settings that can be used to configure IIS Express for VSCode. You can easily get to these settings by using the settings (cog) icon in the IIS Express pane found by default under the file explorer.
 
@@ -35,9 +58,12 @@ Auto launch browser|iisexpress.autoLaunchBrowser|An option to disable or enable 
 Open in browser|iisexpress.autoLaunchBrowser|Decide which browser to auto launch the site with when `iisexpress.autoLaunchBrowser` is set to **true**|default (default, chrome, msedge, firefox, opera)
 
 ## Available commands
-* **IIS Express: Start Website** - Start the current folder run as a website
-* **IIS Express: Stop Website** - Stop the current folder run as a website
-* **IIS Express: Restart Website** - Restart (Stop & Start) the current folder run as a website
+* **Start Website** - Start the current folder run as a website
+* **Stop Website** - Stop the current folder run as a website
+* **Restart Website** - Restart (Stop & Start) the current folder run as a website
+* **Become a supporter** - Opens a webpage to my GitHub Sponsor page if you wish to donate & become a sponsor
+* **Open Settingsr** - This directly opens VSCode settings 
+
 
 ![Usage](images/iis-express-usage.gif)
 
