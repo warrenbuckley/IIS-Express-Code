@@ -10,13 +10,20 @@ This extension gives you the power to run a folder open in Visual Studio Code as
 <a href="https://github.com/sponsors/warrenbuckley"><img src="https://github.githubassets.com/images/modules/site/sponsors/pixel-mona-heart.gif" align="left" height="45" /></a>
 This is a **free extension** I have made for VSCode, if you find it useful to yourself or your business then <a href="https://github.com/sponsors/warrenbuckley">I would love you to consider sponsoring me on Github</a> please
 
+## Features
+* Auto opens folder in browser
+* Super simple way from the command pallete to start & stop the website
+* See ouput from the IIS Express command line directly in Visual Studio
+* Support for PHP via `ApplicationHost.config` common changes for all sites running with IIS Express
 
-## Install
-Open the command pallete & type **ext install** then search for **IIS Express**
+### Requirements
+* Windows Machine (Sorry not for Linux, OSX or Web)
+
+## How do I Install IIS Express for VSCode?
+Open the command pallete in VSCode & type **ext install** then search for **IIS Express** alternatively you can [download the IIS Express for VSCode extension on the marketplace](https://marketplace.visualstudio.com/items?itemName=warren-buckley.iis-expres)
 
 ![Install](images/iis-express-install.gif)
 
-# Usage
 ## Available commands
 * **IIS Express: Start Website** - Start the current folder run as a website
 * **IIS Express: Stop Website** - Stop the current folder run as a website
@@ -24,12 +31,3 @@ Open the command pallete & type **ext install** then search for **IIS Express**
 
 ![Usage](images/iis-express-usage.gif)
 
-# Features
-* Auto opens folder in browser
-* Super simple way from the command pallete to start & stop the website
-* See ouput from the IIS Express command line directly in Visual Studio
-* Support for PHP via `ApplicationHost.config` common changes for all sites running with IIS Express
-
-# Requirements
-* Windows Machine (Sorry not for Linux & OSX)
-* IIS Express installed
