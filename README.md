@@ -69,3 +69,13 @@ Open in browser|iisexpress.autoLaunchBrowser|Decide which browser to auto launch
 ## How do I use HTTPS for my site?
 To enable HTTPS for your site use the settings file `.vscode/iisexpress.json` set the property **protocol** to **https** and ensure the port property is in the range between `44300 - 44399`
 
+## How do I change keymappings for IIS Express for VSCode
+By default IIS Express for VSCode binds to the following keyboard shortcuts, you may prefer to change these keybindings if you find them conflicting in your workflows.
+The best way to do this is to [read the official documentation from VSCode](https://code.visualstudio.com/docs/getstarted/keybindings).
+
+Keyboard Shortcut|Command
+-----------------|-------
+ctrl+f5| Start Site
+shift+f5| Stop Site
+ctrl+shift+f5| Restart Site
+
