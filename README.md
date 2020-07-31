@@ -22,7 +22,17 @@ This is a **free extension** I have made for VSCode, if you find it useful to yo
 ## How do I Install IIS Express for VSCode?
 Open the command pallete in VSCode & type **ext install** then search for **IIS Express** alternatively you can [download the IIS Express for VSCode extension on the marketplace](https://marketplace.visualstudio.com/items?itemName=warren-buckley.iis-expres)
 
-![Install](images/iis-express-install.gif)
+![Installing IIS Express for VSCode](images/iis-express-install.gif)
+
+## Global Settings for IIS Express for VSCode
+Below is a table of settings that can be used to configure IIS Express for VSCode. You can easily get to these settings by using the settings (cog) icon in the IIS Express pane found by default under the file explorer.
+
+Setting | Alias | Description | Default Value
+--------|-------|-------------|------
+Path to IISExpress.exe|iisexpress.iisExpressPath|An absolute path to **IISExpress.exe** such as `C:\Program Files\IIS Express\iisexpress.exe`|null - We try to use default program path location
+Path to AppCmd.exe|iisexpress.appcmdPath|An absolute path to **appcmd.exe** such as `C:\Program Files\IIS Express\appcmd.exe`|null - We try to use default program path location
+Auto launch browser|iisexpress.autoLaunchBrowser|An option to disable or enable the browser from launching the site when IIS Express starts. By default this is **true**|true
+Open in browser|iisexpress.autoLaunchBrowser|Decide which browser to auto launch the site with when `iisexpress.autoLaunchBrowser` is set to **true**|default (default, chrome, msedge, firefox, opera)
 
 ## Available commands
 * **IIS Express: Start Website** - Start the current folder run as a website
