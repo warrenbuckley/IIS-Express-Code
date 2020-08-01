@@ -1,7 +1,7 @@
 {
     "name": "iis-express",
     "displayName": "IIS Express",
-    "description": "This allows you to run the current folder as a website in IIS Express",
+    "description": "This allows you to run the current folder as a website using the IIS Express web server",
     "version": "1.1.2",
     "publisher": "warren-buckley",
     "icon": "images/iis-icon.png",
@@ -12,7 +12,8 @@
     "keywords": [
         "IIS",
         "IIS Express",
-        "Web Server"
+        "Web Server",
+        "Server"
     ],
     "bugs": {
         "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues"
@@ -230,7 +231,7 @@
         "eslint-config-airbnb-base": "^14.2.0",
         "eslint-plugin-import": "^2.22.0",
         "glob": "^7.1.6",
-        "mocha": "^8.0.1",
+        "mocha": "^8.1.0",
         "typescript": "^3.9.7",
         "vscode-test": "^1.4.0"
     },

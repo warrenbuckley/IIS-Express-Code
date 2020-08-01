@@ -1,8 +1,8 @@
 # Changelog
-##Version 1.1.2
+## Version 1.1.2
 * **Bug Fix:** Version 1.1.1 fixed starting & stopping sites issue & having to cold reboot VSCode however the restart was overlooked. Thanks to @swensorm for the PR & fix for this :)
 
-##Version 1.1.1
+## Version 1.1.1
 * **Bug Fix:** Fix issue where the site could not be restarted and required users to close VSCode to start the site up again
 
 ## Version 1.1.0
