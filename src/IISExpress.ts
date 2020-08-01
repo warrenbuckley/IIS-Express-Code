@@ -3,10 +3,13 @@ import * as process from 'child_process';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as settings from './settings';
+import * as telemtry from './telemetry';
 
 // External libraries
 import { v4 as uuidv4 } from 'uuid';
 import * as iconv from 'iconv-lite';
+import TelemetryReporter from 'vscode-extension-telemetry';
+
 
 export interface IExpressArguments {
 	path: string;
@@ -23,10 +26,14 @@ export class IISExpress {
 	private _output!: vscode.OutputChannel | null;
 	private _statusbar!: vscode.StatusBarItem;
 	private _statusMessage!: string;
+	private _context: vscode.ExtensionContext;
+	private _reporter: TelemetryReporter;
 
-	constructor(iisPath: string, appCmdPath: string){
+	constructor(iisPath: string, appCmdPath: string, context:vscode.ExtensionContext, reporter:TelemetryReporter){
 		this._iisPath = iisPath;
 		this._iisAppCmdPath = appCmdPath;
+		this._context = context;
+		this._reporter = reporter;
 	}
 
 	public startWebsite(options: settings.Isettings) {
@@ -102,6 +109,7 @@ export class IISExpress {
 			process.execFileSync(this._iisAppCmdPath, ['add', 'site', `-name:${siteName}`, `-bindings:${this._args.protocol}://localhost:${this._args.port}`, `-physicalPath:${this._args.path}`]);
 		} catch (error) {
 			console.log(error);
+			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `add site -name:${siteName} -bindings:${this._args.protocol}://localhost:${this._args.port} -physicalPath:${this._args.path}`});
 		}
 
 		// Based on the CLR chosen use the correct built in AppPools shipping with IISExpress
@@ -113,7 +121,11 @@ export class IISExpress {
 			process.execFileSync(this._iisAppCmdPath, ['set', 'app', `/app.name:${siteName}/`, `/applicationPool:${appPool}`]);
 		} catch (error) {
 			console.log(error);
+			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath});
 		}
+
+		// Log telemtry
+		telemtry.updateCountAndReport(this._context, this._reporter, telemtry.keys.start);
 
 		// This is the magic that runs the IISExpress cmd from the appcmd config list
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
@@ -170,6 +182,7 @@ export class IISExpress {
 				process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `${siteName}`]);
 			} catch (error) {
 				console.log(error);
+				this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `delete site ${siteName}`});
 			}
 		});
 	}
@@ -189,6 +202,9 @@ export class IISExpress {
 
 		// Used to enable/disable commands & to know when a site is running
 		vscode.commands.executeCommand('setContext', 'iisexpress:siterunning', false);
+
+		// Log telemtry
+		telemtry.updateCountAndReport(this._context, this._reporter, telemtry.keys.stop);
 
 		// Clear the output log
 		this._output!.clear();
@@ -230,6 +246,9 @@ export class IISExpress {
 			this.stopWebsite();
 			this.startWebsite(options);
 		}
+
+		// Log telemtry
+		telemtry.updateCountAndReport(this._context, this._reporter, telemtry.keys.restart);
 	}
 
     private decode2gbk(data: string): string {
