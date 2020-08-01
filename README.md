@@ -66,6 +66,10 @@ Open in browser|iisexpress.autoLaunchBrowser|Decide which browser to auto launch
 
 ![Usage](images/iis-express-usage.gif)
 
+## How do I use the extension?
+The VSCode command pallete is your friend. Press **F1 on the keyboard and start typing IISExpress** to see the list of commands to use.
+Alternatively is version 1.2.0 and newer there is a new panel view that by default lives under the list of files in the file explorer, in newer versions of VSCode you are able to drag and drop this pane around to a new location if you prefer to put it elsewhere.
+
 ## How do I use HTTPS for my site?
 To enable HTTPS for your site use the settings file `.vscode/iisexpress.json` set the property **protocol** to **https** and ensure the port property is in the range between `44300 - 44399`
 
