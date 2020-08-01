@@ -1,14 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as vsls from 'vsls';
+import TelemetryReporter from 'vscode-extension-telemetry';
+
 import * as iis from './IISExpress';
 import * as verify from './verification';
 import * as settings from './settings';
-import * as telemtry from './telemetry';
-
-import * as vsls from 'vsls';
 import { ControlsTreeProvider } from './ControlsTreeProvider';
-import TelemetryReporter from 'vscode-extension-telemetry';
+
 
 let iisExpressServer:iis.IISExpress;
 
@@ -22,20 +22,14 @@ const extensionVersion = pkgJson.version;
 // the application insights key (also known as instrumentation key)
 const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
 
-// telemetry reporter
-let reporter:TelemetryReporter;
 
+// telemetry reporter
+// create telemetry reporter on extension activation
+const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionVersion, key);
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
-
-	// create telemetry reporter on extension activation
-	reporter = new TelemetryReporter(extensionId, extensionVersion, key);
-
-	// Push the disposable VSCode into the subscriptions
-	// so VSCode can dispose them if we forget to or when the extension is deactivated
-	context.subscriptions.push(reporter);
 
 	// This will check if the user has VS LiveShare installed & return its API to us
 	// If not then this will be null
@@ -49,7 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Begin checks of OS, IISExpress location etc..
 	const verification = await verify.checkForProblems();
-	iisExpressServer = new iis.IISExpress(verification.programPath, verification.appCmdProgramPath);
+	iisExpressServer = new iis.IISExpress(verification.programPath, verification.appCmdProgramPath, context, reporter);
 
 	// Registering a command so we can assign a direct keybinding to it (without opening quick launch)
 	const startSite = vscode.commands.registerCommand('extension.iis-express.start',async () => {
@@ -58,9 +52,7 @@ export async function activate(context: vscode.ExtensionContext) {
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             // Stop the extension from running
             return;
-		}
-
-		await telemtry.updateCountAndReport(context, reporter, telemtry.keys.start);
+        }
 
 		// Start Website...
 		// Pass settings - just in case its changed between session
@@ -89,8 +81,6 @@ export async function activate(context: vscode.ExtensionContext) {
             // Stop the extension from running
             return;
         }
-
-		await telemtry.updateCountAndReport(context, reporter, telemtry.keys.stop);
 
 		// Stop Website...
 		iisExpressServer.stopWebsite();
@@ -127,8 +117,6 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
 		}
 
-		await telemtry.updateCountAndReport(context, reporter, telemtry.keys.restart);
-
 		// Open site in browser - this will need to check if site is running first...
 		// Pass settings - just in case its changed between session (Hence not set globally in this file)
 		iisExpressServer.restartSite(settings.getSettings());
@@ -136,6 +124,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	const supporter = vscode.commands.registerCommand('extension.iis-express.supporter',async () => {
 		vscode.env.openExternal(vscode.Uri.parse("http://github.com/sponsors/warrenbuckley"));
+		reporter.sendTelemetryEvent('supporterlinkopened');
 	});
 
 	const openSettings = vscode.commands.registerCommand('extension.iis-express.settings',async () => {
@@ -158,7 +147,4 @@ export function deactivate() {
 	if(iisExpressServer){
 		iisExpressServer.stopWebsite();
 	}
-
-	// This will ensure all pending events get flushed
-	reporter.dispose();
 }
