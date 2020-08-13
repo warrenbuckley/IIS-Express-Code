@@ -24,7 +24,7 @@
         "url": "https://github.com/warrenbuckley/IIS-Express-Code.git"
     },
     "engines": {
-        "vscode": "^1.23.0"
+        "vscode": "^1.48.0"
     },
     "categories": [
         "Other"
