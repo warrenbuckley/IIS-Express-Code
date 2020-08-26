@@ -8,6 +8,7 @@ import * as iis from './IISExpress';
 import * as verify from './verification';
 import * as settings from './settings';
 import { ControlsTreeProvider } from './ControlsTreeProvider';
+import { Credentials } from './credentials';
 
 
 let iisExpressServer:iis.IISExpress;
@@ -22,7 +23,6 @@ const extensionVersion = pkgJson.version;
 // the application insights key (also known as instrumentation key)
 const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
 
-
 // telemetry reporter
 // create telemetry reporter on extension activation
 const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionVersion, key);
@@ -31,10 +31,18 @@ const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionV
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
 
+
 	// This will check if the user has VS LiveShare installed & return its API to us
 	// If not then this will be null
 	const liveshare = await vsls.getApi();
 	let liveShareServer:vscode.Disposable;
+
+	// Init credentials class
+	// Means we can fetch token later when needed with
+	// const userAuth = await credentials.getAuthSession();
+	const credentials = new Credentials();
+	await credentials.initialize(context, reporter);
+	const isValidSponsor = await credentials.isUserSponsor();
 
 	// Register tree provider to put our custom commands into the tree
 	// Start, Stop, Restart, Support etc...
@@ -132,8 +140,36 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('workbench.action.openSettings', '@ext:warren-buckley.iis-express');
 	});
 
+	const displaySponsorMessage = vscode.commands.registerCommand('extension.iis-express.displaySponsorMessage', async () => {
+		// // Check if we need to display or not...
+		// const foo = await credentials.getAuthSession();
+		// const bar = foo.scopes;
+		// const temp = foo.account.id;
+		// const tempBar = foo.account.label; // warrenbuckley
+		// const accessToken = foo.accessToken; //
+
+		if(isValidSponsor === false){
+			vscode.window.showErrorMessage("You are NOT a sponsor", { modal: true });
+		}
+		else {
+			vscode.window.showInformationMessage("YAY you are a sponsor", { modal: true });
+		}
+
+		 // Create and show a new webview
+		 const panel = vscode.window.createWebviewPanel(
+			'iisExpress.sponsorware',
+			'IIS Express - Sponsorware',
+			vscode.ViewColumn.Beside,
+			{
+			}
+		  );
+
+		    // And set its HTML content
+			panel.webview.html = getWebviewContent(87);
+	});
+
 	// Push the commands & any other VSCode disposables
-	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings);
+	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings, displaySponsorMessage);
 }
 
 // this method is called when your extension is deactivated
@@ -148,3 +184,27 @@ export function deactivate() {
 		iisExpressServer.stopWebsite();
 	}
 }
+
+function getWebviewContent(numberOfLaunches:number) {
+	return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <title>IIS Express - Sponsorware</title>
+	  <style>
+	  button {
+		  font-size:40px;
+		color: var(--vscode-editor-background);
+	  }
+	  </style>
+  </head>
+  <body>
+	  <h1>IIS Express - Sponsorware</h1>
+	  <p>You have used IIS Express ${numberOfLaunches} times. You like to use it alot, have you considered becoming a sponsor</p>
+	  <button>Sponsor</button>
+	  <a href="http://google.com">Google</a>
+	  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
+  </body>
+  </html>`;
+  }
