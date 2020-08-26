@@ -141,12 +141,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
 	const displaySponsorMessage = vscode.commands.registerCommand('extension.iis-express.displaySponsorMessage', async () => {
-		// // Check if we need to display or not...
-		// const foo = await credentials.getAuthSession();
-		// const bar = foo.scopes;
-		// const temp = foo.account.id;
-		// const tempBar = foo.account.label; // warrenbuckley
-		// const accessToken = foo.accessToken; //
 
 		if(isValidSponsor === false){
 			vscode.window.showErrorMessage("You are NOT a sponsor", { modal: true });
