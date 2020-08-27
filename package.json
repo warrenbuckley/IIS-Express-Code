@@ -151,11 +151,6 @@
                 "category": "IIS Express",
                 "enablement": "isWindows",
                 "icon": "$(settings-gear)"
-            },
-            {
-                "command": "extension.iis-express.displaySponsorMessage",
-                "title": "Sponsorware",
-                "category": "IIS Express"
             }
         ],
         "menus": {
