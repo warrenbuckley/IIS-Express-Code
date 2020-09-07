@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
+import * as util from './util';
 
 export interface Isettings {
     port: number;
@@ -102,12 +103,5 @@ export function getSettings():Isettings{
 // IIS Express docs recommend ports greater than 1024
 // http://www.iis.net/learn/extensions/using-iis-express/running-iis-express-without-administrative-privileges
 export function getRandomPort():number{
-    return getRandomIntInclusive(1024,44399);
-}
-
-
-// Returns a random integer between min (included) and max (included)
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-function getRandomIntInclusive(min:number, max:number):number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return util.getRandomIntInclusive(1024,44399);
 }

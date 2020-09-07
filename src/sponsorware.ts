@@ -13,17 +13,19 @@ export class Sponsorware {
         this.credentials = credentials;
     }
 
-    private doWeShowSponsoreMessagePanel():boolean {
+    private doWeShowSponsorMessagePanel():boolean {
         // Exit out early if they are a sponsor
         // Don't show them the sponsorware message
-        if(this.credentials.isUserSponsor()){
-            return false;
-        }
+
+        //const isSponsor = await this.credentials.isUserSponsor();
+        // if(this.credentials.isUserSponsor()){
+        //     return false;
+        // }
 
         // Get the counter values
         this.totalCount = this.context.globalState.get<number>('iisexpress.start.count', 0);
         const sponsorwareCount = this.context.globalState.get<number>('iisexpress.sponsorware.count', 0);
-        const sponsorwareDisplayCount = this.context.globalState.get<number>('iisexpress.sponsorware.display.count', 20);
+        const sponsorwareDisplayCount = this.context.globalState.get<number>('iisexpress.sponsorware.display.count', 10);
 
         // Decide if we met the threshold yet
         if(sponsorwareCount > sponsorwareDisplayCount){
@@ -38,31 +40,6 @@ export class Sponsorware {
         else {
             return false;
         }
-    }
-
-    showSponsorMessagePanel(){
-
-        // Exit out early (if user is a sponsor or the counter threshold not met yet)
-        if(this.doWeShowSponsoreMessagePanel() === false){
-            return;
-        }
-
-        // Create and show a new webview
-        const panel = vscode.window.createWebviewPanel(
-            'iisExpress.sponsorware',
-            'IIS Express - Sponsorware',
-            vscode.ViewColumn.Beside,
-            {
-                // Only allow the webview to access resources in our extension's media directory
-                localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'assets'))]
-            }
-        );
-
-        const onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'assets', 'sponsorware.svg'));
-        const sponsorSvgSrc = panel.webview.asWebviewUri(onDiskPath);
-
-        // And set its HTML content
-        panel.webview.html = this.getWebviewContent(this.totalCount, sponsorSvgSrc);
     }
 
     private getWebviewContent(numberOfLaunches:number, svgSrc:vscode.Uri) {
@@ -113,6 +90,31 @@ export class Sponsorware {
             </p>
         </body>
         </html>`;
+    }
+
+    showSponsorMessagePanel():void {
+
+        // Exit out early (if user is a sponsor or the counter threshold not met yet)
+        if(this.doWeShowSponsorMessagePanel() === false){
+            return;
+        }
+
+        // Create and show a new webview
+        const panel = vscode.window.createWebviewPanel(
+            'iisExpress.sponsorware',
+            'IIS Express - Sponsorware',
+            vscode.ViewColumn.Beside,
+            {
+                // Only allow the webview to access resources in our extension's media directory
+                localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'assets'))]
+            }
+        );
+
+        const onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'assets', 'sponsorware.svg'));
+        const sponsorSvgSrc = panel.webview.asWebviewUri(onDiskPath);
+
+        // And set its HTML content
+        panel.webview.html = this.getWebviewContent(this.totalCount, sponsorSvgSrc);
     }
 }
 

@@ -35,7 +35,7 @@ export class Credentials {
 		this.authSession = undefined;
 	}
 
-	registerListeners(context: vscode.ExtensionContext): void {
+	private registerListeners(context: vscode.ExtensionContext): void {
 		/**
 		 * Sessions are changed when a user logs in or logs out.
 		 */
@@ -46,26 +46,25 @@ export class Credentials {
 		}));
 	}
 
-	async getAuthSession(): Promise<vscode.AuthenticationSession> {
-		if (this.authSession) {
-			return this.authSession;
-		}
-
-		/**
-		 * When the `createIfNone` flag is passed, a modal dialog will be shown asking the user to sign in.
-		 * Note that this can throw if the user clicks cancel.
-		 */
-		const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
-		this.authSession = session;
-		return this.authSession;
-	}
-
+	// Acessed from sponsorware class
 	async isUserSponsor():Promise<boolean> {
 
 		// Ensure we have an auth session
 		if(this.authSession === undefined){
-			await this.getAuthSession();
+			/**
+			 * When the `createIfNone` flag is passed, a modal dialog will be shown asking the user to sign in.
+			 * Note that this can throw if the user clicks cancel.
+			 */
+			try {
+				const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true });
+				this.authSession = session;
+			} catch (error) {
+				// User has explicitly not consented to allow us to login
+				// We will need to show the sponsorware message
+				return false;
+			}
 		}
+
 		// Use the token in this.authSession.accessToken
 		const accessToken = this.authSession?.accessToken;
 

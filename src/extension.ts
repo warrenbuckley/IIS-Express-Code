@@ -7,8 +7,10 @@ import TelemetryReporter from 'vscode-extension-telemetry';
 import * as iis from './IISExpress';
 import * as verify from './verification';
 import * as settings from './settings';
+import * as util from './util';
 import { ControlsTreeProvider } from './ControlsTreeProvider';
 import { Credentials } from './credentials';
+import { Sponsorware } from './sponsorware';
 
 
 let iisExpressServer:iis.IISExpress;
@@ -31,18 +33,19 @@ const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionV
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
 
+	// Get a random number to use/compare if we have run IIS Express
+	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(1, 3);
+	context.globalState.update('iisexpress.sponsorware.display.count', randomNumberOfLaunchesToShowSponsor);
 
 	// This will check if the user has VS LiveShare installed & return its API to us
 	// If not then this will be null
 	const liveshare = await vsls.getApi();
 	let liveShareServer:vscode.Disposable;
 
-	// Init credentials class
-	// Means we can fetch token later when needed with
-	// const userAuth = await credentials.getAuthSession();
+	// Init credentials class with event listener & prompt/get token from GitHub auth
 	const credentials = new Credentials();
 	await credentials.initialize(context, reporter);
-	const isValidSponsor = await credentials.isUserSponsor();
+	const sponsorware = new Sponsorware(context, credentials);
 
 	// Register tree provider to put our custom commands into the tree
 	// Start, Stop, Restart, Support etc...
@@ -65,6 +68,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Start Website...
 		// Pass settings - just in case its changed between session
 		iisExpressServer.startWebsite(settings.getSettings());
+
+		// Checks if we need to display sponsoware webview message
+		sponsorware.showSponsorMessagePanel();
 
 		// Ensure user has liveshare extension
 		if(liveshare !== null){
