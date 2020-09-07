@@ -140,30 +140,8 @@ export async function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('workbench.action.openSettings', '@ext:warren-buckley.iis-express');
 	});
 
-	const displaySponsorMessage = vscode.commands.registerCommand('extension.iis-express.displaySponsorMessage', async () => {
-
-		if(isValidSponsor === false){
-			vscode.window.showErrorMessage("You are NOT a sponsor", { modal: true });
-		}
-		else {
-			vscode.window.showInformationMessage("YAY you are a sponsor", { modal: true });
-		}
-
-		 // Create and show a new webview
-		 const panel = vscode.window.createWebviewPanel(
-			'iisExpress.sponsorware',
-			'IIS Express - Sponsorware',
-			vscode.ViewColumn.Beside,
-			{
-			}
-		  );
-
-		    // And set its HTML content
-			panel.webview.html = getWebviewContent(87);
-	});
-
 	// Push the commands & any other VSCode disposables
-	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings, displaySponsorMessage);
+	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings);
 }
 
 // this method is called when your extension is deactivated
@@ -178,27 +156,3 @@ export function deactivate() {
 		iisExpressServer.stopWebsite();
 	}
 }
-
-function getWebviewContent(numberOfLaunches:number) {
-	return `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-	  <meta charset="UTF-8">
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  <title>IIS Express - Sponsorware</title>
-	  <style>
-	  button {
-		  font-size:40px;
-		color: var(--vscode-editor-background);
-	  }
-	  </style>
-  </head>
-  <body>
-	  <h1>IIS Express - Sponsorware</h1>
-	  <p>You have used IIS Express ${numberOfLaunches} times. You like to use it alot, have you considered becoming a sponsor</p>
-	  <button>Sponsor</button>
-	  <a href="http://google.com">Google</a>
-	  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
-  </body>
-  </html>`;
-  }
