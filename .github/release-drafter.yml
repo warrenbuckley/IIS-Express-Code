@@ -15,7 +15,9 @@ categories:
       - 'bug'
       
   - title: '🧰 Maintenance'
-    label: 'chore'
+    labels:
+      - 'chore'
+      - 'dependencies'
     
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 
@@ -35,7 +37,6 @@ version-resolver:
   
 template: |
   ## Changes
-
   $CHANGES
   
   ## Contributors
