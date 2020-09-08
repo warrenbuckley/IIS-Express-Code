@@ -13,22 +13,22 @@ export class Sponsorware {
         this.credentials = credentials;
     }
 
-    private doWeShowSponsorMessagePanel():boolean {
+    private async doWeShowSponsorMessagePanel():Promise<boolean> {
         // Exit out early if they are a sponsor
         // Don't show them the sponsorware message
 
-        //const isSponsor = await this.credentials.isUserSponsor();
-        // if(this.credentials.isUserSponsor()){
-        //     return false;
-        // }
+        const isSponsor = await this.credentials.isUserSponsor();
+        if(isSponsor){
+            return false;
+        }
 
         // Get the counter values
         this.totalCount = this.context.globalState.get<number>('iisexpress.start.count', 0);
         const sponsorwareCount = this.context.globalState.get<number>('iisexpress.sponsorware.count', 0);
-        const sponsorwareDisplayCount = this.context.globalState.get<number>('iisexpress.sponsorware.display.count', 10);
+        const sponsorwareDisplayCount = this.context.globalState.get<number>('iisexpress.sponsorware.display.count', 10); // Default to 10 if the random number not been set
 
         // Decide if we met the threshold yet
-        if(sponsorwareCount > sponsorwareDisplayCount){
+        if(sponsorwareCount >= sponsorwareDisplayCount){
             // Each activation of extension (ie when VSCode boots)
             // Will decide a random number in a range as the threshold counter
             // So its not always the same number of launches of a site
@@ -78,9 +78,9 @@ export class Sponsorware {
         </head>
         <body>
             <img src="${svgSrc}" />
-            <h1>You have used IIS Express <span>${numberOfLaunches}</span> times.</h1>
-            <p>As you like to use this VSCode extension alot, have you considered becoming a GitHub sponsor for this project?</p>
-            <p>Becoming a sponsor removes this sponsorware message and you get a warm fuzzy feeling for supporting someone</p>
+            <h1>You have used it <span>${numberOfLaunches}</span> times.</h1>
+            <p>I'm happy to see you're using IIS Express extension alot, have you considered becoming a GitHub sponsor for this project?</p>
+            <p>Becoming a sponsor removes this sponsorware message and you get a warm fuzzy feeling for supporting an individual.</p>
 
             <p>
                 <a href="https://github.com/sponsors/warrenbuckley"
@@ -92,10 +92,10 @@ export class Sponsorware {
         </html>`;
     }
 
-    showSponsorMessagePanel():void {
+    async showSponsorMessagePanel():Promise<void> {
 
         // Exit out early (if user is a sponsor or the counter threshold not met yet)
-        if(this.doWeShowSponsorMessagePanel() === false){
+        if(await this.doWeShowSponsorMessagePanel() === false){
             return;
         }
 

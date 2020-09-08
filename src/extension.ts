@@ -34,7 +34,7 @@ const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionV
 export async function activate(context: vscode.ExtensionContext) {
 
 	// Get a random number to use/compare if we have run IIS Express
-	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(1, 3);
+	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(1, 2);
 	context.globalState.update('iisexpress.sponsorware.display.count', randomNumberOfLaunchesToShowSponsor);
 
 	// This will check if the user has VS LiveShare installed & return its API to us
@@ -70,7 +70,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		iisExpressServer.startWebsite(settings.getSettings());
 
 		// Checks if we need to display sponsoware webview message
-		sponsorware.showSponsorMessagePanel();
+		await sponsorware.showSponsorMessagePanel();
 
 		// Ensure user has liveshare extension
 		if(liveshare !== null){
@@ -136,7 +136,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		iisExpressServer.restartSite(settings.getSettings());
 
 		// Checks if we need to display sponsoware webview message
-		sponsorware.showSponsorMessagePanel();
+		await sponsorware.showSponsorMessagePanel();
 	});
 
 	const supporter = vscode.commands.registerCommand('extension.iis-express.supporter',async () => {
