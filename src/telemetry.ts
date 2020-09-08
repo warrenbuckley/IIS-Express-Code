@@ -4,7 +4,8 @@ import TelemetryReporter from 'vscode-extension-telemetry';
 export enum keys {
     start = 'start',
     restart = 'restart',
-    stop = 'stop'
+    stop = 'stop',
+    sponsorware = 'sponsorware'
 }
 
 

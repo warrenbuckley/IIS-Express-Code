@@ -126,6 +126,7 @@ export class IISExpress {
 
 		// Log telemtry
 		telemtry.updateCountAndReport(this._context, this._reporter, telemtry.keys.start);
+		telemtry.updateCountAndReport(this._context, this._reporter, telemtry.keys.sponsorware);
 
 		// This is the magic that runs the IISExpress cmd from the appcmd config list
 		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);

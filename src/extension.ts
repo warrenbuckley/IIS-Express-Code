@@ -7,7 +7,10 @@ import TelemetryReporter from 'vscode-extension-telemetry';
 import * as iis from './IISExpress';
 import * as verify from './verification';
 import * as settings from './settings';
+import * as util from './util';
 import { ControlsTreeProvider } from './ControlsTreeProvider';
+import { Credentials } from './credentials';
+import { Sponsorware } from './sponsorware';
 
 
 let iisExpressServer:iis.IISExpress;
@@ -22,7 +25,6 @@ const extensionVersion = pkgJson.version;
 // the application insights key (also known as instrumentation key)
 const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
 
-
 // telemetry reporter
 // create telemetry reporter on extension activation
 const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionVersion, key);
@@ -31,10 +33,19 @@ const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionV
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
 
+	// Get a random number to use/compare if we have run IIS Express
+	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(5, 20);
+	context.globalState.update('iisexpress.sponsorware.display.count', randomNumberOfLaunchesToShowSponsor);
+
 	// This will check if the user has VS LiveShare installed & return its API to us
 	// If not then this will be null
 	const liveshare = await vsls.getApi();
 	let liveShareServer:vscode.Disposable;
+
+	// Init credentials class with event listener & prompt/get token from GitHub auth
+	const credentials = new Credentials();
+	await credentials.initialize(context, reporter);
+	const sponsorware = new Sponsorware(context, credentials);
 
 	// Register tree provider to put our custom commands into the tree
 	// Start, Stop, Restart, Support etc...
@@ -57,6 +68,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Start Website...
 		// Pass settings - just in case its changed between session
 		iisExpressServer.startWebsite(settings.getSettings());
+
+		// Checks if we need to display sponsoware webview message
+		await sponsorware.showSponsorMessagePanel();
 
 		// Ensure user has liveshare extension
 		if(liveshare !== null){
@@ -120,6 +134,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Open site in browser - this will need to check if site is running first...
 		// Pass settings - just in case its changed between session (Hence not set globally in this file)
 		iisExpressServer.restartSite(settings.getSettings());
+
+		// Checks if we need to display sponsoware webview message
+		await sponsorware.showSponsorMessagePanel();
 	});
 
 	const supporter = vscode.commands.registerCommand('extension.iis-express.supporter',async () => {
