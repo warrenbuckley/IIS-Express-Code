@@ -134,6 +134,9 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Open site in browser - this will need to check if site is running first...
 		// Pass settings - just in case its changed between session (Hence not set globally in this file)
 		iisExpressServer.restartSite(settings.getSettings());
+
+		// Checks if we need to display sponsoware webview message
+		sponsorware.showSponsorMessagePanel();
 	});
 
 	const supporter = vscode.commands.registerCommand('extension.iis-express.supporter',async () => {
