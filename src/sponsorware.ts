@@ -78,7 +78,7 @@ export class Sponsorware {
         </head>
         <body>
             <img src="${svgSrc}" />
-            <h1>You have used it <span>${numberOfLaunches}</span> times.</h1>
+            <h1>You have used IIS Express <span>${numberOfLaunches}</span> times.</h1>
             <p>I'm happy to see you're using IIS Express extension alot, have you considered becoming a GitHub sponsor for this project?</p>
             <p>Becoming a sponsor removes this sponsorware message and you get a warm fuzzy feeling for supporting an individual.</p>
 
