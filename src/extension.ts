@@ -34,7 +34,7 @@ const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionV
 export async function activate(context: vscode.ExtensionContext) {
 
 	// Get a random number to use/compare if we have run IIS Express
-	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(1, 2);
+	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(5, 20);
 	context.globalState.update('iisexpress.sponsorware.display.count', randomNumberOfLaunchesToShowSponsor);
 
 	// This will check if the user has VS LiveShare installed & return its API to us
