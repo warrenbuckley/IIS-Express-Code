@@ -8,8 +8,6 @@ updates:
     timezone: Europe/London
   open-pull-requests-limit: 10
   labels:
-      - "npm"
-      - "chore"
       - "dependencies"
   reviewers:
   - warrenbuckley
