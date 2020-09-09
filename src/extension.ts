@@ -34,7 +34,7 @@ const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionV
 export async function activate(context: vscode.ExtensionContext) {
 
 	// Get a random number to use/compare if we have run IIS Express
-	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(5, 20);
+	const randomNumberOfLaunchesToShowSponsor = util.getRandomIntInclusive(1, 2);
 	context.globalState.update('iisexpress.sponsorware.display.count', randomNumberOfLaunchesToShowSponsor);
 
 	// This will check if the user has VS LiveShare installed & return its API to us
@@ -56,7 +56,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	iisExpressServer = new iis.IISExpress(verification.programPath, verification.appCmdProgramPath, context, reporter);
 
 	// Registering a command so we can assign a direct keybinding to it (without opening quick launch)
-	const startSite = vscode.commands.registerCommand('extension.iis-express.start',async () => {
+	const startSite = vscode.commands.registerCommand('extension.iis-express.start', async () => {
 
 		// Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
@@ -122,7 +122,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	});
 
     // Registering a command so we can assign a direct keybinding to it (without opening quick launch)
-	const restartSite = vscode.commands.registerCommand('extension.iis-express.restart',async () => {
+	const restartSite = vscode.commands.registerCommand('extension.iis-express.restart', async () => {
 
 		// Stop extension from running if we did not pass checks
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
@@ -138,18 +138,23 @@ export async function activate(context: vscode.ExtensionContext) {
 		await sponsorware.showSponsorMessagePanel();
 	});
 
-	const supporter = vscode.commands.registerCommand('extension.iis-express.supporter',async () => {
+	const supporter = vscode.commands.registerCommand('extension.iis-express.supporter', async () => {
 		vscode.env.openExternal(vscode.Uri.parse("http://github.com/sponsors/warrenbuckley"));
 		reporter.sendTelemetryEvent('supporterlinkopened');
 	});
 
-	const openSettings = vscode.commands.registerCommand('extension.iis-express.settings',async () => {
+	const openSettings = vscode.commands.registerCommand('extension.iis-express.settings', async () => {
 		// 'workbench.action.openSettings' argument is search query to only show our settings to filter out other settings
 		vscode.commands.executeCommand('workbench.action.openSettings', '@ext:warren-buckley.iis-express');
 	});
 
+	const promptGitHubLogin = vscode.commands.registerCommand('extension.iis-express.githublogin', async () => {
+		// Will try to get an auth session & if it does not exist it will prompt with a popup/dialog
+		credentials.promptForAuthSession();
+	});
+
 	// Push the commands & any other VSCode disposables
-	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings);
+	context.subscriptions.push(startSite, stopSite, openSite, restartSite, supporter, openSettings, promptGitHubLogin);
 }
 
 // this method is called when your extension is deactivated

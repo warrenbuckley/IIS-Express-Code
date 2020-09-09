@@ -42,7 +42,7 @@ export class Sponsorware {
         }
     }
 
-    private getWebviewContent(numberOfLaunches:number, svgSrc:vscode.Uri) {
+    private getWebviewContent(numberOfLaunches:number, svgSrc:vscode.Uri, showAuth: boolean = true) {
         return `
         <!DOCTYPE html>
         <html lang="en">
@@ -74,6 +74,10 @@ export class Sponsorware {
                     width:60%;
                     float:right;
                 }
+
+                #auth {
+                    display: ${showAuth ? 'block' :'none' };
+                }
             </style>
         </head>
         <body>
@@ -88,11 +92,27 @@ export class Sponsorware {
                     role="button"
                     title="Sponsor Warren Buckley">Sponsor Warren Buckley on GitHub</a>
             </p>
+            <div id="auth">
+                <h2>Authenticate</h2>
+                <p>Authenticate with GitHub to check if you are a sponsor</p>
+                <ul>
+                    <li>You are part of the Umbraco organization on GitHub</li>
+                    <li>You have made a PR that has been merged into the codebase</li>
+                    <li>You are an active sponsor of WarrenBuckley</li>
+                </ul>
+                <p>
+                    <a id="github-login"
+                        href="command:extension.iis-express.githublogin"
+                        class="button"
+                        role="button"
+                        title="Login to GitHub">Login to GitHub</a>
+                </p>
+            </div>
         </body>
         </html>`;
     }
 
-    async showSponsorMessagePanel():Promise<void> {
+    public async showSponsorMessagePanel():Promise<void> {
 
         // Exit out early (if user is a sponsor or the counter threshold not met yet)
         if(await this.doWeShowSponsorMessagePanel() === false){
@@ -106,15 +126,17 @@ export class Sponsorware {
             vscode.ViewColumn.Beside,
             {
                 // Only allow the webview to access resources in our extension's media directory
-                localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'assets'))]
+                localResourceRoots: [vscode.Uri.file(path.join(this.context.extensionPath, 'assets'))],
+                enableCommandUris: true
             }
         );
 
         const onDiskPath = vscode.Uri.file(path.join(this.context.extensionPath, 'assets', 'sponsorware.svg'));
         const sponsorSvgSrc = panel.webview.asWebviewUri(onDiskPath);
+        const userHasAuth = this.credentials.authSession !== undefined;
 
         // And set its HTML content
-        panel.webview.html = this.getWebviewContent(this.totalCount, sponsorSvgSrc);
+        panel.webview.html = this.getWebviewContent(this.totalCount, sponsorSvgSrc, !userHasAuth);
     }
 }
 

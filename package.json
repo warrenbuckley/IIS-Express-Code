@@ -151,6 +151,13 @@
                 "category": "IIS Express",
                 "enablement": "isWindows",
                 "icon": "$(settings-gear)"
+            },
+            {
+                "command": "extension.iis-express.githublogin",
+                "title": "Login to GitHub",
+                "category": "IIS Express",
+                "enablement": "iisexpress:userIsLoggedIn != true && isWindows",
+                "icon": "$(github)"
             }
         ],
         "menus": {
@@ -166,9 +173,18 @@
                 {
                     "command": "extension.iis-express.restart",
                     "when": "iisexpress:siterunning && isWindows"
+                },
+                {
+                    "command": "extension.iis-express.githublogin",
+                    "when": "iisexpress:userIsLoggedIn != true && isWindows"
                 }
             ],
             "view/title": [
+                {
+                    "command": "extension.iis-express.githublogin",
+                    "group": "navigation@0",
+                    "when": "isWindows && view == iisexpress.controls"
+                },
                 {
                     "command": "extension.iis-express.settings",
                     "group": "navigation@1",

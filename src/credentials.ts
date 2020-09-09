@@ -10,7 +10,7 @@ const AZURE_FUNCTION_URL = 'https://warren-buckley.co.uk/IsActiveSponsor';
 
 export class Credentials {
 
-	private authSession: vscode.AuthenticationSession | undefined;
+	public authSession: vscode.AuthenticationSession | undefined;
 	private reporter: TelemetryReporter | undefined;
 	private context: vscode.ExtensionContext;
 
@@ -23,23 +23,30 @@ export class Credentials {
 
 	private async initialize(): Promise<void> {
 		this.registerListeners();
-		this.setAuthSession();
+		this.setAuthSession(false);
 	}
 
-	private async setAuthSession(): Promise<void>  {
+	private async setAuthSession(showPrompt:boolean = false): Promise<void>  {
 		/**
 		 * By passing the `createIfNone` flag, a numbered badge will show up on the accounts activity bar icon.
 		 * An entry for the sample extension will be added under the menu to sign in. This allows quietly
 		 * prompting the user to sign in.
 		 * */
-		const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: false });
+		const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: showPrompt });
 
 		if (session) {
 			this.authSession = session;
+
+			// Used to enable/disable the GitHub Login command & to know when user has auth'd
+			vscode.commands.executeCommand('setContext', 'iisexpress:userIsLoggedIn', true);
 			return;
 		}
 
+		// Not logged in or cancelled
 		this.authSession = undefined;
+
+		// Used to enable/disable the GitHub Login command & to know when user has auth'd
+		vscode.commands.executeCommand('setContext', 'iisexpress:userIsLoggedIn', false);
 	}
 
 	private registerListeners(): void {
@@ -49,39 +56,18 @@ export class Credentials {
 		this.context.subscriptions.push(vscode.authentication.onDidChangeSessions(async e => {
 			if (e.provider.id === GITHUB_AUTH_PROVIDER_ID) {
 				await this.setAuthSession();
-
-				// If logging in or out - reset the GlobalState config (no way in event to be notified if login or logout)
-				this.context.globalState.update('iisexpress.sponsorware.login.cancelled', false);
 			}
 		}));
 	}
 
+	public async promptForAuthSession():Promise<void> {
+		// Used in our sponsorware message button to auth to GitHub
+		// Calling setAuthSession will explicitly prompt the user with a dialog
+		this.setAuthSession(true);
+	}
+
 	// Acessed from sponsorware class
-	async isUserSponsor():Promise<boolean> {
-		// Ensure we have an auth session
-		if(this.authSession === undefined){
-
-			const userHasCancelledLogin = this.context.globalState.get<Boolean>('iisexpress.sponsorware.login.cancelled', false);
-			const promptWithLoginDialog = !userHasCancelledLogin;
-
-			/**
-			 * When the `createIfNone` flag is passed, a modal dialog will be shown asking the user to sign in.
-			 * Note that this can throw if the user clicks cancel.
-			 */
-			try {
-				const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: promptWithLoginDialog });
-				this.authSession = session;
-			} catch (error) {
-				// Store something in storage to say user explicitly cancelled/said NO
-				// Then above we can toggle createIfNone based on this value - so we don't annolying re-prompt to login in all the time
-				this.context.globalState.update('iisexpress.sponsorware.login.cancelled', true);
-
-				// User has explicitly not consented to allow us to login
-				// We will need to show the sponsorware message
-				return false;
-			}
-		}
-
+	public async isUserSponsor():Promise<boolean> {
 		// Use the token in authSession
 		const accessToken = this.authSession?.accessToken;
 		let isValidSponsor = false;
