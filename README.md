@@ -64,8 +64,6 @@ Open in browser|iisexpress.autoLaunchBrowser|Decide which browser to auto launch
 * **Become a supporter** - Opens a webpage to my GitHub Sponsor page if you wish to donate & become a sponsor
 * **Open Settings** - This directly opens VSCode settings for IIS Express
 
-![Usage](images/iis-express-usage.gif)
-
 ## How do I use the extension?
 The VSCode command pallete is your friend. Press **F1 on the keyboard and start typing IISExpress** to see the list of commands to use.
 Alternatively is version 1.2.0 and newer there is a new panel view that by default lives under the list of files in the file explorer, in newer versions of VSCode you are able to drag and drop this pane around to a new location if you prefer to put it elsewhere.
