@@ -2,6 +2,7 @@
 .vscode/**
 .vscode-test/**
 images/**
+!images/iis-icon.png
 out/test/**
 src/**
 .gitignore
