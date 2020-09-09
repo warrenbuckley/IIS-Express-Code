@@ -43,8 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	let liveShareServer:vscode.Disposable;
 
 	// Init credentials class with event listener & prompt/get token from GitHub auth
-	const credentials = new Credentials();
-	await credentials.initialize(context, reporter);
+	const credentials = new Credentials(context, reporter);
 	const sponsorware = new Sponsorware(context, credentials);
 
 	// Register tree provider to put our custom commands into the tree

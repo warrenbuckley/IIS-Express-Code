@@ -14,14 +14,19 @@ export class Credentials {
 	private reporter: TelemetryReporter | undefined;
 	private context: vscode.ExtensionContext;
 
-	async initialize(context: vscode.ExtensionContext, reporter:TelemetryReporter): Promise<void> {
-		this.registerListeners(context);
-		this.setAuthSession();
-		this.reporter = reporter;
+	constructor(context: vscode.ExtensionContext, reporter:TelemetryReporter) {
 		this.context = context;
+		this.reporter = reporter;
+
+		this.initialize();
 	}
 
-	private async setAuthSession() {
+	private async initialize(): Promise<void> {
+		this.registerListeners();
+		this.setAuthSession();
+	}
+
+	private async setAuthSession(): Promise<void>  {
 		/**
 		 * By passing the `createIfNone` flag, a numbered badge will show up on the accounts activity bar icon.
 		 * An entry for the sample extension will be added under the menu to sign in. This allows quietly
@@ -37,11 +42,11 @@ export class Credentials {
 		this.authSession = undefined;
 	}
 
-	private registerListeners(context: vscode.ExtensionContext): void {
+	private registerListeners(): void {
 		/**
 		 * Sessions are changed when a user logs in or logs out.
 		 */
-		context.subscriptions.push(vscode.authentication.onDidChangeSessions(async e => {
+		this.context.subscriptions.push(vscode.authentication.onDidChangeSessions(async e => {
 			if (e.provider.id === GITHUB_AUTH_PROVIDER_ID) {
 				await this.setAuthSession();
 
