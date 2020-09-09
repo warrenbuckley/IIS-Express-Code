@@ -20,7 +20,7 @@ This is a **free extension** I have made for VSCode, if you find it useful to yo
 * Windows Machine (Sorry not for Linux, OSX or Web)
 
 ## How do I Install IIS Express for VSCode?
-Open the command pallete in VSCode & type **ext install** then search for **IIS Express** alternatively you can [download the IIS Express for VSCode extension on the marketplace](https://marketplace.visualstudio.com/items?itemName=warren-buckley.iis-expres)
+Open the command pallete in VSCode & type **ext install** then search for **IIS Express** alternatively you can [download the IIS Express for VSCode extension on the marketplace](https://marketplace.visualstudio.com/items?itemName=warren-buckley.iis-express)
 
 ![Installing IIS Express for VSCode](images/iis-express-install.gif)
 
