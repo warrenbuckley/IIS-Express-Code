@@ -243,7 +243,7 @@
         "@types/vscode": "^1.49.0",
         "@typescript-eslint/eslint-plugin": "^4.0.0",
         "@typescript-eslint/parser": "^3.10.1",
-        "eslint": "^7.8.1",
+        "eslint": "^7.9.0",
         "eslint-config-airbnb-base": "^14.2.0",
         "eslint-plugin-import": "^2.22.0",
         "glob": "^7.1.6",
