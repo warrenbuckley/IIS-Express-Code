@@ -12,10 +12,13 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
     getChildren(element?: ControlsTreeItem | undefined): vscode.ProviderResult<ControlsTreeItem[]> {
         if(element === undefined){
             const items = new Array<ControlsTreeItem>();
+
+            const startIconThemeColor = new vscode.ThemeColor("debugIcon.startForeground");
+            
             items.push(
                 {
                     label: 'Start Website',
-                    iconPath: new vscode.ThemeIcon("play"),
+                    iconPath: new vscode.ThemeIcon2("play").with(startIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Start Website',
