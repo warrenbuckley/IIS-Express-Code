@@ -13,10 +13,10 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
         if(element === undefined){
             const items = new Array<ControlsTreeItem>();
 
-            const startIconThemeColor = new vscode.ThemeColor("debugIcon.startForeground");
-            const stopIconThemeColor = new vscode.ThemeColor("debugIcon.stopForeground");
-            const restartIconThemeColor = new vscode.ThemeColor("debugIcon.pauseForeground");
-            const sponsorIconThemeColor = new vscode.ThemeColor("terminal.ansiBrightMagenta");
+            const startIconThemeColor = new vscode.ThemeColor("iisexpress.startIcon");
+            const stopIconThemeColor = new vscode.ThemeColor("iisexpress.stopIcon");
+            const restartIconThemeColor = new vscode.ThemeColor("iisexpress.restartIcon");
+            const supporterIconThemeColor = new vscode.ThemeColor("iisexpress.supporterIcon");
             
             items.push(
                 {
@@ -48,7 +48,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
                 },
                 {
                     label: 'Become a supporter',
-                    iconPath: new vscode.ThemeIcon2("heart").with(sponsorIconThemeColor),
+                    iconPath: new vscode.ThemeIcon2("heart").with(supporterIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Become a supporter',

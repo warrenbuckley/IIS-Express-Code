@@ -226,6 +226,44 @@
                 "fileMatch": "/.vscode/iisexpress.json",
                 "url": "./src/iisexpress-schema.json"
             }
+        ],
+        "colors": [
+            {
+                "id": "iisexpress.startIcon",
+                "description": "Color for the start icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "debugIcon.startForeground",
+                    "light": "debugIcon.startForeground",
+                    "highContrast": "debugIcon.startForeground"
+                }
+            },
+            {
+                "id": "iisexpress.stopIcon",
+                "description": "Color for the stop icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "debugIcon.stopForeground",
+                    "light": "debugIcon.stopForeground",
+                    "highContrast": "debugIcon.stopForeground"
+                }
+            },
+            {
+                "id": "iisexpress.restartIcon",
+                "description": "Color for the restart icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "debugIcon.pauseForeground",
+                    "light": "debugIcon.pauseForeground",
+                    "highContrast": "debugIcon.pauseForeground"
+                }
+            },
+            {
+                "id": "iisexpress.supporterIcon",
+                "description": "Color for the sponsor icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "terminal.ansiBrightMagenta",
+                    "light": "terminal.ansiBrightMagenta",
+                    "highContrast": "terminal.ansiBrightMagenta"
+                }
+            }
         ]
     },
     "scripts": {
