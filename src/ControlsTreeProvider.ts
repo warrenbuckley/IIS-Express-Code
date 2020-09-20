@@ -14,6 +14,9 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
             const items = new Array<ControlsTreeItem>();
 
             const startIconThemeColor = new vscode.ThemeColor("debugIcon.startForeground");
+            const stopIconThemeColor = new vscode.ThemeColor("debugIcon.stopForeground");
+            const restartIconThemeColor = new vscode.ThemeColor("debugIcon.pauseForeground");
+            const sponsorIconThemeColor = new vscode.ThemeColor("terminal.ansiBrightMagenta");
             
             items.push(
                 {
@@ -27,7 +30,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
                 },
                 {
                     label: 'Restart Website',
-                    iconPath: new vscode.ThemeIcon("refresh"),
+                    iconPath: new vscode.ThemeIcon2("refresh").with(restartIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Restart Website',
@@ -36,7 +39,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
                 },
                 {
                     label: 'Stop Website',
-                    iconPath: new vscode.ThemeIcon("stop"),
+                    iconPath: new vscode.ThemeIcon2("stop").with(stopIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Stop Website',
@@ -45,7 +48,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
                 },
                 {
                     label: 'Become a supporter',
-                    iconPath: new vscode.ThemeIcon("heart"),
+                    iconPath: new vscode.ThemeIcon2("heart").with(sponsorIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Become a supporter',
