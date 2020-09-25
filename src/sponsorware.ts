@@ -90,7 +90,7 @@ export class Sponsorware {
             <p>Becoming a sponsor removes this sponsorware message and you get a warm fuzzy feeling for supporting an individual.</p>
 
             <p>
-                <a href="https://github.com/sponsors/warrenbuckley"
+                <a href="command:extension.iis-express.supporter"
                     class="button"
                     role="button"
                     title="Sponsor Warren Buckley">Sponsor Warren Buckley on GitHub</a>
