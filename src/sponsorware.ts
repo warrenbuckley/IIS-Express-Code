@@ -1,16 +1,19 @@
 import * as vscode from 'vscode';
 import path = require('path');
 import { Credentials } from './credentials';
+import TelemetryReporter from 'vscode-extension-telemetry';
 
 export class Sponsorware {
 
     private context: vscode.ExtensionContext;
     private totalCount:number = 0;
     private credentials: Credentials;
+    private reporter: TelemetryReporter;
 
-    constructor(context: vscode.ExtensionContext, credentials:Credentials) {
+    constructor(context: vscode.ExtensionContext, credentials:Credentials, reporter:TelemetryReporter) {
         this.context = context;
         this.credentials = credentials;
+        this.reporter = reporter;
     }
 
     private async doWeShowSponsorMessagePanel():Promise<boolean> {
@@ -118,6 +121,10 @@ export class Sponsorware {
         if(await this.doWeShowSponsorMessagePanel() === false){
             return;
         }
+
+        // Send telmetry event - so we know how many times this is being shown
+        this.reporter.sendTelemetryEvent('sponsorware.displayed', {}, { 'totalCount': this.totalCount });
+
 
         // Create and show a new webview
         const panel = vscode.window.createWebviewPanel(
