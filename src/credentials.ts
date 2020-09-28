@@ -39,6 +39,7 @@ export class Credentials {
 
 			// Used to enable/disable the GitHub Login command & to know when user has auth'd
 			vscode.commands.executeCommand('setContext', 'iisexpress:userIsLoggedIn', true);
+			this.reporter?.sendTelemetryEvent('github.loggedin');
 			return;
 		}
 
@@ -47,6 +48,7 @@ export class Credentials {
 
 		// Used to enable/disable the GitHub Login command & to know when user has auth'd
 		vscode.commands.executeCommand('setContext', 'iisexpress:userIsLoggedIn', false);
+		this.reporter?.sendTelemetryEvent('github.loggedout');
 	}
 
 	private registerListeners(): void {

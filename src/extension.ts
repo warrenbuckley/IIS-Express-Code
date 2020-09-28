@@ -44,7 +44,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	// Init credentials class with event listener & prompt/get token from GitHub auth
 	const credentials = new Credentials(context, reporter);
-	const sponsorware = new Sponsorware(context, credentials);
+	const sponsorware = new Sponsorware(context, credentials, reporter);
 
 	// Register tree provider to put our custom commands into the tree
 	// Start, Stop, Restart, Support etc...
