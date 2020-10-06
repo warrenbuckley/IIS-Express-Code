@@ -58,7 +58,7 @@
         "onCommand:extension.iis-express.restart",
         "onView:iisexpress.controls"
     ],
-    "main": "./out/extension",
+    "main": "./dist/extension",
     "contributes": {
         "configuration": {
             "title": "IIS Express",
