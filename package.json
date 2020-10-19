@@ -263,6 +263,6 @@
         "jsonfile": "^6.0.1",
         "uuid": "^8.3.1",
         "vscode-extension-telemetry": "^0.1.6",
-        "vsls": "^1.0.2594"
+        "vsls": "^1.0.3015"
     }
 }
