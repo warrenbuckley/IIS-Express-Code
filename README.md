@@ -84,5 +84,15 @@ ctrl+f5| Start Site
 shift+f5| Stop Site
 ctrl+shift+f5| Restart Site
 
+## Customize Icon Colors
+With version 1.4.0 and newer it is now possible to change the colors of the icons displayed in the tree view, if you wish to customise them you can do so by using the documentation from VSCode
 
+https://code.visualstudio.com/docs/getstarted/themes#_customizing-a-color-theme
+
+Alias|Default Color
+-----------------|-------
+iisexpress.startIcon|debugIcon.startForeground
+iisexpress.stopIcon|debugIcon.stopForeground
+iisexpress.restartIcon|debugIcon.pauseForeground
+iisexpress.supporterIcon|terminal.ansiBrightMagenta
 
