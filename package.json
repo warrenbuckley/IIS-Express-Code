@@ -2,7 +2,7 @@
     "name": "iis-express",
     "displayName": "IIS Express",
     "description": "This allows you to run the current folder as a website using the IIS Express web server",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "publisher": "warren-buckley",
     "icon": "images/iis-icon.png",
     "galleryBanner": {
@@ -59,7 +59,7 @@
         "onCommand:extension.iis-express.restart",
         "onView:iisexpress.controls"
     ],
-    "main": "./out/extension",
+    "main": "./dist/extension",
     "contributes": {
         "configuration": {
             "title": "IIS Express",
@@ -267,7 +267,10 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "vscode:prepublish": "webpack --mode production",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "test-compile": "tsc -p ./",
         "compile": "tsc -p ./",
         "lint": "eslint src --ext ts",
         "watch": "tsc -watch -p ./",
@@ -278,27 +281,30 @@
         "postinstall": "npm run download-api"
     },
     "devDependencies": {
-        "@types/uuid": "^8.3.0",
         "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.0.3",
-        "@types/node": "^14.11.2",
-        "@types/vscode": "^1.48.0",
+        "@types/mocha": "^8.0.4",
+        "@types/node": "^14.14.7",
+        "@types/uuid": "^8.3.0",
+        "@types/vscode": "^1.51.0",
         "@typescript-eslint/eslint-plugin": "^4.0.0",
         "@typescript-eslint/parser": "^3.10.1",
-        "eslint": "^7.10.0",
-        "eslint-config-airbnb-base": "^14.2.0",
+        "eslint": "^7.13.0",
+        "eslint-config-airbnb-base": "^14.2.1",
         "eslint-plugin-import": "^2.22.1",
         "glob": "^7.1.6",
-        "mocha": "^8.1.3",
-        "typescript": "^4.0.3",
-        "vscode-test": "^1.4.0"
+        "mocha": "^8.2.1",
+        "ts-loader": "^8.0.11",
+        "typescript": "^4.0.5",
+        "vscode-test": "^1.4.1",
+        "webpack": "^5.4.0",
+        "webpack-cli": "^4.2.0"
     },
     "dependencies": {
-        "axios": "^0.19.0",
+        "axios": "^0.21.0",
         "iconv-lite": "^0.6.2",
-        "jsonfile": "^6.0.1",
-        "uuid": "^8.3.0",
+        "jsonfile": "^6.1.0",
+        "uuid": "^8.3.1",
         "vscode-extension-telemetry": "^0.1.6",
-        "vsls": "^1.0.2594"
+        "vsls": "^1.0.3015"
     }
 }
