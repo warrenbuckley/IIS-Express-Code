@@ -17,11 +17,11 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
             const stopIconThemeColor = new vscode.ThemeColor("iisexpress.stopIcon");
             const restartIconThemeColor = new vscode.ThemeColor("iisexpress.restartIcon");
             const supporterIconThemeColor = new vscode.ThemeColor("iisexpress.supporterIcon");
-            
+
             items.push(
                 {
                     label: 'Start Website',
-                    iconPath: new vscode.ThemeIcon2("play", startIconThemeColor),
+                    iconPath: new vscode.ThemeIcon("play", startIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Start Website',
@@ -30,7 +30,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
                 },
                 {
                     label: 'Restart Website',
-                    iconPath: new vscode.ThemeIcon2("refresh", restartIconThemeColor),
+                    iconPath: new vscode.ThemeIcon("refresh", restartIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Restart Website',
@@ -39,7 +39,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
                 },
                 {
                     label: 'Stop Website',
-                    iconPath: new vscode.ThemeIcon2("stop", stopIconThemeColor),
+                    iconPath: new vscode.ThemeIcon("stop", stopIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Stop Website',
@@ -48,7 +48,7 @@ export class ControlsTreeProvider implements vscode.TreeDataProvider<ControlsTre
                 },
                 {
                     label: 'Become a supporter',
-                    iconPath: new vscode.ThemeIcon2("heart", supporterIconThemeColor),
+                    iconPath: new vscode.ThemeIcon("heart", supporterIconThemeColor),
                     collapsibleState: vscode.TreeItemCollapsibleState.None,
                     command: {
                         title: 'Become a supporter',
