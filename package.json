@@ -2,7 +2,7 @@
     "name": "iis-express",
     "displayName": "IIS Express",
     "description": "This allows you to run the current folder as a website using the IIS Express web server",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "publisher": "warren-buckley",
     "icon": "images/iis-icon.png",
     "galleryBanner": {
