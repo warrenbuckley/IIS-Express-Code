@@ -303,7 +303,7 @@
         "axios": "^0.21.0",
         "iconv-lite": "^0.6.2",
         "jsonfile": "^6.1.0",
-        "uuid": "^8.3.1",
+        "uuid": "^8.3.2",
         "vscode-extension-telemetry": "^0.1.6",
         "vsls": "^1.0.3015"
     }
