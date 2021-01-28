@@ -53,15 +53,11 @@ export async function checkForProblems():Promise<verification>{
     // Checks that VS Code is open with a folder
     // *******************************************
 
-    // Get the path of the folder that is open in VS Code
-    const folderPath = vscode.workspace.rootPath;
-
-
     // Check if we are in a folder/workspace & NOT just have a single file open
-	if(!folderPath){
+	if(vscode.workspace.workspaceFolders === undefined || vscode.workspace.workspaceFolders.length === 0){
 		vscode.window.showErrorMessage('Please open a workspace directory first.');
 
-        // We are not a folder
+        // No folder/s are open (could be more than one if using workspaces)
         results.folderIsOpen = false;
 	}
     else {
