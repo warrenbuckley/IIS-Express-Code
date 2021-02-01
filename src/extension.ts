@@ -64,26 +64,38 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-		// Start Website...
-		// Pass settings - just in case its changed between session
-		iisExpressServer.startWebsite(settings.getSettings());
+		// Will auto get single folder or let user choose single folder from multi-workspace folders
+		settings.getFolder().then(async folderToRun => {
 
-		// Checks if we need to display sponsoware webview message
-		await sponsorware.showSponsorMessagePanel();
-
-		// Ensure user has liveshare extension
-		if(liveshare !== null){
-			if((liveshare.session.id !== null) && (liveshare.session.role === vsls.Role.Host)){
-				const portNumber = settings.getSettings().port;
-
-				// This will prompt the LiveShare Host to share the IIS Server Port
-				liveShareServer = await liveshare.shareServer({ displayName: `IIS Express:${portNumber}`, port: portNumber });
-
-				// Push the disposable VSCode into the subscriptions
-				// so VSCode can dispose them if we forget to or when the extension is deactivated
-				context.subscriptions.push(liveShareServer);
+			// Exit out early
+			if(folderToRun === undefined){
+				return;
 			}
-		}
+
+			// Start Website...
+			// Pass settings - just in case its changed between session
+			// GetSettings now takes new param of workspace folder URI to use
+			const serverSettings = settings.getSettings(folderToRun);
+			await iisExpressServer.startWebsite(serverSettings, folderToRun);
+
+			// Checks if we need to display sponsorware webview message
+			await sponsorware.showSponsorMessagePanel();
+
+			// Ensure user has liveshare extension
+			if(liveshare !== null){
+				if((liveshare.session.id !== null) && (liveshare.session.role === vsls.Role.Host)){
+					const portNumber = serverSettings.port;
+
+					// This will prompt the LiveShare Host to share the IIS Server Port
+					liveShareServer = await liveshare.shareServer({ displayName: `IIS Express:${portNumber}`, port: portNumber });
+
+					// Push the disposable VSCode into the subscriptions
+					// so VSCode can dispose them if we forget to or when the extension is deactivated
+					context.subscriptions.push(liveShareServer);
+				}
+			}
+		});
+		
 	});
 
 	// Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -116,9 +128,21 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
 		}
 
-		// Open site in browser - this will need to check if site is running first...
-		// Pass settings - just in case its changed between session (Hence not set globally in this file)
-		iisExpressServer.openWebsite(settings.getSettings());
+		// Will auto get single folder or let user choose single folder from multi-workspace folders
+		settings.getFolder().then(async folderToRun => {
+
+			// Exit out early
+			if(folderToRun === undefined){
+				return;
+			}
+
+			// GetSettings now takes new param of workspace folder URI to use
+			const serverSettings = settings.getSettings(folderToRun);
+			
+			// Open site in browser - this will need to check if site is running first...
+			// Pass settings - just in case its changed between session (Hence not set globally in this file)
+			iisExpressServer.openWebsite(serverSettings);
+		});
 	});
 
     // Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -130,9 +154,21 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
 		}
 
-		// Open site in browser - this will need to check if site is running first...
-		// Pass settings - just in case its changed between session (Hence not set globally in this file)
-		iisExpressServer.restartSite(settings.getSettings());
+		// Will auto get single folder or let user choose single folder from multi-workspace folders
+		settings.getFolder().then(async folderToRun => {
+
+			// Exit out early
+			if(folderToRun === undefined){
+				return;
+			}
+
+			// GetSettings now takes new param of workspace folder URI to use
+			const serverSettings = settings.getSettings(folderToRun);
+			
+			// Restart site  - this will need to check if site is running first...
+			// Pass settings - just in case its changed between session (Hence not set globally in this file)
+			iisExpressServer.restartSite(serverSettings, folderToRun);
+		});
 
 		// Checks if we need to display sponsoware webview message
 		await sponsorware.showSponsorMessagePanel();
