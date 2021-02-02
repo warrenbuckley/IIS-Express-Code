@@ -29,6 +29,9 @@ const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
 // create telemetry reporter on extension activation
 const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionVersion, key);
 
+
+let vsCodeFolderToRun:vscode.Uri | undefined = undefined;
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
@@ -67,16 +70,18 @@ export async function activate(context: vscode.ExtensionContext) {
 		// Will auto get single folder or let user choose single folder from multi-workspace folders
 		settings.getFolder().then(async folderToRun => {
 
+			vsCodeFolderToRun = folderToRun;
+
 			// Exit out early
-			if(folderToRun === undefined){
+			if(vsCodeFolderToRun === undefined){
 				return;
 			}
 
 			// Start Website...
 			// Pass settings - just in case its changed between session
 			// GetSettings now takes new param of workspace folder URI to use
-			const serverSettings = settings.getSettings(folderToRun);
-			await iisExpressServer.startWebsite(serverSettings, folderToRun);
+			const serverSettings = settings.getSettings(vsCodeFolderToRun);
+			await iisExpressServer.startWebsite(serverSettings, vsCodeFolderToRun);
 
 			// Checks if we need to display sponsorware webview message
 			await sponsorware.showSponsorMessagePanel();
@@ -105,7 +110,9 @@ export async function activate(context: vscode.ExtensionContext) {
         if(!verification || !verification.isValidOS || !verification.folderIsOpen || !verification.iisExists){
             // Stop the extension from running
             return;
-        }
+		}
+		
+		vsCodeFolderToRun = undefined;
 
 		// Stop Website...
 		iisExpressServer.stopWebsite();
@@ -128,21 +135,17 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
 		}
 
-		// Will auto get single folder or let user choose single folder from multi-workspace folders
-		settings.getFolder().then(async folderToRun => {
+		// Exit out early
+		if(vsCodeFolderToRun === undefined){
+			return;
+		}
 
-			// Exit out early
-			if(folderToRun === undefined){
-				return;
-			}
-
-			// GetSettings now takes new param of workspace folder URI to use
-			const serverSettings = settings.getSettings(folderToRun);
+		// GetSettings now takes new param of workspace folder URI to use
+		const serverSettings = settings.getSettings(vsCodeFolderToRun);
 			
-			// Open site in browser - this will need to check if site is running first...
-			// Pass settings - just in case its changed between session (Hence not set globally in this file)
-			iisExpressServer.openWebsite(serverSettings);
-		});
+		// Open site in browser - this will need to check if site is running first...
+		// Pass settings - just in case its changed between session (Hence not set globally in this file)
+		iisExpressServer.openWebsite(serverSettings);
 	});
 
     // Registering a command so we can assign a direct keybinding to it (without opening quick launch)
@@ -154,21 +157,17 @@ export async function activate(context: vscode.ExtensionContext) {
             return;
 		}
 
-		// Will auto get single folder or let user choose single folder from multi-workspace folders
-		settings.getFolder().then(async folderToRun => {
+		// Exit out early
+		if(vsCodeFolderToRun === undefined){
+			return;
+		}
 
-			// Exit out early
-			if(folderToRun === undefined){
-				return;
-			}
-
-			// GetSettings now takes new param of workspace folder URI to use
-			const serverSettings = settings.getSettings(folderToRun);
-			
-			// Restart site  - this will need to check if site is running first...
-			// Pass settings - just in case its changed between session (Hence not set globally in this file)
-			iisExpressServer.restartSite(serverSettings, folderToRun);
-		});
+		// GetSettings now takes new param of workspace folder URI to use
+		const serverSettings = settings.getSettings(vsCodeFolderToRun);
+		
+		// Restart site  - this will need to check if site is running first...
+		// Pass settings - just in case its changed between session (Hence not set globally in this file)
+		iisExpressServer.restartSite(serverSettings, vsCodeFolderToRun);
 
 		// Checks if we need to display sponsoware webview message
 		await sponsorware.showSponsorMessagePanel();
