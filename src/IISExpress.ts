@@ -36,7 +36,7 @@ export class IISExpress {
 		this._reporter = reporter;
 	}
 
-	public startWebsite(options: settings.Isettings) {
+	public startWebsite(options: settings.Isettings, workspaceFolder: vscode.Uri) {
 
 		// Verify process not already running, so if we have a PID (process ID) it's running
 		if(this._iisProcess !== undefined && this._iisProcess.killed === false){
@@ -59,7 +59,7 @@ export class IISExpress {
 			port: options.port,
 
 			// Folder to run as the arg
-			path: options.path ? options.path : <string>vscode.workspace.rootPath,
+			path: options.path ? options.path : workspaceFolder.fsPath,
 
 			// CLR version, yes there are still people on 3.5 & default back to v4 if not set
 			clr: options.clr ? options.clr : settings.clrVersion.v40,
@@ -74,7 +74,7 @@ export class IISExpress {
 		// It may also include the legacy full path of the workspace rootpath
 		// Which caused issues - when checked into source control & other users did not have same folder structure
 		// or if you moved the folder on your own machine - it would no longer map correctly
-		const resolvedPath = path.resolve(<string>vscode.workspace.rootPath, this._args.path);
+		const resolvedPath = path.resolve(workspaceFolder.fsPath, this._args.path);
 		this._args.path = resolvedPath;
 
 		// Verify folder exists on disk (in case relative path used & selected wrong thing)
@@ -91,7 +91,7 @@ export class IISExpress {
 
 		// Site name is the name of the workspace folder & GUID/UUID
 		// Need to append a UUID as could have two folders/sites with same name
-		const siteName = path.basename(vscode.workspace.rootPath as string) + "-" + uuidv4();
+		const siteName = path.basename(workspaceFolder.fsPath as string) + "-" + uuidv4();
 
 		// If user is using HTTPS & port not in range of auto-approved port numbers (44300-44399)
 		// Then display an error & stop process
@@ -236,16 +236,16 @@ export class IISExpress {
 		}
 	}
 
-	public restartSite(options : settings.Isettings){
+	public restartSite(options : settings.Isettings, workspaceFolder: vscode.Uri){
 		// If we do not have an iisProcess/website running
 		if(!this._iisProcess){
 			// Then just do a start site...
-			this.startWebsite(options);
+			this.startWebsite(options, workspaceFolder);
 		}
 		else {
 			// It's already running so stop it first then, start it
 			this.stopWebsite();
-			this.startWebsite(options);
+			this.startWebsite(options, workspaceFolder);
 		}
 
 		// Log telemtry

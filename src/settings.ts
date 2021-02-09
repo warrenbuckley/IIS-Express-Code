@@ -21,7 +21,25 @@ export enum protocolType {
     https = <any>"https"
 }
 
-export function getSettings():Isettings{
+export async function getFolder():Promise<vscode.Uri | undefined> {
+
+    // Check if we are in a workspace (where user added multiple folders)
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if(workspaceFolders !== undefined && workspaceFolders.length > 1){
+
+        // User needs to decide which site they wish to start with the picker
+        // *********** TODO: ERROR HANDLING IF USER PRESSES ESC KEY ***********
+        const pickedFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: "Choose your site to start"});
+        return pickedFolder?.uri;
+    }
+    else if(workspaceFolders !== undefined && workspaceFolders.length === 1) {
+        // The user has only one folder open - so we don't need to prompt & can use the first item in the array
+        return workspaceFolders[0].uri;
+    }
+    return undefined;
+}
+
+export function getSettings(uri:vscode.Uri| undefined):Isettings{
     // Give some default values
     let defaultSettings:Isettings = {
         port : getRandomPort(),
@@ -35,8 +53,13 @@ export function getSettings():Isettings{
     // *******************************************
     // Checks that iisexpress.json exist
     // *******************************************
-    let settingsFolderPath = vscode.workspace.rootPath + "\\.vscode";
-	let settingsFilePath = settingsFolderPath + "\\iisexpress.json";
+
+    if(uri === undefined){
+        return defaultSettings;
+    }
+
+    const settingsFolderPath = vscode.Uri.joinPath(uri, ".vscode");
+    const settingsFilePath = vscode.Uri.joinPath(settingsFolderPath, "iisexpress.json");
 
 
     // use -> https://www.npmjs.com/package/jsonfile
@@ -46,7 +69,7 @@ export function getSettings():Isettings{
     let folderExists = false;
 
     try {
-        fileExists = fs.existsSync(settingsFilePath);
+        fileExists = fs.existsSync(settingsFilePath.fsPath);
     }
     catch(err){
         // Error checking if file exists
@@ -60,7 +83,7 @@ export function getSettings():Isettings{
         // However we also need to verify that the directory exists as well
         // As writeFile does not create the directories if they do not exist
         try {
-            folderExists = fs.existsSync(settingsFolderPath);
+            folderExists = fs.existsSync(settingsFolderPath.fsPath);
         } catch (error) {
             // Error checking if folder exists
             // Maybe permissions or something else?
@@ -72,7 +95,7 @@ export function getSettings():Isettings{
             // create .vscode folder first
 
             try {
-                fs.mkdirSync(settingsFolderPath);
+                fs.mkdirSync(settingsFolderPath.fsPath);
             } catch (error) {
                 // Error creating the directory - again perhaps a permission error?
                 vscode.window.showErrorMessage('Unable to create .vscode folder');
@@ -81,7 +104,7 @@ export function getSettings():Isettings{
 
         // jsonfile.writeFile (does not create path/folder if it does not exist)
         // The dir should be available & thus able to now write the file
-        jsonfile.writeFile(settingsFilePath, defaultSettings, {spaces: 2}, function (jsonErr:string) {
+        jsonfile.writeFile(settingsFilePath.fsPath, defaultSettings, {spaces: 2}, function (jsonErr:string) {
             if(jsonErr){
                 console.error(jsonErr);
                 vscode.window.showErrorMessage('Error creating iisexpress.json file: ' + jsonErr);
@@ -93,7 +116,7 @@ export function getSettings():Isettings{
     } else {
         // File exists lets read the settings from the JSON file then
         // read file .vscode\iisexpress.json and merge with defaults
-        const fileSettings = jsonfile.readFileSync(settingsFilePath);
+        const fileSettings = jsonfile.readFileSync(settingsFilePath.fsPath);
         settings = {...defaultSettings, ...fileSettings};
         return settings;
     }

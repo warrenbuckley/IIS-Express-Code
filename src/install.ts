@@ -89,7 +89,8 @@ function InstallTime(installerFilePath:string) : Promise<any> {
         });
 
         installer.on('exit', () => {
-            resolve();
+            // Resolve promise with empty obj
+            resolve({});
         });
     });
 }
