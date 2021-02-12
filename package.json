@@ -292,7 +292,7 @@
         "eslint-config-airbnb-base": "^14.2.1",
         "eslint-plugin-import": "^2.22.1",
         "glob": "^7.1.6",
-        "mocha": "^8.2.1",
+        "mocha": "^8.3.0",
         "ts-loader": "^8.0.17",
         "typescript": "^4.1.5",
         "vscode-test": "^1.5.0",
