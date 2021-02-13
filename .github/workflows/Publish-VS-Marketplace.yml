@@ -2,10 +2,10 @@
 
 name: Publish to VSCode Marketplace
 
-# When a release or draft of a release is published, or a pre-release is changed to a release
+# When a release, pre-release, or draft of a release is published
 on:
   release:
-    types: [released]
+    types: [published]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
