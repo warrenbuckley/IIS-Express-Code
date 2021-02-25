@@ -1,0 +1,55 @@
+name: Bug Report
+about: File a bug report
+title: "[Bug]: "
+labels: "bug"
+assignees: warrenbuckley
+issue_body: true
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for taking the time to fill out this bug report!
+- type: textarea
+  attributes:
+    label: What happened?
+    description: Also tell us, what did you expect to happen?
+    placeholder: Tell us what you see!
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: Version
+    description: What version of our software are you running?
+    options:
+    - 1.4.0
+    - 1.3.0
+    - 1.2.1
+    - 1.2.0
+    - 1.1.2
+    - 1.1.1
+    - 1.1.0
+    - 1.0.0
+    - 0.0.7
+    - 0.0.6
+    - 0.0.5
+    - 0.0.4
+    - 0.0.3
+    - 0.0.2
+    - 0.0.1
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: What version of VSCode are you running
+    options:
+    - Stable
+    - Nightly
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: VSCode Version
+    placeholder: v1.53.2
+    description: Goto Help -> About in VSCode to see the version number
+  validations:
+    required: true
