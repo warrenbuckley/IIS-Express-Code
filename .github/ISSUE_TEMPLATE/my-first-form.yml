@@ -1,0 +1,54 @@
+name: Bug Report
+about: File a bug report for IIS Express VSCode extension :warning:
+title: "[Bug]: "
+labels: "bug, triage"
+assignees: warrenbuckley
+issue_body: true
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for taking the time to fill out this bug report! I AM NOT IN THE FORM
+- type: input
+  attributes:
+    label: Contact Details
+    description: How can we get in touch with you if we need more info?
+    placeholder: ex. email@example.com
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: What happened?
+    description: Also tell us, what did you expect to happen?
+    placeholder: Tell us what you see!
+    value: |
+      * Step One
+      * Step Two
+      * Step Three      
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: Version
+    description: What version of our software are you running?
+    options:
+    - 1.0.2 (Default)
+    - 1.0.3 (Edge)
+  validations:
+    required: true
+- type: dropdown
+  attributes:
+    label: What browsers are you seeing the problem on?
+    multiple: true
+    options:
+    - Firefox
+    - Chrome
+    - Safari
+    - Microsoft Edge    
+- type: checkboxes
+  attributes:
+    label: Code of Conduct
+    description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+    options:
+    - label: I agree to follow this project's Code of Conduct
+      required: true
