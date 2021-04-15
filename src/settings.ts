@@ -123,7 +123,7 @@ export function getSettings(uri:vscode.Uri| undefined):Isettings{
         // Check if path to applicationhost.config file is defined in settings
         if(!settings.config){
             // Checks if local applicationhost.config file exists
-            let localApplicatonHostConfig = getLocalApplicationHostConfig();
+            let localApplicatonHostConfig = getVSCodeLocalApplicationHostConfig(settingsFolderPath);
 
             if(localApplicatonHostConfig){
                 // File exists
@@ -136,24 +136,25 @@ export function getSettings(uri:vscode.Uri| undefined):Isettings{
     }
 }
 
-function getLocalApplicationHostConfig(){
-    let vscodeFilePath = vscode.workspace.rootPath + "\\.vscode\\applicationhost.config";
+function getVSCodeLocalApplicationHostConfig(vsCodeSettingsFolderUri:vscode.Uri){
+
+    const apphostFilePath = vscode.Uri.joinPath(vsCodeSettingsFolderUri, "applicationhost.config");
     let fileExists = false;
 
     try {
         // Checks if local applicationhost.config file exists
-        fileExists = fs.existsSync(vscodeFilePath);
+        fileExists = fs.existsSync(apphostFilePath.fsPath);
     }
     catch(err){
         // Error checking if file exists
         // Maybe permissions or something else?
-        vscode.window.showErrorMessage('Unable to check if .vscode/applicationhost.config exists');
+        vscode.window.showErrorMessage('Unable to automatically check if .vscode/applicationhost.config exists');
     }
 
     if(fileExists){
         // File exists
         // Return path to local applicationhost.config file
-        return vscodeFilePath;
+        return apphostFilePath.fsPath;
     }
 
     return "";
