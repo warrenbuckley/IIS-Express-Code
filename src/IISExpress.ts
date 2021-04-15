@@ -81,6 +81,13 @@ export class IISExpress {
 		const resolvedPath = path.resolve(workspaceFolder.fsPath, this._args.path);
 		this._args.path = resolvedPath;
 
+		// Same for path for applicationhost.config
+		// as it could be absolute or relative path & needs to be absolute for the CLI args
+		if(this._args.config){
+			const resolvedAppHostPath = path.resolve(workspaceFolder.fsPath, this._args.config);
+			this._args.config = resolvedAppHostPath;
+		}
+
 		// Verify folder exists on disk (in case relative path used & selected wrong thing)
 		if(fs.existsSync(resolvedPath) === false){
 			vscode.window.showErrorMessage(`The folder does not exist ${resolvedPath} & IIS Express can not run.`, {modal: true});
