@@ -16,6 +16,7 @@ export interface IExpressArguments {
 	port: number;
 	clr: settings.clrVersion;
 	protocol: settings.protocolType;
+	config?: string;
 }
 
 export class IISExpress {
@@ -60,6 +61,9 @@ export class IISExpress {
 
 			// Folder to run as the arg
 			path: options.path ? options.path : workspaceFolder.fsPath,
+
+			//Path to ApplicationHost.Config
+			config = options.config ? options.config : '';
 
 			// CLR version, yes there are still people on 3.5 & default back to v4 if not set
 			clr: options.clr ? options.clr : settings.clrVersion.v40,
@@ -106,7 +110,13 @@ export class IISExpress {
 		// Add the site to the config (which will invoke/run from iisexpress cmd line)
 		// Not done as async - so we wait until this command completes
 		try {
-			process.execFileSync(this._iisAppCmdPath, ['add', 'site', `-name:${siteName}`, `-bindings:${this._args.protocol}://localhost:${this._args.port}`, `-physicalPath:${this._args.path}`]);
+			var siteArgs: string[] = ['add', 'site', `-name:${siteName}`, `-bindings:${this._args.protocol}://localhost:${this._args.port}`, `-physicalPath:${this._args.path}`];
+
+			if(this._args.config){
+				siteArgs.push(`/apphostconfig:${this._args.config}`);
+			}
+
+			process.execFileSync(this._iisAppCmdPath, siteArgs);
 		} catch (error) {
 			console.log(error);
 			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `add site -name:${siteName} -bindings:${this._args.protocol}://localhost:${this._args.port} -physicalPath:${this._args.path}`});
@@ -118,7 +128,13 @@ export class IISExpress {
 		// Assign the apppool to the site
 		// appcmd set app /app.name:Site-Staging-201ec232-2906-4052-a431-727ec57b5b2e/ /applicationPool:Clr2IntegratedAppPool
 		try {
-			process.execFileSync(this._iisAppCmdPath, ['set', 'app', `/app.name:${siteName}/`, `/applicationPool:${appPool}`]);
+			var appArgs: string[] = ['set', 'app', `/app.name:${siteName}/`, `/applicationPool:${appPool}`];
+
+			if(this._args.config){
+				appArgs.push(`/apphostconfig:${this._args.config}`);
+			}
+
+			process.execFileSync(this._iisAppCmdPath, appArgs);
 		} catch (error) {
 			console.log(error);
 			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath});
@@ -129,7 +145,13 @@ export class IISExpress {
 		telemtry.updateCountAndReport(this._context, this._reporter, telemtry.keys.sponsorware);
 
 		// This is the magic that runs the IISExpress cmd from the appcmd config list
-		this._iisProcess = process.spawn(this._iisPath, [`-site:${siteName}`]);
+		var iisArgs: string[] = [`-site:${siteName}`];
+		
+		if(this._args.config){
+			iisArgs.unshift(`/config:${this._args.config}`)
+		}
+
+		this._iisProcess = process.spawn(this._iisPath, iisArgs);
 
 		// Create Statusbar item & show it
 		this._statusbar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
@@ -180,7 +202,12 @@ export class IISExpress {
 			// Delete any existing entries for the site using appcmd
 			// Not done as async - so we wait until this command completes
 			try {
-				process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `${siteName}`]);
+				var deleteSiteArgs: string[] = ['delete', 'site', `${siteName}`];
+				if(this._args.config){
+					deleteSiteArgs.push(`/apphostconfig:${this._args.config}`);
+				}
+
+				process.execFileSync(this._iisAppCmdPath, deleteSiteArgs);
 			} catch (error) {
 				console.log(error);
 				this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `delete site ${siteName}`});
