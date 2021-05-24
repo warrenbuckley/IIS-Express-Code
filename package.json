@@ -301,7 +301,7 @@
     },
     "dependencies": {
         "axios": "^0.21.1",
-        "iconv-lite": "^0.6.2",
+        "iconv-lite": "^0.6.3",
         "jsonfile": "^6.1.0",
         "uuid": "^8.3.2",
         "vscode-extension-telemetry": "^0.1.7",
