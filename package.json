@@ -290,7 +290,7 @@
         "@typescript-eslint/parser": "^3.10.1",
         "eslint": "^7.32.0",
         "eslint-config-airbnb-base": "^14.2.1",
-        "eslint-plugin-import": "^2.24.0",
+        "eslint-plugin-import": "^2.24.1",
         "glob": "^7.1.7",
         "mocha": "^9.0.3",
         "ts-loader": "^9.2.5",
