@@ -1,8 +1,8 @@
 {
     "name": "iis-express",
     "displayName": "IIS Express",
-    "description": "This allows you to run the current folder as a website in IIS Express",
-    "version": "1.1.0",
+    "description": "This allows you to run the current folder as a website using the IIS Express web server",
+    "version": "1.4.0",
     "publisher": "warren-buckley",
     "icon": "images/iis-icon.png",
     "galleryBanner": {
@@ -12,11 +12,11 @@
     "keywords": [
         "IIS",
         "IIS Express",
-        "Web Server"
+        "Web Server",
+        "Server"
     ],
     "bugs": {
-        "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues",
-        "email": ""
+        "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues"
     },
     "homepage": "https://github.com/warrenbuckley/IIS-Express-Code",
     "repository": {
@@ -24,71 +24,287 @@
         "url": "https://github.com/warrenbuckley/IIS-Express-Code.git"
     },
     "engines": {
-        "vscode": "^1.12.0"
+        "vscode": "^1.51.0"
     },
     "categories": [
         "Other"
     ],
+    "badges": [
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/v/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Version",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/i/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Installs",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/d/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Downloads",
+            "href": ""
+        },
+        {
+            "url": "https://img.shields.io/visual-studio-marketplace/r/warren-buckley.iis-express?logo=visual-studio-code&style=for-the-badge",
+            "description": "Ratings",
+            "href": ""
+        }
+    ],
+    "enableProposedApi": false,
     "activationEvents": [
         "onCommand:extension.iis-express.start",
         "onCommand:extension.iis-express.stop",
         "onCommand:extension.iis-express.open",
-        "onCommand:extension.iis-express.restart"
+        "onCommand:extension.iis-express.restart",
+        "onView:iisexpress.controls"
     ],
-    "main": "./out/src/extension",
+    "main": "./dist/extension",
     "contributes": {
+        "configuration": {
+            "title": "IIS Express",
+            "properties": {
+                "iisexpress.iisExpressPath": {
+                    "title": "Path to IISExpress.exe",
+                    "examples": [
+                        "C:\\Program Files\\IIS Express\\iisexpress.exe",
+                        "C:\\Program Files (x86)\\IIS Express\\iisexpress.exe"
+                    ],
+                    "markdownDescription": "An absolute path to **IISExpress.exe** such as `C:\\Program Files\\IIS Express\\iisexpress.exe`",
+                    "default": null,
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "iisexpress.appcmdPath": {
+                    "title": "Path to AppCmd.exe",
+                    "examples": [
+                        "C:\\Program Files\\IIS Express\\appcmd.exe",
+                        "C:\\Program Files (x86)\\IIS Express\\appcmd.exe"
+                    ],
+                    "markdownDescription": "An absolute path to **appcmd.exe** such as `C:\\Program Files\\IIS Express\\appcmd.exe`",
+                    "default": null,
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "iisexpress.autoLaunchBrowser": {
+                    "title": "Auto launch browser",
+                    "markdownDescription": "An option to disable or enable the browser from launching the site when IIS Express starts. By default this is **true**",
+                    "default": true,
+                    "type": "boolean"
+                },
+                "iisexpress.openInBrowser": {
+                    "title": "Open in browser",
+                    "markdownDescription": "Decide which browser to auto launch the site with when `iisexpress.autoLaunchBrowser` is set to **true**",
+                    "markdownEnumDescriptions": [
+                        "Open in `Default Browser`",
+                        "Open in `Chrome`",
+                        "Open in `Edge`",
+                        "Open in `Firefox`",
+                        "Open in `Opera`"
+                    ],
+                    "enum": [
+                        "default",
+                        "chrome",
+                        "msedge",
+                        "firefox",
+                        "opera"
+                    ],
+                    "default": "default"
+                }
+            }
+        },
         "commands": [
             {
                 "command": "extension.iis-express.start",
-                "title": "IIS Express: Start Website"
+                "title": "Start Website",
+                "category": "IIS Express",
+                "enablement": "iisexpress:siterunning != true && isWindows",
+                "icon": "$(play)"
             },
             {
                 "command": "extension.iis-express.stop",
-                "title": "IIS Express: Stop Website"
+                "title": "Stop Website",
+                "category": "IIS Express",
+                "enablement": "iisexpress:siterunning && isWindows",
+                "icon": "$(stop)"
             },
             {
                 "command": "extension.iis-express.restart",
-                "title": "IIS Express: Restart Website"
+                "title": "Restart Website",
+                "category": "IIS Express",
+                "enablement": "iisexpress:siterunning && isWindows",
+                "icon": "$(refresh)"
+            },
+            {
+                "command": "extension.iis-express.supporter",
+                "title": "Become a supporter",
+                "category": "IIS Express",
+                "enablement": "isWindows",
+                "icon": "$(heart)"
+            },
+            {
+                "command": "extension.iis-express.settings",
+                "title": "Open Settings",
+                "category": "IIS Express",
+                "enablement": "isWindows",
+                "icon": "$(settings-gear)"
+            },
+            {
+                "command": "extension.iis-express.githublogin",
+                "title": "Login to GitHub",
+                "category": "IIS Express",
+                "enablement": "iisexpress:userIsLoggedIn != true && isWindows",
+                "icon": "$(github)"
             }
         ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "extension.iis-express.start",
+                    "when": "iisexpress:siterunning != true && isWindows"
+                },
+                {
+                    "command": "extension.iis-express.stop",
+                    "when": "iisexpress:siterunning && isWindows"
+                },
+                {
+                    "command": "extension.iis-express.restart",
+                    "when": "iisexpress:siterunning && isWindows"
+                },
+                {
+                    "command": "extension.iis-express.githublogin",
+                    "when": "iisexpress:userIsLoggedIn != true && isWindows"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "extension.iis-express.githublogin",
+                    "group": "navigation@0",
+                    "when": "isWindows && view == iisexpress.controls"
+                },
+                {
+                    "command": "extension.iis-express.settings",
+                    "group": "navigation@1",
+                    "when": "isWindows && view == iisexpress.controls"
+                }
+            ]
+        },
         "keybindings": [
             {
                 "command": "extension.iis-express.start",
+                "when": "iisexpress:siterunning != true && isWindows",
                 "key": "ctrl+f5"
             },
             {
                 "command": "extension.iis-express.stop",
-                "key": "shift+f5"
+                "key": "shift+f5",
+                "when": "iisexpress:siterunning && isWindows"
             },
             {
                 "command": "extension.iis-express.restart",
-                "key": "ctrl+shift+f5"
+                "key": "ctrl+shift+f5",
+                "when": "iisexpress:siterunning && isWindows"
             }
         ],
+        "views": {
+            "explorer": [
+                {
+                    "id": "iisexpress.controls",
+                    "contextualTitle": "IIS Express",
+                    "name": "IIS Express",
+                    "when": "isWindows && workspaceFolderCount != 0",
+                    "icon": "assets/server-environment.svg"
+                }
+            ]
+        },
         "jsonValidation": [
             {
                 "fileMatch": "/.vscode/iisexpress.json",
-                "url": "https://raw.githubusercontent.com/warrenbuckley/IIS-Express-Code/master/src/iisexpress-schema.json"
+                "url": "./src/iisexpress-schema.json"
+            }
+        ],
+        "colors": [
+            {
+                "id": "iisexpress.startIcon",
+                "description": "Color for the start icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "debugIcon.startForeground",
+                    "light": "debugIcon.startForeground",
+                    "highContrast": "debugIcon.startForeground"
+                }
+            },
+            {
+                "id": "iisexpress.stopIcon",
+                "description": "Color for the stop icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "debugIcon.stopForeground",
+                    "light": "debugIcon.stopForeground",
+                    "highContrast": "debugIcon.stopForeground"
+                }
+            },
+            {
+                "id": "iisexpress.restartIcon",
+                "description": "Color for the restart icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "debugIcon.pauseForeground",
+                    "light": "debugIcon.pauseForeground",
+                    "highContrast": "debugIcon.pauseForeground"
+                }
+            },
+            {
+                "id": "iisexpress.supporterIcon",
+                "description": "Color for the sponsor icon tree item in the custom IIS Express view.",
+                "defaults": {
+                    "dark": "terminal.ansiBrightMagenta",
+                    "light": "terminal.ansiBrightMagenta",
+                    "highContrast": "terminal.ansiBrightMagenta"
+                }
             }
         ]
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "vscode:prepublish": "webpack --mode production",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
+        "test-compile": "tsc -p ./",
         "compile": "tsc -p ./",
+        "lint": "eslint src --ext ts",
         "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "pretest": "npm run compile && npm run lint",
+        "test": "node ./out/test/runTest.js",
+        "download-api": "npx vscode-dts dev",
+        "postdownload-api": "npx vscode-dts master",
+        "postinstall": "npm run download-api"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "tslint": "^5.8.0",
-        "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "@types/glob": "^7.1.4",
+        "@types/mocha": "^9.0.0",
+        "@types/node": "^16.7.13",
+        "@types/uuid": "^8.3.1",
+        "@types/vscode": "^1.60.0",
+        "@typescript-eslint/eslint-plugin": "^4.0.0",
+        "@typescript-eslint/parser": "^3.10.1",
+        "eslint": "^7.32.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-plugin-import": "^2.24.2",
+        "glob": "^7.1.7",
+        "mocha": "^9.1.1",
+        "ts-loader": "^9.2.5",
+        "typescript": "^4.4.2",
+        "vscode-test": "^1.6.1",
+        "webpack": "^5.52.0",
+        "webpack-cli": "^4.8.0"
     },
     "dependencies": {
-        "iconv-lite": "^0.4.13",
-        "jsonfile": "^2.2.3",
-        "uuid": "^3.0.1"
+        "axios": "^0.21.4",
+        "iconv-lite": "^0.6.3",
+        "jsonfile": "^6.1.0",
+        "uuid": "^8.3.2",
+        "vscode-extension-telemetry": "^0.3.2",
+        "vsls": "^1.0.4753"
     }
 }

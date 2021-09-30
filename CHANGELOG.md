@@ -1,5 +1,32 @@
 # Changelog
-## Version 1.0.1
+## Version 1.2.0
+### 🚀 Features
+
+- GitHub Sponsors & Friendly Sponsorware Message @warrenbuckley (#159)
+- Added Telemetry @warrenbuckley (#125)
+- Support for relative paths for the site folder to run in iisexpress.json config file @warrenbuckley (#118)
+- Custom IIS Express View in Explorer for easier access to commands @warrenbuckley (#113)
+- Add in VSCode custom when context for enabling & disabling commands @warrenbuckley (#109)
+- VSLiveShare - Auto shares IIS Express as a shared server in a LiveShare session @warrenbuckley (#107)
+- Adds new config option iisexpress.openInBrowser to specify which browser to use with auto launch @warrenbuckley (#100)
+- Adds new config option to toggle auto launch of browser @warrenbuckley (#87)
+- EXE paths to IISExpress & AppCmd can be configured @warrenbuckley (#86)
+
+### 🐛 Bug Fixes
+
+- Update JSON Schema to use local file @warrenbuckley (#97)
+
+### 🧰 Maintenance
+
+- Lots of node dependencies updated
+
+## Version 1.1.2
+* **Bug Fix:** Version 1.1.1 fixed starting & stopping sites issue & having to cold reboot VSCode however the restart was overlooked. Thanks to @swensorm for the PR & fix for this :)
+
+## Version 1.1.1
+* **Bug Fix:** Fix issue where the site could not be restarted and required users to close VSCode to start the site up again
+
+## Version 1.1.0
 * **New:** Adds a new feature where IIS Express can be auto installed - by downloading the MSI from Microsoft & installing it for you when IIS is not detected
 
 ## Version 1.0.0

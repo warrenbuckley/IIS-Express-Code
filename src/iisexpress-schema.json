@@ -1,22 +1,31 @@
 {
-	"title": "JSON schema for VS Code IIS Express configuration file",
-	"$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "JSON schema for VS Code IIS Express configuration file",
+    "$schema": "http://json-schema.org/draft-04/schema#",
     "definitions": {
         "clr": {
-            "enum": ["v4.0","v2.0"]
+            "enum": [
+                "v4.0",
+                "v2.0"
+            ]
+        },
+        "protocol": {
+            "enum": [
+                "http",
+                "https"
+            ]
         }
     },
-	"type": "object",
-	 "properties": {
-         "port": {
-             "type": "integer",
-             "description": "The port number you wish to use for IIS Express",
-             "minimum": 1024,
-             "maximum": 44399
+    "type": "object",
+    "properties": {
+        "port": {
+            "type": "integer",
+            "description": "The port number you wish to use for IIS Express",
+            "minimum": 1024,
+            "maximum": 44399
         },
         "path": {
             "type": "string",
-            "description": "This property is optional & allows you to set a path to the folder or subfolder as the root of your site/project for IIS Express to run"
+            "description": "This property is optional & allows you to set an absolute path to the folder or subfolder as the root of your site/project for IIS Express to run. Additionally this support relative paths to the workspace folder such as ./my-sub-folder"
         },
         "config": {
             "type": "string",
@@ -25,10 +34,15 @@
         "url": {
             "type": "string",
             "description": "This property is optional & allows you to set the URL you wish to open eg: '/about/the-team'"
-	    },
-	    "clr":{
+        },
+        "clr": {
             "$ref": "#/definitions/clr",
             "description": "This property is optional & allows you to set AppPool CLR version, 2.0 vs 4.0"
+        },
+        "protocol": {
+            "$ref": "#/definitions/protocol",
+            "title": "Protocol",
+            "description": "This property is optional & allows you to set http or https"
         }
     },
     "required": [
