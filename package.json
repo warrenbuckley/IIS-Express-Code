@@ -281,7 +281,7 @@
         "postinstall": "npm run download-api"
     },
     "devDependencies": {
-        "@types/glob": "^7.1.4",
+        "@types/glob": "^7.2.0",
         "@types/mocha": "^9.0.0",
         "@types/node": "^16.11.6",
         "@types/uuid": "^8.3.1",
