@@ -9,19 +9,22 @@ export class Sponsorware {
     private totalCount:number = 0;
     private credentials: Credentials;
     private reporter: TelemetryReporter;
+    private outputWindow: vscode.OutputChannel;
 
-    constructor(context: vscode.ExtensionContext, credentials:Credentials, reporter:TelemetryReporter) {
+    constructor(context: vscode.ExtensionContext, credentials:Credentials, reporter:TelemetryReporter, outputWindow:vscode.OutputChannel) {
         this.context = context;
         this.credentials = credentials;
         this.reporter = reporter;
+        this.outputWindow = outputWindow;
     }
 
     private async doWeShowSponsorMessagePanel():Promise<boolean> {
         // Exit out early if they are a sponsor
         // Don't show them the sponsorware message
-
         const isSponsor = await this.credentials.isUserSponsor();
         if(isSponsor){
+            const githubUsername = this.credentials.authSession?.account?.label;
+            this.outputWindow.appendLine(`[Sponsorware] User ${githubUsername} is a valid sponsor`);
             return false;
         }
 
@@ -29,6 +32,10 @@ export class Sponsorware {
         this.totalCount = this.context.globalState.get<number>('iisexpress.start.count', 0);
         const sponsorwareCount = this.context.globalState.get<number>('iisexpress.sponsorware.count', 0);
         const sponsorwareDisplayCount = this.context.globalState.get<number>('iisexpress.sponsorware.display.count', 10); // Default to 10 if the random number not been set
+
+        this.outputWindow.appendLine(`[Sponsorware] Total count ${this.totalCount}`);
+        this.outputWindow.appendLine(`[Sponsorware] Sponsorware count ${sponsorwareCount}`);
+        this.outputWindow.appendLine(`[Sponsorware] Sponsorware display count ${sponsorwareDisplayCount}`);
 
         // Decide if we met the threshold yet
         if(sponsorwareCount >= sponsorwareDisplayCount){
@@ -38,6 +45,7 @@ export class Sponsorware {
 
             // If we have met the threshold - reset the sponsor counter back to 0
             this.context.globalState.update('iisexpress.sponsorware.count', 0);
+            this.outputWindow.appendLine(`[Sponsorware] Sponsorware threshold met - display the friendly message`);
             return true;
         }
         else {

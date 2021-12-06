@@ -13,10 +13,12 @@ export class Credentials {
 	public authSession: vscode.AuthenticationSession | undefined;
 	private reporter: TelemetryReporter | undefined;
 	private context: vscode.ExtensionContext;
+	private outputWindow: vscode.OutputChannel;
 
-	constructor(context: vscode.ExtensionContext, reporter:TelemetryReporter) {
+	constructor(context: vscode.ExtensionContext, reporter:TelemetryReporter, outputWindow:vscode.OutputChannel) {
 		this.context = context;
 		this.reporter = reporter;
+		this.outputWindow = outputWindow;
 
 		this.initialize();
 	}
@@ -40,6 +42,7 @@ export class Credentials {
 			// Used to enable/disable the GitHub Login command & to know when user has auth'd
 			vscode.commands.executeCommand('setContext', 'iisexpress:userIsLoggedIn', true);
 			this.reporter?.sendTelemetryEvent('github.loggedin');
+			this.outputWindow.appendLine(`[Credentials] Logged in as ${session.account.label}`);
 			return;
 		}
 
@@ -48,6 +51,7 @@ export class Credentials {
 
 		// Used to enable/disable the GitHub Login command & to know when user has auth'd
 		vscode.commands.executeCommand('setContext', 'iisexpress:userIsLoggedIn', false);
+		this.outputWindow.appendLine(`[Credentials] Logged out`);
 		this.reporter?.sendTelemetryEvent('github.loggedout');
 	}
 
@@ -75,11 +79,16 @@ export class Credentials {
 		let isValidSponsor = false;
 
 		if(accessToken){
+
+			const accountLabel = this.authSession?.account.label;
+			this.outputWindow.appendLine(`[Credentials] Checking sponsorship for ${accountLabel}`);
+
 			// Make a request to Azure Function to check if they are a sponsor
 			// Do request - pass back JSON response bool from this func
 			await axios.post(AZURE_FUNCTION_URL, {token: accessToken})
 				.then(response => {
 					isValidSponsor = response.data.validSponsor ? response.data.validSponsor : false;
+					this.outputWindow.appendLine(`[Credentials] Is ${accountLabel} a valid sponsor from Azure Function? ${isValidSponsor}`);
 				})
 				.catch(error => {
 
@@ -100,6 +109,8 @@ export class Credentials {
 
 					this.reporter?.sendTelemetryException(error);
 					isValidSponsor = false;
+					this.outputWindow.appendLine(`[Credentials] Error determining if user ${accountLabel} is a valid sponsor`);
+					this.outputWindow.appendLine(`[ERROR] ${error}`);
 				});
 		}
 

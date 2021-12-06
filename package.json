@@ -2,7 +2,7 @@
     "name": "iis-express",
     "displayName": "IIS Express",
     "description": "This allows you to run the current folder as a website using the IIS Express web server",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "publisher": "warren-buckley",
     "icon": "images/iis-icon.png",
     "galleryBanner": {
@@ -24,7 +24,7 @@
         "url": "https://github.com/warrenbuckley/IIS-Express-Code.git"
     },
     "engines": {
-        "vscode": "^1.51.0"
+        "vscode": "^1.62.0"
     },
     "categories": [
         "Other"
