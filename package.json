@@ -293,7 +293,7 @@
         "eslint-plugin-import": "^2.25.4",
         "glob": "^7.2.0",
         "mocha": "^9.2.1",
-        "ts-loader": "^9.2.6",
+        "ts-loader": "^9.2.7",
         "typescript": "^4.5.5",
         "vscode-test": "^1.6.1",
         "webpack": "^5.69.1",
