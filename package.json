@@ -291,7 +291,7 @@
         "eslint": "^7.32.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-plugin-import": "^2.26.0",
-        "glob": "^8.0.1",
+        "glob": "^8.0.3",
         "mocha": "^10.0.0",
         "ts-loader": "^9.3.0",
         "typescript": "^4.6.4",
