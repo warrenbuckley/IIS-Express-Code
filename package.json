@@ -19,6 +19,9 @@
         "url": "https://github.com/warrenbuckley/IIS-Express-Code/issues"
     },
     "homepage": "https://github.com/warrenbuckley/IIS-Express-Code",
+    "sponsor": {
+        "url": "https://github.com/sponsors/warrenbuckley"
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/warrenbuckley/IIS-Express-Code.git"
