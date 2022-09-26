@@ -29,6 +29,7 @@ const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
 // create telemetry reporter on extension activation
 const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionVersion, key);
 
+const iisOutputWindow = vscode.window.createOutputChannel('IIS Express (Logs)');
 
 let vsCodeFolderToRun:vscode.Uri | undefined = undefined;
 
@@ -46,8 +47,8 @@ export async function activate(context: vscode.ExtensionContext) {
 	let liveShareServer:vscode.Disposable;
 
 	// Init credentials class with event listener & prompt/get token from GitHub auth
-	const credentials = new Credentials(context, reporter);
-	const sponsorware = new Sponsorware(context, credentials, reporter);
+	const credentials = new Credentials(context, reporter, iisOutputWindow);
+	const sponsorware = new Sponsorware(context, credentials, reporter, iisOutputWindow);
 
 	// Register tree provider to put our custom commands into the tree
 	// Start, Stop, Restart, Support etc...

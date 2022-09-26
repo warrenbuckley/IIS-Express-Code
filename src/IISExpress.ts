@@ -89,7 +89,7 @@ export class IISExpress {
 
 		// Create output channel & show it
 		this._output = this._output || vscode.window.createOutputChannel('IIS Express');
-		this._output.show(vscode.ViewColumn.Three);
+		this._output.show();
 
 		// Site name is the name of the workspace folder & GUID/UUID
 		// Need to append a UUID as could have two folders/sites with same name
@@ -115,7 +115,7 @@ export class IISExpress {
 			}
 
 			process.execFileSync(this._iisAppCmdPath, siteArgs);
-		} catch (error) {
+		} catch (error:any) {
 			console.log(error);
 			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `add site -name:${siteName} -bindings:${this._args.protocol}://localhost:${this._args.port} -physicalPath:${this._args.path}`});
 		}
@@ -133,7 +133,7 @@ export class IISExpress {
 			}
 
 			process.execFileSync(this._iisAppCmdPath, appArgs);
-		} catch (error) {
+		} catch (error:any) {
 			console.log(error);
 			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath});
 		}
@@ -206,7 +206,7 @@ export class IISExpress {
 				}
 
 				process.execFileSync(this._iisAppCmdPath, deleteSiteArgs);
-			} catch (error) {
+			} catch (error:any) {
 				console.log(error);
 				this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `delete site ${siteName}`});
 			}

@@ -3,9 +3,10 @@ updates:
 - package-ecosystem: npm
   directory: "/"
   schedule:
-    interval: daily
+    interval: monthly
     time: '10:00'
     timezone: Europe/London
+    day: "friday"
   open-pull-requests-limit: 10
   labels:
       - "dependencies"
