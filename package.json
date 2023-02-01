@@ -284,7 +284,7 @@
         "postinstall": "npm run download-api"
     },
     "devDependencies": {
-        "@types/glob": "^8.0.0",
+        "@types/glob": "^8.0.1",
         "@types/mocha": "^10.0.1",
         "@types/node": "^18.11.18",
         "@types/uuid": "^9.0.0",
@@ -294,7 +294,7 @@
         "eslint": "^7.32.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-plugin-import": "^2.26.0",
-        "glob": "^8.0.3",
+        "glob": "^8.1.0",
         "mocha": "^10.2.0",
         "ts-loader": "^9.4.2",
         "typescript": "^4.9.4",
