@@ -291,6 +291,7 @@
         "@types/vscode": "^1.81.0",
         "@typescript-eslint/eslint-plugin": "^4.0.0",
         "@typescript-eslint/parser": "^3.10.1",
+        "@vscode/test-electron": "^2.3.4",
         "eslint": "^7.32.0",
         "eslint-config-airbnb-base": "^15.0.0",
         "eslint-plugin-import": "^2.28.1",
@@ -298,7 +299,6 @@
         "mocha": "^10.2.0",
         "ts-loader": "^9.4.4",
         "typescript": "^5.2.2",
-        "vscode-test": "^1.6.1",
         "webpack": "^5.88.2",
         "webpack-cli": "^5.1.4"
     },
