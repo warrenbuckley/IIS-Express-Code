@@ -27,6 +27,10 @@ const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
 
 // telemetry reporter
 // create telemetry reporter on extension activation
+
+// TODO: Previously passed in the version and the extension name - NEED to investigae source code repo
+// https://github.com/microsoft/vscode-extension-telemetry
+// TODO: Test with new Azure AppInsights key to check data going in OK
 const reporter:TelemetryReporter = new TelemetryReporter(key);
 
 const iisOutputWindow = vscode.window.createOutputChannel('IIS Express (Logs)');
