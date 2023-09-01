@@ -303,11 +303,11 @@
         "webpack-cli": "^5.1.4"
     },
     "dependencies": {
+        "@vscode/extension-telemetry": "^0.8.4",
         "axios": "^1.5.0",
         "iconv-lite": "^0.6.3",
         "jsonfile": "^6.1.0",
         "uuid": "^9.0.0",
-        "vscode-extension-telemetry": "^0.4.5",
         "vsls": "^1.0.4753"
     }
 }
