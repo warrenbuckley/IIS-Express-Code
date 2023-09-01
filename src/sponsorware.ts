@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import path = require('path');
 import { Credentials } from './credentials';
-import TelemetryReporter from 'vscode-extension-telemetry';
+import TelemetryReporter from '@vscode/extension-telemetry';
 
 export class Sponsorware {
 

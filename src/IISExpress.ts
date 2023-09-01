@@ -8,7 +8,7 @@ import * as telemtry from './telemetry';
 // External libraries
 import { v4 as uuidv4 } from 'uuid';
 import * as iconv from 'iconv-lite';
-import TelemetryReporter from 'vscode-extension-telemetry';
+import TelemetryReporter from '@vscode/extension-telemetry';
 
 
 export interface IExpressArguments {
@@ -109,7 +109,7 @@ export class IISExpress {
 			process.execFileSync(this._iisAppCmdPath, ['add', 'site', `-name:${siteName}`, `-bindings:${this._args.protocol}://localhost:${this._args.port}`, `-physicalPath:${this._args.path}`]);
 		} catch (error:any) {
 			console.log(error);
-			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `add site -name:${siteName} -bindings:${this._args.protocol}://localhost:${this._args.port} -physicalPath:${this._args.path}`});
+			this._reporter.sendTelemetryErrorEvent(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `add site -name:${siteName} -bindings:${this._args.protocol}://localhost:${this._args.port} -physicalPath:${this._args.path}`});
 		}
 
 		// Based on the CLR chosen use the correct built in AppPools shipping with IISExpress
@@ -121,7 +121,7 @@ export class IISExpress {
 			process.execFileSync(this._iisAppCmdPath, ['set', 'app', `/app.name:${siteName}/`, `/applicationPool:${appPool}`]);
 		} catch (error:any) {
 			console.log(error);
-			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath});
+			this._reporter.sendTelemetryErrorEvent(error, {"appCmdPath": this._iisAppCmdPath});
 		}
 
 		// Log telemtry
@@ -183,7 +183,7 @@ export class IISExpress {
 				process.execFileSync(this._iisAppCmdPath, ['delete', 'site', `${siteName}`]);
 			} catch (error:any) {
 				console.log(error);
-				this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `delete site ${siteName}`});
+				this._reporter.sendTelemetryErrorEvent(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `delete site ${siteName}`});
 			}
 		});
 	}
