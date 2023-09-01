@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as vsls from 'vsls';
-import TelemetryReporter from 'vscode-extension-telemetry';
+import TelemetryReporter from '@vscode/extension-telemetry';
 
 import * as iis from './IISExpress';
 import * as verify from './verification';
@@ -16,18 +16,18 @@ import { Sponsorware } from './sponsorware';
 let iisExpressServer:iis.IISExpress;
 
 // all events will be prefixed with this event name
-const extensionId = 'iis-express';
+// const extensionId = 'iis-express';
 
 // extension version will be reported as a property with each event
-const pkgJson = require('../package.json');
-const extensionVersion = pkgJson.version;
+//const pkgJson = require('../package.json');
+//const extensionVersion = pkgJson.version;
 
 // the application insights key (also known as instrumentation key)
 const key = 'e0cc903f-73ec-4216-92cd-3479696785b2';
 
 // telemetry reporter
 // create telemetry reporter on extension activation
-const reporter:TelemetryReporter = new TelemetryReporter(extensionId, extensionVersion, key);
+const reporter:TelemetryReporter = new TelemetryReporter(key);
 
 const iisOutputWindow = vscode.window.createOutputChannel('IIS Express (Logs)');
 

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
-import TelemetryReporter from 'vscode-extension-telemetry';
+import TelemetryReporter from '@vscode/extension-telemetry';
 
 // The GitHub Authentication Provider accepts the scopes described here:
 // https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/
@@ -107,7 +107,7 @@ export class Credentials {
 					// 	console.log("Error", error.message);
 					// }
 
-					this.reporter?.sendTelemetryException(error);
+					this.reporter?.sendTelemetryErrorEvent(error); // May not work or be happy :S
 					isValidSponsor = false;
 					this.outputWindow.appendLine(`[Credentials] Error determining if user ${accountLabel} is a valid sponsor`);
 					this.outputWindow.appendLine(`[ERROR] ${error}`);
