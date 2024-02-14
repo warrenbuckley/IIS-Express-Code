@@ -5,6 +5,7 @@ import * as util from './util';
 export interface Isettings {
     port: number;
     path: string;
+    config?: string;
     url?: string;
     clr: clrVersion;
     protocol: protocolType;
@@ -45,7 +46,8 @@ export function getSettings(uri:vscode.Uri| undefined):Isettings{
         port : getRandomPort(),
         path: './',
         clr: clrVersion.v40,
-        protocol: protocolType.http
+        protocol: protocolType.http,
+        config: getLocalApplicationHostConfig()
     };
 
     let settings:Isettings;
@@ -122,6 +124,28 @@ export function getSettings(uri:vscode.Uri| undefined):Isettings{
     }
 }
 
+function getLocalApplicationHostConfig(){
+    let vscodeFilePath = vscode.workspace.rootPath + "\\.vscode\\applicationhost.config";
+    let fileExists = false;
+
+    try {
+        //Checks if local applicationhost.config file exists
+        fileExists = fs.existsSync(vscodeFilePath);
+    }
+    catch(err){
+        //Error checking if file exists
+        //Maybe permissions or something else?
+        vscode.window.showErrorMessage('Unable to check if .vscode/applicationhost.config exists');
+    }
+
+    if(fileExists){
+        //File exists
+        //Return path to local applicationhost.config file
+        return vscodeFilePath;
+    }
+
+    return "";
+}
 
 // IIS Express docs recommend ports greater than 1024
 // http://www.iis.net/learn/extensions/using-iis-express/running-iis-express-without-administrative-privileges
