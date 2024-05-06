@@ -13,6 +13,13 @@
                 "http",
                 "https"
             ]
+        },
+        "pipelineMode": {
+            "enum": [
+                "Integrated",
+                "Classic"
+            ],
+            "description": "This property allows you to set the pipeline mode for the application pool."
         }
     },
     "type": "object",
@@ -39,6 +46,10 @@
             "$ref": "#/definitions/protocol",
             "title": "Protocol",
             "description": "This property is optional & allows you to set http or https"
+        },
+        "pipelineMode": {
+            "$ref": "#/definitions/pipelineMode",
+            "description": "This property allows you to set the pipeline mode for the application pool."
         }
     },
     "required": [

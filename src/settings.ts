@@ -8,6 +8,7 @@ export interface Isettings {
     url?: string;
     clr: clrVersion;
     protocol: protocolType;
+    pipelineMode?: pipelineMode; // New property for pipeline mode
 }
 
 export enum clrVersion {
@@ -15,6 +16,10 @@ export enum clrVersion {
 	v20 = <any>"v2.0"
 }
 
+export enum pipelineMode {
+    Integrated = <any>"Integrated",
+    Classic = <any>"Classic" // New enum value for Classic pipeline mode
+}
 
 export enum protocolType {
     http = <any>"http",
@@ -45,7 +50,8 @@ export function getSettings(uri:vscode.Uri| undefined):Isettings{
         port : getRandomPort(),
         path: './',
         clr: clrVersion.v40,
-        protocol: protocolType.http
+        protocol: protocolType.http,
+        pipelineMode: pipelineMode.Integrated // Default to Integrated if not set
     };
 
     let settings:Isettings;

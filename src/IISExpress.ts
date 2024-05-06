@@ -10,12 +10,12 @@ import { v4 as uuidv4 } from 'uuid';
 import * as iconv from 'iconv-lite';
 import TelemetryReporter from 'vscode-extension-telemetry';
 
-
 export interface IExpressArguments {
 	path: string;
 	port: number;
 	clr: settings.clrVersion;
 	protocol: settings.protocolType;
+	pipelineMode?: settings.pipelineMode; // New property for pipeline mode
 }
 
 export class IISExpress {
@@ -65,7 +65,10 @@ export class IISExpress {
 			clr: options.clr ? options.clr : settings.clrVersion.v40,
 
 			// If no protocol set fallback to http as opposed to https
-			protocol: options.protocol ? options.protocol : settings.protocolType.http
+			protocol: options.protocol ? options.protocol : settings.protocolType.http,
+
+			// Pipeline mode, default to Integrated if not set
+			pipelineMode: options.pipelineMode ? options.pipelineMode : settings.pipelineMode.Integrated
 		};
 
 
@@ -112,8 +115,13 @@ export class IISExpress {
 			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath, "appCmd": `add site -name:${siteName} -bindings:${this._args.protocol}://localhost:${this._args.port} -physicalPath:${this._args.path}`});
 		}
 
-		// Based on the CLR chosen use the correct built in AppPools shipping with IISExpress
-		const appPool = this._args.clr === settings.clrVersion.v40 ? "Clr4IntegratedAppPool" : "Clr2IntegratedAppPool";
+		// Determine the application pool based on CLR version and pipeline mode
+		let appPool = "";
+		if (this._args.pipelineMode === settings.pipelineMode.Integrated) {
+			appPool = this._args.clr === settings.clrVersion.v40 ? "Clr4IntegratedAppPool" : "Clr2IntegratedAppPool";
+		} else {
+			appPool = this._args.clr === settings.clrVersion.v40 ? "Clr4ClassicAppPool" : "Clr2ClassicAppPool";
+		}
 
 		// Assign the apppool to the site
 		// appcmd set app /app.name:Site-Staging-201ec232-2906-4052-a431-727ec57b5b2e/ /applicationPool:Clr2IntegratedAppPool
