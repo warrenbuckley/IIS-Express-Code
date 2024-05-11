@@ -27,6 +27,10 @@
             "type": "string",
             "description": "This property is optional & allows you to set an absolute path to the folder or subfolder as the root of your site/project for IIS Express to run. Additionally this support relative paths to the workspace folder such as ./my-sub-folder"
         },
+        "config": {
+            "type": "string",
+            "description": "This property is optional & allows you to set a path to the ApplicationHost.Config file you wish to run"
+        },
         "url": {
             "type": "string",
             "description": "This property is optional & allows you to set the URL you wish to open eg: '/about/the-team'"
