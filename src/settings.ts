@@ -8,6 +8,7 @@ export interface Isettings {
     url?: string;
     clr: clrVersion;
     protocol: protocolType;
+    apps?: string[];
 }
 
 export enum clrVersion {

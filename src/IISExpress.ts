@@ -16,6 +16,7 @@ export interface IExpressArguments {
 	port: number;
 	clr: settings.clrVersion;
 	protocol: settings.protocolType;
+	apps: string[];
 }
 
 export class IISExpress {
@@ -65,7 +66,10 @@ export class IISExpress {
 			clr: options.clr ? options.clr : settings.clrVersion.v40,
 
 			// If no protocol set fallback to http as opposed to https
-			protocol: options.protocol ? options.protocol : settings.protocolType.http
+			protocol: options.protocol ? options.protocol : settings.protocolType.http,
+
+			// Collection of Folders to treat as Applications
+			apps: options.apps || []
 		};
 
 
@@ -123,6 +127,21 @@ export class IISExpress {
 			console.log(error);
 			this._reporter.sendTelemetryException(error, {"appCmdPath": this._iisAppCmdPath});
 		}
+
+		// Add Applications to the site
+		// appcmd add app /site.name:Site-Staging-201ec232-2906-4052-a431-727ec57b5b2e /path:/SubApp /physicalPath:C:\Site\SubApp /applicationPool:Clr2IntegratedAppPool
+		if(this._args.apps.length !== 0){
+		    this._args.apps.forEach((app) => {
+					let physicalPath = path.join(this._args.path, app);
+			try {
+			    process.execFileSync(this._iisAppCmdPath, ['add', 'app', `/site.name:${siteName}`, `/path:${app}`, `/physicalPath:${physicalPath}`, `/applicationPool:${appPool}`]);
+			}
+			catch (error:any) {
+			    console.log(error);
+			    this._reporter.sendTelemetryException(error, { "appCmdPath": this._iisAppCmdPath });
+			}
+		    });
+		} 
 
 		// Log telemtry
 		telemtry.updateCountAndReport(this._context, this._reporter, telemtry.keys.start);
